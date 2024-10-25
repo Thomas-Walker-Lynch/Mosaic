@@ -1,0 +1,8 @@
+
+1. reflect project skeleton changes.
+   replaced literal `Ariadne` with `$PROJECT`
+   in top level env choices, PROJECT -> PROMPT_DECOR
+
+   note in 'release' there is a variable name with the project name embedded in it:
+   Ariadne_jar_fp -> project_jar_fp
+   Change slashes to dots in the wrapper maker of 'make'
