@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # cp subtree at <source> under file path <destination>, and make all the copied
 # files read-only. The intended use case is for moving files to a `deprecated`

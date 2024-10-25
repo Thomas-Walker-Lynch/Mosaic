@@ -35,7 +35,7 @@ echo "Creating JAR file..."
 echo "Creating shell wrappers..."
   mkdir -p shell
   # wrapper is a space separated list
-  wrapper=Mosaic
+  wrapper=$(shell_wrapper_list)
   for file in $wrapper;do
     cat > shell/$file << EOL
 #!/bin/bash

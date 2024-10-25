@@ -1,0 +1,2 @@
+#!/bin/env bash
+java com.ReasoningTechnology."Mosaic_tester".Test.shell_wrapper_list

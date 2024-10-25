@@ -19,11 +19,11 @@ echo "Compiling files..."
 echo "Creating shell wrappers..."
   mkdir -p shell
   # wrapper is a space separated list
-  wrapper=TestTestBench
+  wrapper=$(shell_wrapper_list)
   for file in $wrapper;do
     cat > shell/$file << EOL
 #!/bin/env bash
-java com.ReasoningTechnology."$PROJECT".Test.$file
+java com.ReasoningTechnology.$PROJECT.Test.$file
 EOL
     chmod +x shell/$file
   done

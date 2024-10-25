@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 # remove files made by `make` and by `release`
 
 # input guards
@@ -12,7 +12,7 @@
 # things to clean
 
   release_dir="$REPO_HOME"/release
-  wrapper=build
+  wrapper=$(shell_wrapper_list)
 
 # remove files
   set -x

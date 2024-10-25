@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # Removes all files found in the build directories. It asks no questions as to
 # how or why the files got there. Be especially careful with the 'shell' directory

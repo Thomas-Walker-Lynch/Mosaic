@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 # remove all files made by `make`
 
 # input guards
@@ -11,7 +11,7 @@
 
 # wrappers to clean (this list space separated list will grow)
 
-  wrapper=build
+  wrapper=$(shell_wrapper_list)
 
 # remove files
 

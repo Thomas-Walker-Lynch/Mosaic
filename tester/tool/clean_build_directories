@@ -1,8 +1,9 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
-# Caveat: the 'shell' directory is for built wrapper functions. `clean_build_directories` will
-# remove all the files in this directory. For bespoke scripts used by the tester, put
-# them in the `tool` directory.
+# Caveat: the 'shell' directory is for built wrapper
+# functions. `clean_build_directories` will remove all the files in this
+# directory. For bespoke scripts used by the tester, put them in the `tool`
+# directory.
 
 # input guards
   env_must_be="tester/tool/env"
