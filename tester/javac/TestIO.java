@@ -16,12 +16,12 @@ public class TestIO{
 
       // Count remaining characters until EOF
       int count = 0;
-      while( System.in.read() != -1 ){
+      while(System.in.read() != -1){
         count++;
       }
 
       return count;
-    } catch( Exception e ){
+    } catch(Exception e){
       e.printStackTrace();
       return -1; // Error case
     }
@@ -29,30 +29,32 @@ public class TestIO{
 
   public static int run(){
     IO io = new IO();
-    String input_data = "abcdefg"; // Sample input
     boolean[] condition = new boolean[3];
 
     // Redirect IO streams
-    io.redirect_io(input_data);
+    io.redirect();
+
+    // Provide input for the function under test
+    io.push_input("abcdefg");
 
     // Execute function under test
     int result = fut();
 
     // Check stdout content
-    String stdout = io.get_out_content().toString();
-    condition[0] = stdout.equals("ab");
+    String stdout_string = io.get_out_content();
+    condition[0] = stdout_string.equals("ab");
 
     // Check stderr content
-    String stderr = io.get_err_content().toString();
-    condition[1] = stderr.equals("cd");
+    String stderr_string = io.get_err_content();
+    condition[1] = stderr_string.equals("cd");
 
-    // Check returned character count (3 remaining characters: 'e' ,'f' ,'g')
+    // Check returned character count (3 remaining characters: 'e','f','g')
     condition[2] = result == 3;
 
     // Restore original IO streams
-    io.restore_io();
+    io.restore();
 
-    if( !Util.all(condition) ){
+    if(!Util.all(condition)){
       System.out.println("TestIO failed");
       return 1;
     }
@@ -68,3 +70,5 @@ public class TestIO{
   }
 
 }
+
+
