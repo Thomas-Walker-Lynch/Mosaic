@@ -51,12 +51,17 @@ public class Util{
       log_writer.write("\n" + iso_utc_time() + " -----------------------------------------------------------\n");
       log_writer.write("Test: " + test_name + "\n");
       log_writer.write("Message:\n" + message + "\n");
-    } catch(IOException e) {
-      System.err.println("Error writing to log for test: " + test_name + ", stream: " + stream);
+    } catch(IOException e){
+      System.err.println
+        (
+         "Error writing message \"" 
+         + message 
+         + "\" to log for test \'"
+         + test_name
+         + "\'"
+         );
       e.printStackTrace(System.err);
     }
   }
-
-
 
 }

@@ -71,7 +71,7 @@ public class IO{
   // Restores original IO streams, ensuring foobar and uninitialized states are checked.
   // If anything goes wrong reverse to restore_hard.
   public void restore(){
-    if(unitialized || streams_foobar){
+    if(uninitialized || streams_foobar){
       restore_hard();
       return;
     }
@@ -79,7 +79,7 @@ public class IO{
       System.setOut(original_out);
       System.setErr(original_err);
       System.setIn(original_in);
-    } catch{Throwable e){
+    } catch(Throwable e){
       restore_hard();
     }
   }
@@ -95,7 +95,15 @@ public class IO{
     System.setIn(in_content);
   }
 
-  // Returns stdout content as a string, checks foobar state only.
+  public boolean has_out_content(){
+    if(streams_foobar){
+      throw new IllegalStateException
+        (
+         "Cannot access stdout content: IO object is in foobar state."
+         );
+    }
+    return out_content.size() > 0;
+  }
   public String get_out_content(){
     if(streams_foobar){
       throw new IllegalStateException
@@ -106,7 +114,15 @@ public class IO{
     return out_content.toString();
   }
 
-  // Returns stderr content as a string, checks foobar state only.
+  public boolean has_err_content(){
+    if(streams_foobar){
+      throw new IllegalStateException
+        (
+         "Cannot access stderr content: IO object is in foobar state."
+         );
+    }
+    return err_content.size() > 0;
+  }
   public String get_err_content(){
     if(streams_foobar){
       throw new IllegalStateException
