@@ -20,3 +20,9 @@ Updates for Ariadne
 
 5. fix many shebangs to be: #!/usr/bin/env bash
 
+6. scratch_pad -> scratchpad
+
+5. make_source_tree also integrated into make
+
+6. replacement for bespoke/env
+

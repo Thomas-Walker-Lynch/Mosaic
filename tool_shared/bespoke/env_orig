@@ -1,0 +1,118 @@
+#!/usr/bin/bash
+
+# This is the base environment shared by all roles in the project.
+
+# The project administrator sets up the following tools for all roles to use:
+#
+export JAVA_HOME="$REPO_HOME/tool_shared/third_party/jdk-11"
+
+# Absolute path to script directory, the use of eval makes it suitable for
+# exporting and use with other scripts
+
+read -r -d '' script_adp_string <<-"EOF"
+  local bash_source
+  if [[ -n "${BASH_SOURCE[1]}" ]]; then
+    bash_source="${BASH_SOURCE[1]}"
+  elif [[ -n "${BASH_SOURCE[0]}" ]]; then
+    bash_source="${BASH_SOURCE[0]}"
+  else
+    echo 'Error: Unable to determine script path in script_adp.' >&2
+    return 1
+  fi
+  echo
+  echo 0: ${BASH_SOURCE[0]}
+  echo 1: ${BASH_SOURCE[1]}
+  echo bash_source: $bash_source
+  local adp
+  adp=$(dirname "$(realpath "$bash_source" 2>/dev/null)")
+  if [[ $? -ne 0 ]]; then
+    echo 'Error: Failed to resolve path in script_adp.' >&2
+    return 1
+  fi
+  echo "$adp"
+EOF
+  script_adp(){
+    eval "$script_adp_string"
+  }
+
+
+# This script assumes it is located at $REPO_HOME/tools_shared/bespoke and works
+# backwards to recover $REPO_HOME, etc.
+
+  REPO_HOME=$(dirname "$(dirname "$(script_adp)")")
+  echo REPO_HOME "$REPO_HOME"
+
+  PROJECT=$(basename "$REPO_HOME")
+  echo PROJECT "$PROJECT"
+  PROMPT_DECOR=$PROJECT
+
+
+# These functions are offered as a convenience to be run inside other scripts.
+# These produce $REPO_HOME relative results, and thus preferred over script_adp.
+
+  ## script's filename
+read -r -d '' script_fn_string <<-"EOF" 
+  local source_file="${BASH_SOURCE[1]:-${BASH_SOURCE[0]}}"
+  if [[ -z "$source_file" ]]; then
+    echo 'Error: Unable to determine script filename in script_fn.' >&2
+    return 1
+  fi
+  echo $(basename "$source_file")
+EOF
+  script_fn(){
+    eval "$script_fn_string"
+  }
+
+
+  ## path to script directory relative to $REPO_HOME
+read -r -d '' script_dp_string <<-"EOF" 
+  local rh="${REPO_HOME}"
+  echo
+  echo "REPO_HOME: ${rh}"
+
+  local adp
+  adp=$(script_adp)
+  echo "adp: ${adp}"
+
+  if [[ -z "${adp}" ]]; then
+    echo 'Error: script_adp returned an empty path in script_dp.' >&2
+    return 1
+  fi
+
+  realpath --relative-to="${rh}" "${adp}" || echo 'Error resolving path in script_dp' >&2
+EOF
+  script_dp(){
+    eval "$script_dp_string"
+    echo dp
+  }
+
+   ## script's filepath relative to $REPO_HOME
+read -r -d '' script_fp_string <<-"EOF" 
+  local dp fn
+  dp=$(script_dp)
+  fn=$(script_fn)
+  if [[ -z "$dp" || -z "$fn" ]]; then
+    echo 'Error: script_fp encountered an empty path component.' >&2
+    return 1
+  fi
+  echo "$dp/$fn"
+EOF
+  script_fp(){
+    eval "$script_fp_string"
+  }
+
+  ## this script assumes it is located in workspace/tool/env, so
+  workspace(){
+    eval "echo \$(dirname \$(script_dp))"
+  }
+
+# Exports, and give the exported environment a name
+# Bash has no 'closure' hence when exporting a function, one must also export all the pieces.
+
+  export REPO_HOME PROJECT PROMPT_DECOR PPS1 PPS2 
+  export script_adp_string script_fn_string script_dp_string script_fp_string
+  export -f script_adp script_fn script_dp script_fp workspace
+
+  export ENV=$(script_fp)
+  echo ENV "$ENV"
+

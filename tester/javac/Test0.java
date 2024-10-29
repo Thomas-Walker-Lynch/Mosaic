@@ -1,4 +1,3 @@
-package com.ReasoningTechnology.Mosaic.Test;
 import com.ReasoningTechnology.Mosaic.Util;
 
 /*

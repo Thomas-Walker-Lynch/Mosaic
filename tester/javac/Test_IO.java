@@ -1,8 +1,7 @@
-package com.ReasoningTechnology.Mosaic.Test;
 import com.ReasoningTechnology.Mosaic.IO;
 import com.ReasoningTechnology.Mosaic.Util;
 
-public class TestIO{
+public class Test_IO{
 
   public static int fut(){
     try{
@@ -55,10 +54,10 @@ public class TestIO{
     io.restore();
 
     if(!Util.all(condition)){
-      System.out.println("TestIO failed");
+      System.out.println("Test_IO failed");
       return 1;
     }
-    System.out.println("TestIO passed");
+    System.out.println("Test_IO passed");
     return 0;
   }
 

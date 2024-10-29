@@ -15,7 +15,7 @@
 # remove files
   set -x
   cd "$REPO_HOME"/developer
-  rm -r scratch_pad/*
+  rm -r scratchpad/*
   rm jvm/*
   rm shell/*
   set +x

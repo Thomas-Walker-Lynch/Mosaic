@@ -1,0 +1,12 @@
+#!/bin/env bash
+# try both running and sourcing this test
+
+echo "REPO_HOME:" "$REPO_HOME"
+echo "PROJECT:" "$PROJECT"
+
+echo "script_afp:" "$(script_afp)"
+echo "script_adp:" "$(script_adp)"
+echo "script_fn:" "$(script_fn)"
+echo "script_fp:" "$(script_fp)"
+echo "script_dp:" "$(script_dp)"
+echo "ENV:" "$ENV"

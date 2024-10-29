@@ -24,8 +24,7 @@ export PATH=\
 export CLASSPATH=\
 "$JAVA_HOME"/lib\
 :"$REPO_HOME"/release/"$PROJECT".jar\
-:"$REPO_HOME"/tester/jvm/TestBench.jar\
-:"$REPO_HOME"/tester/jvm/TestBench"$PROJECT".jar\
+:"$REPO_HOME"/tester/jvm/Test_"$PROJECT".jar\
 :"$CLASSPATH"
 
 # misc

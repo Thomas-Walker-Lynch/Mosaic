@@ -1,57 +1,80 @@
 #!/usr/bin/env bash
-# environment shared by entire project
-# number one task, establish REPO_HOME
-# this is specific to this script being in the .../tools_shared/env directory
 
-  export PROJECT=$(basename "$REPO_HOME")
+# This is the base environment shared by all roles in the project.
 
-  ## set the shell prompt to show the project
-  PPS1="\n[$PROJECT]\n\u@\h§$(pwd)§\n> "
-  PPS2=">> "
+# The project administrator sets up the following tools for all roles to use:
+#
+  export JAVA_HOME="$REPO_HOME/tool_shared/third_party/jdk-11"
 
-# some useful functions for environment scripts
+# Absolute path to script file. The use of eval makes it suitable for exporting
+# and use with other scripts
 
-  ## path to script file
-  script_fp() {
-    eval "
-      local script_dp=\$(dirname \$(realpath \${BASH_SOURCE[1]}))
-      echo \$(realpath --relative-to=\"$REPO_HOME\" \"\$script_dp\")/\$(script_fn)
-    "
+	read -r -d '' script_afp_string <<-"EOF"
+	  # get the top of the BASH_SOURCE stack
+	  local top_index=$(( ${#BASH_SOURCE[@]} - 1 ))
+	  local bash_source="${BASH_SOURCE[$top_index]}"
+	
+	  # echo
+	  # for (( i=0; i<=top_index; i++ )); do
+	  #   echo "$i: ${BASH_SOURCE[$i]}"
+	  # done
+	  # echo "bash_source (top of stack): $bash_source"
+	
+	  # Resolve the absolute file path
+	  local afp
+	  afp=$(realpath "$bash_source" 2>/dev/null)
+	  if [[ $? -ne 0 ]]; then
+	    echo 'Error: Failed to resolve path in script_afp.' >&2
+	    return 1
+	  fi
+	  echo "$afp"
+	EOF
+	
+  script_afp(){
+    eval "$script_afp_string"
   }
 
-  ## path to script directory
-  script_dp() {
-    eval "
-      local script_dp=\$(dirname \$(realpath \${BASH_SOURCE[1]}))
-      echo \$(realpath --relative-to=\"$REPO_HOME\" \"\$script_dp\")
-    "
+  script_adp(){
+    dirname "$(script_afp)"
   }
 
-  ## an env script will be in workspace/tool/env, so
-  workspace(){
-    eval "echo \$(dirname \$(script_dp))"
-  }
+
+# This script assumes it is located at $REPO_HOME/tools_shared/bespoke and works
+# backwards to recover $REPO_HOME, etc.
+
+  REPO_HOME=$(dirname "$(dirname "$(script_adp)")")
+  echo REPO_HOME "$REPO_HOME"
+
+  PROJECT=$(basename "$REPO_HOME")
+  echo PROJECT "$PROJECT"
+  PROMPT_DECOR=$PROJECT
+
+
+# These functions are offered as a convenience to be run inside other scripts.
+# These produce $REPO_HOME relative results, and thus preferred over script_adp.
 
   ## script's filename
-  script_fn() {
-    eval "echo \$(basename \${BASH_SOURCE[1]})"
+  script_fn(){
+    basename "$(script_afp)"
   }
 
-  export -f script_fp script_dp script_fn workspace
+  ## script's dirpath relative to $REPO_HOME
+  script_fp(){
+    realpath --relative-to="${REPO_HOME}" "$(script_afp)"
+  }
 
-# note to the programs which environment they are running.
+  ## script's dirpath relative to $REPO_HOME
+  script_dp(){
+    dirname "$(script_fp)"
+  }
+
+# Exports, and give the exported environment a name
+# Bash has no 'closure' hence when exporting a function, one must also export all the pieces.
+
+  export REPO_HOME PROJECT PROMPT_DECOR
+  export script_afp_string
+  export -f script_afp script_adp script_fn script_dp script_fp
 
   export ENV=$(script_fp)
-
-# The project administrator setup these tools and environment settings for all
-# on the project to use:
-
-export JAVA_HOME="$REPO_HOME/tool_shared/third_party/jdk-11"
-
-# some feedback to show all went well
-
-echo ENV "$ENV"
-echo PROJECT "$PROJECT"
-
-
+  echo ENV "$ENV"
 

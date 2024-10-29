@@ -12,20 +12,19 @@ import java.time.format.DateTimeFormatter;
 
 public class Util{
 
-  // typically used to gather results before a return
+  // Typically used to gather conditions before returning a test result.
+  // As this is used for testing, and an empty conditions list is unusual,
+  // returns false for an empty conditions list.
   public static boolean all(boolean[] conditions){
-    for( boolean condition : conditions ){
-      if( !condition ){
-        return false;
-      }
-    }
+    if( conditions.length == 0 ) return false;
+    for(boolean condition : conditions) if(!condition) return false;
     return true;
   }
   public static void all_set_false(boolean[] conditions){
-    for( boolean condition : conditions ) condition = false;
+    for(boolean condition : conditions) condition = false;
   }
   public static void all_set_true(boolean[] conditions){
-    for( boolean condition : conditions ) condition = true;
+    for(boolean condition : conditions) condition = true;
   }
 
   public static String iso_utc_time(){

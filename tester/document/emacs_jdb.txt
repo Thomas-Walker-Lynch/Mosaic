@@ -1,0 +1,18 @@
+
+jdb will be in the third_party tools directory:
+
+  2024-10-27T09:34:37Z[Mosaic_tester]
+  Thomas-developer@Blossac§/var/user_data/Thomas-developer/Mosaic/tester§
+  > which jdb
+  /var/user_data/Thomas-developer/Mosaic/tool_shared/third_party/jdk-11/bin/jdb
+
+If Emacs has been run from outside of `env_developer`  or `env_tester` then
+emacs will not see the path to tool_shared/third_party. Emacs can be told
+explicitly:
+
+  (setenv "PATH" (concat (getenv "PATH") ":/var/user_data/Thomas-developer/Mosaic/tool_shared/third_party/jdk-11/bin"))
+  (setq exec-path (append exec-path '("/var/user_data/Thomas-developer/Mosaic/tool_shared/third_party/jdk-11/bin")))
+
+but this probably won't work as other things will also be missing from the
+environment.So either run emacs in the correct environment, or run jdb from a
+shell after sourcing the environment.

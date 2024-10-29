@@ -8,5 +8,5 @@ if [ "$ENV" != "$env_must_be" ]; then
 fi
 
 # space separated list of shell interface wrappers
-echo Test0 TestIO
+echo Test0 Test_Util Test_IO 
  

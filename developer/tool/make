@@ -12,7 +12,7 @@
 
 echo "Compiling files..."
   set -x
-  javac -d scratch_pad javac/*.java
+  javac -g -d scratchpad javac/*.java
   set +x
   if [ $? -ne 0 ]; then
     echo "Compilation failed."
@@ -23,7 +23,7 @@ echo "Creating JAR file..."
   set -x
   jar_file=jvm/"$PROJECT".jar
   mkdir -p jvm
-  jar cf $jar_file -C scratch_pad .
+  jar cf $jar_file -C scratchpad .
   set +x
   if [ $? -eq 0 ]; then
     echo "JAR file created successfully: $jar_file"
