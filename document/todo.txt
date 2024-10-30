@@ -24,5 +24,6 @@ Updates for Ariadne
 
 5. make_source_tree also integrated into make
 
-6. replacement for bespoke/env
+6. replacement for bespoke/env and all other env files
+
 
