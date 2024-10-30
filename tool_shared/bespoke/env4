@@ -69,3 +69,22 @@ script_afp=$(realpath "${BASH_SOURCE[0]}")
   export ENV=$(script_fp)
   echo ENV "$ENV"
 
+echo
+echo "--------------------------------------------------------------------------------"
+echo "from within, at the end, of test_shared/bespoke/env the script functions return the following."
+echo
+echo "REPO_HOME:" "$REPO_HOME"
+echo "PROJECT:" "$PROJECT"
+echo "script_afp:" "$script_afp"
+echo "script_adp:" "$(script_adp)"
+echo "script_fn:" "$(script_fn)"
+echo "script_fp:" "$(script_fp)"
+echo "script_dp:" "$(script_dp)"
+echo "ENV:" "$ENV"
+echo "---------"
+echo "the stack"
+	  top_index=$(( ${#BASH_SOURCE[@]} - 1 ))
+	  for (( i=0; i<=top_index; i++ )); do
+	    echo "$i: ${BASH_SOURCE[$i]}"
+	  done
+
