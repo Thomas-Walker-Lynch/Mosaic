@@ -9,17 +9,28 @@ import java.lang.reflect.Method;
 import java.time.Instant;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
+import java.util.function.Predicate;
 
 public class Util{
 
-  // Typically used to gather conditions before returning a test result.
-  // As this is used for testing, and an empty conditions list is unusual,
-  // returns false for an empty conditions list.
-  public static boolean all(boolean[] conditions){
-    if( conditions.length == 0 ) return false;
-    for(boolean condition : conditions) if(!condition) return false;
-    return true;
+  // Linear search with a predicate
+  public static <T> T find( T[] elements ,Predicate<T> predicate ){
+    for( T element : elements ){
+      if( predicate.test( element )) return element; // Return the first match
+    }
+    return null; // Return null if no element satisfies the predicate
   }
+
+  // True when it does a search and finds a true value; otherwise false.
+  public static boolean exists( Object[] elements ){
+    return elements.length > 0 && find( elements ,element -> (element instanceof Boolean) && (Boolean) element ) != null;
+  }
+
+  // True when it does a search and does not find a false value; otherwise false.
+  public static boolean all( Object[] elements ){
+    return elements.length > 0 && find( elements ,element -> !(element instanceof Boolean) || !(Boolean) element ) == null;
+  }
+
   public static void all_set_false(boolean[] conditions){
     for(boolean condition : conditions) condition = false;
   }

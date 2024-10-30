@@ -29,6 +29,11 @@ export CLASSPATH=\
 :"$REPO_HOME"/tester/jvm/Test_"$PROJECT".jar\
 :"$CLASSPATH"
 
+export SOURCEPATH=\
+"$REPO_HOME"/tester/javac/\
+:"$REPO_HOME"/developer/scratchpad/\
+
+
 # misc
 
   # make .githolder and .gitignore visible

@@ -24,7 +24,7 @@ echo "Creating shell wrappers..."
   for file in $wrapper;do
     cat > shell/$file << EOL
 #!/bin/env bash
-java com.ReasoningTechnology.$PROJECT.Test.$file
+java $file
 EOL
     chmod +x shell/$file
   done

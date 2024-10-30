@@ -8,6 +8,5 @@ if [ "$ENV" != "$env_must_be" ]; then
   exit 1
 fi
 
-# space separated list of shell interface wrappers
-echo Test0 Test_Util Test_IO 
- 
+jdb -sourcepath "$SOURCEPATH" "$@"
+

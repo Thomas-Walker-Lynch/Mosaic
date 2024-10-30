@@ -1,4 +1,5 @@
 #!/bin/env bash
+script_afp=$(realpath "${BASH_SOURCE[0]}")
 
 # This script links the sources into the directory tree in parallel to the package.
 

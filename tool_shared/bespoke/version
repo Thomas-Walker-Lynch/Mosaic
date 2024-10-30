@@ -1,4 +1,5 @@
 #!/bin/env bash
+script_afp=$(realpath "${BASH_SOURCE[0]}")
 
 # 2024-10-24T14:56:09Z project skeleton and test bench files extracted from Ariadne 
 echo v0.1

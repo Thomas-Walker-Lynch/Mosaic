@@ -5,47 +5,37 @@ if [[ "${BASH_SOURCE[0]}" == "$0" ]]; then
   exit 1
 fi
 
-# This is the base environment shared by all roles in the project.
+# --------------------------------------------------------------------------------
+# project definition
 
-# The project administrator sets up the following tools for all roles to use:
-#
-  export JAVA_HOME="$REPO_HOME/tool_shared/third_party/jdk-11"
-
-# Absolute path to script file. The use of eval makes it suitable for exporting
-# and use with other scripts
-#
-# IMHO it is not possible write a function in bash that reliably returns the
-# script's path in all execution scenarios of direct execute, sourcing, and
-# usage in other functions.  So instead, define a variable script_afp at the top
-# of each script:
-#
-#   script_afp=realpath "${BASH_SOURCE[0]}"
-#
-# read -r -d '' script_afp_string <<'EOF'
-# realpath "${BASH_SOURCE[0]}" 2>/dev/null
-# EOF
-#   script_afp(){
-#     eval "$script_afp_string"
-#   }
+# actual absolute director path for this script file
 
   script_adp(){
     dirname "$script_afp"
   }
 
-
-# This script assumes it is located at $REPO_HOME/tools_shared/bespoke and works
-# backwards to recover $REPO_HOME, etc.
+# assume this script is located  $REPO_HOME/tools_shared/bespoke and work backwards
+# to get $REPO_HOME, etc.
 
   REPO_HOME=$(dirname "$(dirname "$(script_adp)")")
   echo REPO_HOME "$REPO_HOME"
 
   PROJECT=$(basename "$REPO_HOME")
   echo PROJECT "$PROJECT"
+
+  # set the prompt decoration to the name of the project
   PROMPT_DECOR=$PROJECT
 
+# --------------------------------------------------------------------------------
+# The project administrator sets up the following tools for all roles to use:
+#
+  export JAVA_HOME="$REPO_HOME/tool_shared/third_party/jdk-11"
 
-# These functions are offered as a convenience to be run inside other scripts.
-# These produce $REPO_HOME relative results, and thus preferred over script_adp.
+# --------------------------------------------------------------------------------
+# the following functions are provided for other scripts to use.
+# at the top of files that make use of these functions put the following line:
+#  script_afp=$(realpath "${BASH_SOURCE[0]}")
+#
 
   ## script's filename
   script_fn(){
@@ -62,12 +52,12 @@ fi
     dirname "$(script_fp)"
   }
 
-# Exports, and give the exported environment a name
+# --------------------------------------------------------------------------------
+# Exports
 # Bash has no 'closure' hence when exporting a function, one must also export all the pieces.
+# do not export script_afp
 
   export REPO_HOME PROJECT PROMPT_DECOR
-#  export script_afp_string
-#  export -f script_afp script_adp script_fn script_dp script_fp
   export -f script_adp script_fn script_dp script_fp
 
   export ENV=$(script_fp)

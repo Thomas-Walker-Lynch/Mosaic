@@ -14,13 +14,14 @@ public class Mosaic{
   }
   
   public static int run(){
-    System.out.println("Mosic currently does not have a shell user interface.");
+    System.out.println("Main function placeholder.  Currently Mosaic is used by extending the TestBench class.");
     return 0;
   }
 
-  // Main function to provide a shell interface for running tests
-  public static int main(String[] args){
-    // currently accepts no arguments or options
-    return run();
+  public static void main(String[] args){
+    int return_code = run();
+    System.exit(return_code); 
+    return;
   }
+
 }    
