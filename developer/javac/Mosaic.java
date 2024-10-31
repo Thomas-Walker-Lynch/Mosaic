@@ -9,7 +9,7 @@ Mosaic currently does not have shell commands.
 
 public class Mosaic{
 
-  public static boolean test_is_true(){
+  public static Boolean test_is_true(){
     return true;
   }
   

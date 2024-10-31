@@ -19,16 +19,16 @@ public class TestTestBench extends TestBench{
     TestSuite(){
     }
 
-    public boolean test_pass(ByteArrayOutputStream out_content, ByteArrayOutputStream err_content){
+    public Boolean test_pass(ByteArrayOutputStream out_content, ByteArrayOutputStream err_content){
       return true;
     }
 
-    public boolean test_fail_0(ByteArrayOutputStream out_content, ByteArrayOutputStream err_content){
+    public Boolean test_fail_0(ByteArrayOutputStream out_content, ByteArrayOutputStream err_content){
       return false;
     }
 
     // Tests if exception uncaught by the test correctly causes a failure from the TestBench.
-    public static boolean test_fail_1() throws Exception {
+    public static Boolean test_fail_1() throws Exception {
       int randomInt = (int) (Math.random() * 100);  // Generate a random integer
       // Always returns true, but Java will not complain that following code is unreachable
       if( 

@@ -23,10 +23,10 @@ public class TestBench{
   private static ByteArrayOutputStream err_content;
   private static InputStream in_content;
 
-  public static boolean method_is_wellformed(Method method) {
-    // Check if the method returns boolean
-    if(!method.getReturnType().equals(boolean.class)){
-      System.out.println("Structural problem: " + method.getName() + " does not return boolean.");
+  public static Boolean method_is_wellformed(Method method) {
+    // Check if the method returns Boolean
+    if(!method.getReturnType().equals(Boolean.class)){
+      System.out.println("Structural problem: " + method.getName() + " does not return Boolean.");
       return false;
     }
 
@@ -50,16 +50,16 @@ public class TestBench{
     return true;
   }
 
-  public static boolean run_test(Object test_suite ,Method method ,IO io){
+  public static Boolean run_test(Object test_suite ,Method method ,IO io){
     String test_name = method.getName();
 
     // Ways a test can fail, these are not generally singularly exclusive.
-    boolean fail_TestBench = false;
-    boolean fail_malformed = false;
-    boolean fail_reported = false;
-    boolean fail_exception = false;
-    boolean fail_extraneous_stdout = false;
-    boolean fail_extraneous_stderr = false;
+    Boolean fail_TestBench = false;
+    Boolean fail_malformed = false;
+    Boolean fail_reported = false;
+    Boolean fail_exception = false;
+    Boolean fail_extraneous_stdout = false;
+    Boolean fail_extraneous_stderr = false;
 
     String exception_string = "";
 
@@ -75,7 +75,7 @@ public class TestBench{
     }
 
     // redirect I/O to an io instance
-    boolean successful_redirect = io.redirect();
+    Boolean successful_redirect = io.redirect();
     if( successful_redirect ){
       io.clear_buffers(); // start each test with nothing on the I/O buffers
     }else{
@@ -122,7 +122,7 @@ public class TestBench{
     }
 
     // return condition
-    boolean test_failed =
+    Boolean test_failed =
       fail_reported 
       || fail_exception 
       || fail_extraneous_stdout

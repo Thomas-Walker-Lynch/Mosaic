@@ -21,8 +21,8 @@ public class IO{
   private ByteArrayOutputStream out_content;
   private ByteArrayOutputStream err_content;
   private ByteArrayInputStream in_content;
-  private boolean streams_foobar = false;
-  private boolean uninitialized = true;
+  private Boolean streams_foobar = false;
+  private Boolean uninitialized = true;
 
 
   // IO currently has no constructors defined, uses default
@@ -35,7 +35,7 @@ public class IO{
   // functions are used.
   //
   // This is the only method that can set the streams_foobar flag.
-  public boolean redirect(){
+  public Boolean redirect(){
 
     try{
       original_out = System.out;
@@ -95,7 +95,7 @@ public class IO{
     System.setIn(in_content);
   }
 
-  public boolean has_out_content(){
+  public Boolean has_out_content(){
     if(streams_foobar){
       throw new IllegalStateException
         (
@@ -114,7 +114,7 @@ public class IO{
     return out_content.toString();
   }
 
-  public boolean has_err_content(){
+  public Boolean has_err_content(){
     if(streams_foobar){
       throw new IllegalStateException
         (

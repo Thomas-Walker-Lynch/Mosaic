@@ -1,45 +1,54 @@
+About `jdb`
 
-1. location 
+1. setting the environment
 
-  jdb  will be in the third_party tools directory:
+  The environment should be set before running the IDE. For example,
 
-  2024-10-27T09:34:37Z[Mosaic_tester]
-  Thomas-developer@Blossac§/var/user_data/Thomas-developer/Mosaic/tester§
+  > cd Mosaic
+  > source env_tester
+  > emacs & 
+
+  (I use emacs as my IDE. You might be using a different tool.)
+
+2. location of the executable
+
+  Provided that the project administrator installed it, jdb is located in the
+  third_party tools directory. In the tester environment the variable
+  `JAVA_HOME` should hold the jdb directory path, and this should already
+  be in the `PATH`.  For example:
+
+  > echo $ENV
+  tester/tool/env
+
+  > echo $JAVA_HOME
+  /var/user_data/Thomas-developer/Mosaic/tool_shared/third_party/jdk-11
+
   > which jdb
   /var/user_data/Thomas-developer/Mosaic/tool_shared/third_party/jdk-11/bin/jdb
 
-2. IDE and the environment
-
-  The environment must be set before running the IDE or the IDE will not
-  have access to it.
-
-  For example Emacs will be following the PATH as it was when Emacs
-  was invoked, for file completion in the Emacs shell, etc.  Even when
-  the environment is set in a shell running inside of emacs.  
-
-      FYI, the path can be fixed but other environment settings will still be missing.
-      (setenv "PATH" (concat (getenv "PATH") ":<directory>"))
-      (setq exec-path (append exec-path '("<directory")))
-
-3. command line:
-
-   SOURCEPATH must be defined in advance.  There is no space between -source and the
-   source path.  Typically SOURCEPATH will be `javac`.
+3. invocation from a shell command:
 
      jdb -sourcepath $SOURCEPATH <class_name>
 
-     currently, in emacs, e.g.:
-     jdb -sourcepathjavac Test_Util
+   The `SOURCEPATH` is assigned a value in `tester/tool/env`.  In some versions
+   of jdb there is no space between `-sourcepath` and the `$SOURCDEPATH`.  
 
-   When invoked from Emacs M-x jdb,  there is no space between the -sourcepath and
-   the $SOURCEPATH.  
+   jdb will read CLASSPATH from the environment. In contrast jdb will not read
+   `SOURCEPATH` from the environment. It must be passed as an argument.
 
-   In jdb run from gud-gdb, when packages are used, the SOURCEPATH is the path
-   to the directory that holds a directory tree, where said directory tree
-   parallels the package name. Otherwise it is the directory path to the source
-   directory. Note the `distribute_sources` script.
+   There is a `run_jdb` script in the `tool` directory.
 
-   When using packages, the <class_name> is fully qualified.
+4. invocation inside of Emacs
+
+   The file `tool_shared/bespoke/emacs.el` holds a definition for the `jdbx`
+   command.  This command will read the SOURCEPATH from the environment and run
+   jdb in Emacs.
+
+   That file also holds the definition for a listener to the jdb `sourcepath`
+   command.
+
+
+
 
 
 

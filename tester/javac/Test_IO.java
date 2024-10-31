@@ -28,7 +28,7 @@ public class Test_IO{
 
   public static int run(){
     IO io = new IO();
-    boolean[] condition = new boolean[3];
+    Boolean[] condition = new Boolean[3];
 
     // Redirect IO streams
     io.redirect();

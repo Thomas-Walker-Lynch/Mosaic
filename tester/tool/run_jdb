@@ -9,3 +9,4 @@ if [ "$ENV" != "$env_must_be" ]; then
 fi
 
 jdb -sourcepath "$SOURCEPATH" "$@"
+

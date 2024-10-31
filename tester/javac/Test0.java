@@ -9,12 +9,12 @@ Plug it in, see if there is smoke. There usually is.
 
 public class Test0{
 
-  public static boolean test_is_true(){
+  public static Boolean test_is_true(){
     return true;
   }
   
   public static int run(){
-    boolean[] condition = new boolean[1];
+    Boolean[] condition = new Boolean[1];
     condition[0] = test_is_true();
 
     int i = 0;

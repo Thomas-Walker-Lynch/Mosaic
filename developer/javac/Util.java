@@ -22,20 +22,20 @@ public class Util{
   }
 
   // True when it does a search and finds a true value; otherwise false.
-  public static boolean exists( Object[] elements ){
+  public static Boolean exists( Object[] elements ){
     return elements.length > 0 && find( elements ,element -> (element instanceof Boolean) && (Boolean) element ) != null;
   }
 
   // True when it does a search and does not find a false value; otherwise false.
-  public static boolean all( Object[] elements ){
+  public static Boolean all( Object[] elements ){
     return elements.length > 0 && find( elements ,element -> !(element instanceof Boolean) || !(Boolean) element ) == null;
   }
 
-  public static void all_set_false(boolean[] conditions){
-    for(boolean condition : conditions) condition = false;
+  public static void all_set_false(Boolean[] conditions){
+    for(Boolean condition : conditions) condition = false;
   }
-  public static void all_set_true(boolean[] conditions){
-    for(boolean condition : conditions) condition = true;
+  public static void all_set_true(Boolean[] conditions){
+    for(Boolean condition : conditions) condition = true;
   }
 
   public static String iso_utc_time(){
