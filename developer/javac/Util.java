@@ -31,11 +31,20 @@ public class Util{
     return elements.length > 0 && find( elements ,element -> !(element instanceof Boolean) || !(Boolean) element ) == null;
   }
 
-  public static void all_set_false(Boolean[] conditions){
-    for(Boolean condition : conditions) condition = false;
+  public static void all_set_false( Boolean[] condition_list ){
+    int i = 0;
+    while(i < condition_list.length){
+      condition_list[i] = false;
+      i++;
+    }
   }
-  public static void all_set_true(Boolean[] conditions){
-    for(Boolean condition : conditions) condition = true;
+
+  public static void all_set_true( Boolean[] condition_list ){
+    int i = 0;
+    while(i < condition_list.length){
+      condition_list[i] = true;
+      i++;
+    }
   }
 
   public static String iso_utc_time(){
