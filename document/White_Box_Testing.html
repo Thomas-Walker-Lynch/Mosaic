@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP&display=swap" rel="stylesheet">
+  <title>White Box Testing - Mosaic Project</title>
+  <style>
+    body {
+      font-family: 'Noto Sans JP', Arial, sans-serif;
+      background-color: hsl(0, 0%, 10%);
+      color: hsl(42, 100%, 80%);
+      padding: 2rem;
+    }
+    .page { max-width: 46.875rem; margin: auto; }
+    h1 {
+      font-size: 1.5rem;
+      text-align: center;
+      color: hsl(42, 100%, 84%);
+      text-transform: uppercase;
+      margin-top: 1.5rem;
+    }
+    h2 {
+      font-size: 1.25rem;
+      color: hsl(42, 100%, 84%);
+      margin-top: 2rem;
+    }
+    p, li {
+      color: hsl(42, 100%, 90%);
+      text-align: justify;
+      margin-bottom: 1rem;
+    }
+    .term {
+      font-family: 'Courier New', Courier, monospace;
+      background-color: hsl(0, 0%, 25%);
+      padding: 0.125rem 0.25rem;
+      border-radius: 0.125rem;
+      color: hsl(42, 100%, 90%);
+    }
+    code {
+      font-family: 'Courier New', Courier, monospace;
+      background-color: hsl(0, 0%, 25%);
+      padding: 0.125rem 0.25rem;
+      color: hsl(42, 100%, 90%);
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <header>
+      <h1>White Box Testing</h1>
+      <p>© 2024 Thomas Walker Lynch - All Rights Reserved.</p>
+    </header>
+
+  <h2>Introduction</h2>
+
+  <div>
+    <p>Testing centers around three key components: the <span class="term">test
+    bench</span>, the <span class="term">test functions</span> (or tests), and
+    the <span class="term">functions under test</span>. In most cases, the
+    developer provides the functions under test. When this tool is used, Mosaic
+    supplies the test bench. This leaves the tester with the role of creating and
+    running the tests. Often, of course, the tester role and the developer role are
+    performed by the same person, though these roles are distinct.</p>
+
+    <p>The term <span class="term">function</span> refers to any program or
+    circuit where outputs are determined solely by inputs, without internal
+    state being kept, and without side effects. All inputs and outputs are
+    explicitly defined. By definition, a function returns a single result, but
+    this is not a very strong constraint because said single result can be a
+    collection, such as a vector or set.</p>
+
+    <p>We need this precise definition for a function to make meaningful
+      statements in this document, but the Mosaic TestBench can be used with
+      tests designed to evaluate any type of subroutine. A later chapter will
+      cover testing stateful subroutines, provided that I get around to writing it.</p>
+
+    <p>There is also a nuanced distinction between <span class="term">function</span> 
+      in singular and plural forms, because a collection of functions can be viewed as 
+      a single larger function with perhaps more inputs and outputs. Hence, when a test 
+      is said to work on a function, we cannot conclude that it is a single function 
+      defined in the code.</p>
+
+    <p>A test must have access to the function under test so that it can supply
+      inputs and harvest outputs from it. A test must also have a 
+      <span class="term">failure detection function</span> that, when given
+      copies of the inputs and outputs, will return a result indicating if a
+      test failed or not. Ideally, the failure detection function is accurate,
+      or even perfect, as this reduces missed failures and minimizes the need 
+      to verify cases that it has flagged as failures.</p>
+
+    <p>The tester’s goal is to identify <span class="term">failures</span>,
+    observable differences between actual outputs and expected outputs. Once a
+    failure is identified, a developer can investigate the issue, locate
+    the <span class="term">fault</span>, and implement corrections as
+    necessary. While Mosaic aids in failure detection, it does not directly
+    assist with debugging.</p>
+
+  </div>
+
+  <h2>Unstructured Testing</h2>
+
+  <p>Unstructured testing is at the base of all testing strategies. The following are some
+  examples of approaches to unstructured testing. The Mosaic TestBench is agnostic
+  to the approach used for unstructured testing, rather this section is about writing
+  the test code that the TestBench will call.</p>
+
+    <h3> Reference Value based testing </h3>
+
+    <p>In <span class="term">reference value-based testing</span>, an ordering
+      is assigned to the <span class="term">inputs</span> for
+      the <span class="term">function under test</span>, as well as to
+      its <span class="term">outputs</span>. With this ordering, the function
+      under test can be said to receive an <span class="term">input
+      vector</span> and to return an <span class="term">actual output vector</span>.</p>
+
+    <p> In this testing approach, a <span class="term">Reference Model</span> is also used.
+      When given an <span class="term">input vector</span>, the Reference Model will produce
+      a corresponding <span class="term">reference output vector</span> that follows the
+      same component ordering as the <span class="term">actual output vector</span> from the
+      function under test.</p>
+
+    <p>The <span class="term">failure detection function</span> then compares each
+      actual output vector with its respective reference output vector. If they do
+      not match, the test is deemed to have failed.</p>
+
+    <p>The Reference Model is sometimes referred to as the <span class="term">golden
+        model</span>, and said to produce <span class="term">golden values</span>. However, this
+      terminology is often an exaggeration, as testing frequently reveals inaccuracies
+      in reference values.</p>
+
+    <p>Thus, in reference value-based testing, the failure detection function
+      relies on a comparison between the actual and reference output vectors. Its accuracy
+      depends directly on the accuracy of the Reference Model.</p>
+
+    <h3>Property Check Testing</h3>
+
+    <p><span class="term">Property check testing</span> is an alternative to
+    reference value-based testing. Here, rather than comparing the actual
+    outputs to reference outputs, the actual output is validated against
+      known properties or expected characteristics.</p>
+
+    <p>For example, given an integer as input, a function that squares this
+    input should yield an even result for even inputs and an odd result for odd
+    inputs. If the output satisfies the expected property, the test passes;
+    otherwise, it fails. This approach allows testing of general behaviors
+    without specific reference values.</p>
+
+    <h3>Spot Checking</h3>
+
+    <p>With spot checking, the function under test is checked against one or
+      two input vectors.</p>
+
+    <p>Moving from zero to one, i.e. trying a program for the first time,
+      can have a particularly high threshold of difficulty. A tremendous
+      around is learned during development if even one tests passes for
+      a function.</p>
+
+    <p>Sometimes there are notorious edge cases. Zeros and one off the
+      end of arrays come to mind. Checking a middle value and the edge
+      cases is often an effective test.</p>
+
+    <p>It takes two points to determine a line.  In Fourier Analysis,
+      it takes two samples per period of the highest frequency component
+      to determine an entire wave form. There is only so much a piece of
+      code can do different if it works at the edge cases and in between.
+      It is because of this effect that ad hoc testing has produced so
+      much working code.
+    </p>
+
+    <p>Spot checking is particularly useful during development. It is the
+      highest leverage testing return for low investment.  High investment is
+      not approrpiate for code in development that is not stable, and is open to
+      being refactored.
+    </p>
+
+  </div>
+</body>
+</html>
+  
+<!--
+
+    <h1>White Box Testing</h1>
+
+    <h2>Terminology</h2>
+
+    <p>Testing centers around three key components: the <span class="term">test
+    bench</span>, the <span class="term">test functions</span> (or tests), and
+    the <span class="term">functions under test</span>. In most cases, the
+    developer provides the functions under test. When this tool is used, Mosaic
+    supplies the test bench. This leaves the tester with role of creating and
+    running the tests. Often times, of course, the tester role and the developer
+    role are performed by the same person, still these roles are distinct.</p>
+
+    <p>The term <span class="term">function</span> refers to any program or
+    circuit where outputs are determined solely by inputs, without internal
+    state being kept, and without side effects. All inputs and outputs are
+    explicitly defined. By definition, a function returns a single result, but
+    this is not a very strong constraint because said single result can be a
+    collection, such as a vector or set.</p>
+
+    <p>We need this precise definition for function so as to make meaningful
+      statements in this document, but the Mosaic TestBench can be used with
+      tests that are designed to test any sort of subroutine. There is a later
+      chapter (provide that I get around to writing it) on testing stateful
+      subroutines.</p>
+
+    <p>There is also a nuanced distinction
+    between <span class="term">function</span> in singular and plural forms,
+    because a collection of functions can be viewed as a single larger function
+    with perhaps more inputs and outputs. Hence, when a test is said to work on
+    a function, we cannot conclude that it is a single function defined in the
+    code.</p>
+
+    <p>A test must have access to the function under test so that it can supply
+      inputs and harvest results from it. A test must also have a
+      <span class="term">failure detection function</span> that is when given
+      copies of the inputs and outputs will returns a result indicating if a
+      test failed, or not. Hopefully the failure detection function is accurate,
+      or even perfect, as then fewer failures will be missed, and less work must
+      be done to verify cases it has concluded have failed.</p>
+
+  <h2> Property Check Testing
+
+    <p>Another form of testing is that of <span class="term">property check
+        testing</span>.  With this type of testing input vectors are generated and
+      introduced to the function under test as before; however instead of using a
+      reference value, the actual result vector
+
+
+
+<h2> spot checking</h2>
+
+another form of testing, inputs are generated as for the 
+
+properties 
+
+<p>An ordered set of inputs used in testing is called an "input vector" or "test
+vector". When an input vector is given to the function under test, the result is
+  an "corresponding actual output vector".</p>
+
+<p>In one form of testing, there is a golden model that when given an input
+vector will produce the "corresponding expected output vector".  This is also
+called the "golden value".  The bit order in the expected output vector is made
+the same as for that of the actual output venctor.</p>
+
+<p>In a common for 
+
+
+    <p>As a test bench, Mosaic does not define failure functions directly; rather, the tester implements these functions within the tests.</p>
+
+    <p>The tester's goal is to identify <span class="term">failures</span>, which represent observable mistakes by the developer. The identified cause of failure is called a <span class="term">fault</span>, and it may relate to specific code lines, logic flaws, or physical hardware issues. In hardware testing, faults might also stem from manufacturing defects or component degradation.</p>
+
+    <p>Mosaic is a tool for finding failures. Once a failure is identified, the developer typically uses a debugger to trace the mechanism behind the failure, ultimately locating the fault. While Mosaic aids in failure detection, its primary role is not in the debugging process itself.</p>
+
+  </div>
+</body>
+</html>
+-->

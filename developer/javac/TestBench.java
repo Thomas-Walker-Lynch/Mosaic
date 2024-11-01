@@ -85,7 +85,7 @@ public class TestBench {
   /* --------------------------------------------------------------------------------
     Run all tests in the test suite
   */
-  public static void run(Object test_suite){
+  public static int run(Object test_suite){
     int failed_tests = 0;
     int passed_tests = 0;
     Method[] methods = test_suite.getClass().getDeclaredMethods();
@@ -99,5 +99,8 @@ public class TestBench {
     System.out.println("Total tests run: " + (passed_tests + failed_tests));
     System.out.println("Total tests passed: " + passed_tests);
     System.out.println("Total tests failed: " + failed_tests);
+
+    return (failed_tests > 0) ? 1 : 0;
   }
+
 }

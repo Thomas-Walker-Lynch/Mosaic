@@ -36,18 +36,20 @@
 
     <p>These tests are primarily ad hoc, as we avoid using the TestBench to test
     itself. Despite being ad hoc, the tests follow a core philosophy: the goal
-    is to identify which functions fail, rather than diagnose why they fail. To
-    achieve this, tests do not print messages but instead
-    return <code>true</code> if they pass.</p>
+    is to identify which functions fail, rather than diagnose why they fail. In
+    the argot of the field, we are looking for function failures ad are not
+    identifying falts. Hence, tests do not print messages but signal if they
+    fail, or not.</p>
 
     <p>Accordingly, only pass/fail counts and the names of failing functions are
-    recorded. For more detailed investigation, the developer can run a failed
-    test using a debugging tool such as <code>jdb</code>.</p>
+    recorded. For more detailed investigation, for locating the fault, the
+    developer can run a failed test using a debugging tool such
+    as <code>jdb</code>.</p>
 
     <h2>1. Running the Tests</h2>
     <p>To run all tests and gather results, follow these steps:</p>
     <ol>
-      <li>Ensure the environment is clean by running <code>clean_build_directories</code>.</li>
+      <li>Make sure no old files are hanging about by running <code>clean_build_directories</code>.</li>
       <li>Run <code>make</code> to compile the project and prepare all test class shell wrappers.</li>
       <li>Run <code>run_tests</code> to run the tests. Each test class will output
       its results, identifying tests that failed.</li>

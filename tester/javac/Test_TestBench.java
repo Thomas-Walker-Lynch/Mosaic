@@ -23,6 +23,7 @@ public class Test_TestBench {
 
   // Tests if a method with an invalid return type is identified as malformed by TestBench
   public static Boolean test_method_is_wellformed_1(IO io) {
+    System.out.println("Expected output: Structural problem message for dummy_invalid_return_method.");
     try {
       Method invalidReturnMethod = Test_TestBench.class.getMethod("dummy_invalid_return_method", IO.class);
       return Boolean.FALSE.equals(TestBench.method_is_wellformed(invalidReturnMethod));
@@ -64,9 +65,9 @@ public class Test_TestBench {
     if (test_run_test_0(io)) passed_tests++; else { System.out.println("test_run_test_0"); failed_tests++; }
 
     // Summary for all the tests
-    System.out.println("Total tests run: " + (passed_tests + failed_tests));
-    System.out.println("Total tests passed: " + passed_tests);
-    System.out.println("Total tests failed: " + failed_tests);
+    System.out.println("Test_TestBench Total tests run: " + (passed_tests + failed_tests));
+    System.out.println("Test_TestBench Total tests passed: " + passed_tests);
+    System.out.println("Test_TestBench Total tests failed: " + failed_tests);
 
     return (failed_tests > 0) ? 1 : 0;
   }
