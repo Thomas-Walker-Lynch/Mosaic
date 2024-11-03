@@ -69,14 +69,13 @@
 
     <h2>Introduction</h2>
 
-    <p>This guide provides a general overview of testing concepts to help
-      readers understand how the Mosaic test bench integrates within a testing
-      setup. Note that this is not a reference manual for the Mosaic test bench
-      itself. At the time of writing, no such reference document exists, so
-      developers and testers are advised to consult the source code directly for
-      implementation details. A small example can be found in
-      the <code>Test_MockClass</code> file within the tester directory. Other
-      examples can be found in projects that make use of Mosaic.</p>
+    <p>This guide provides a general overview of testing concepts. It is
+      not a reference manual for the Mosaic test bench itself. At the
+      time of writing, no such reference document exists, so developers and
+      testers are advised to consult the source code directly for implementation
+      details. A small example can be found in the <code>Test_MockClass</code>
+      file within the tester directory. Other examples can be found in projects
+      that make use of Mosaic.</p>
 
     <p>A typical testing setup comprises three main components:
     the <span class="term">test bench</span>, the <span class="term">test
@@ -90,25 +89,26 @@
 
     <p>Each test routine supplies inputs to a RUT, collects the resulting
       outputs, and determines whether the test passes or fails based on those
-      values. The results are then relayed to the test bench.  Testers and
-      developers write the test routines and place them into the test bench.
-    </p>
+      values. A given test routine might repeat this procedure for any number
+      of <span class="term">test cases</span>. The final result from the test
+      routine is then relayed to the test bench. Testers and developers write
+      the test routines and place them into the test bench.</p>
 
     <p>Mosaic is a test bench. It serves as a structured environment for
-    organizing and executing tests, and it provides a library of utility
+    organizing and executing test routines, and it provides a library of utility
     routines for assisting the test writer. When run, the test bench sequences
     through the set of test routines, one by one, providing each test routine
-    with an interface to control and examine standard input and output. (The
-    test routine, depending on its design, might in turn sequence through a
-    series of <span class="term">test cases</span>.) During execution, the test
-    bench records pass/fail results, lists the names of the tests that failed,
+    with an interface to control and examine standard input and output. Each 
+    test routine, depending on its design, might in turn sequence through
+    test cases. During execution, the test
+    bench records pass/fail results, lists the names of the test routines that failed,
     and generates a summary report with pass/fail totals.</p>
 
     <p>At the time of this writing, Mosaic does not provide features for
       breaking up large test runs into parallel pieces and then load balancing
       those pieces. Perhaps such a feature will be developed for a future version.
       However, this does not prevent an enterprising tester from running multiple
-      Mosaic runs with different tests in parallel in an ad hoc manner, or
+      Mosaic runs with different test routines in parallel in an ad hoc manner, or
       with other tools.</p>
 
     <h2>Function versus Routine</h2>
@@ -155,83 +155,82 @@
     components working together, it is conducting
     an <span class="term">integration test</span>.</p>
 
-    <p>Integration tests often involve combining significant components of a
-    program that were developed independently, and they may occur later in the
-    project schedule. This phase can be challenging for testers, as it may
-    reveal complex, unforeseen interactions. To mitigate such challenges, some
-    software development methodologies encourage introducing simpler versions of
-    such components early in development, then refining them over time.</p>
+    <p>Integration tests typically involve combining substantial components of a
+    program that were developed independently. Such tests can occur later in the
+    project timeline, where they can reveal complex and unforeseen interactions
+    between components when there is not adequate time to deal with them. To
+    help address these challenges, some software development methodologies
+    recommend to instead introducing simplified versions of large components
+    early in the development process, and to then refine them over time.</p>
 
+    <h2>Failures and Faults</h2>
 
-  <h2>Failures and Faults</h2>
+    <p>A test routine has two primary responsibilities: firstly in supplying inputs
+      and collecting outputs from the RUT, and secondly in determining whether the RUT
+      passed or failed the test. This second responsibility is handled by
+      the <span class="term">failure decider</span>. When the failure decider is not
+      an explicit function in the test routine,its functionality will still be present
+       in the test routines logic.</p>
 
-    <p>A test routine has two primary responsibilities: supplying inputs and
-      collecting outputs from the RUT, and determining whether the RUT passed or
-      failed the test. This second responsibility is handled by
-      the <span class="term">failure decider</span>. The failure decider may not
-      always be an explicit function in the test routine, but its logical
-      functionality will be there.</p>
+    <p>A given failure decider might produce <span class="term">false
+    positive</span> or <span class="term">false negative</span> results. A
+    false positive occurs when the failure decider indicates that a test has
+    passed when it should have failed; hence, this is also known as
+    a <span class="term">false pass</span>. Conversely, a false negative occurs
+    when the decider indicates failure when the test should have passed; hence, this also
+    known as a <span class="term">false fail</span>. An <span class="term">ideal
+    failure decider</span> would produce neither false passes nor false
+    fails.</p>
 
-    <p>A failure decider implementation can make false positive and false
-    negative decisions. A false positive occurs when the failure decider
-    indicates that a test has passed when ideally it would have
-    failed. Conversely, a false negative decision occurs when the decider
-    indicates failure when ideally it would have
-    passed. An <span class="term">ideal failure decider</span> would produce
-    neither false positives nor false negatives.</p>
+    <p>In a typical testing workflow, passing tests receive no further
+    scrutiny. In contrast, failed tests are further examined to locate the
+    underlying fault. Thus, for such a workflow, false fails are likely to be
+    caught in the debugger, while false passes might go undetected until
+    release, then be discovered by users. Early in the project timeline, this
+    effect can be mitigated by giving passing cases more scrutiny, essentially
+    spot-checking the test environment. Later, in regression testing, the volume
+    of passing cases causes spot-checking to be ineffective. Alternative
+    strategies include redundant testing, better design of the failure decider,
+    or employing other verification techniques.</p>
 
-    <p>In general, false negatives are more likely to be caught, as all negative
-      results (fails) lead to debugging sessions and further scrutiny. In
-      contrast positives (passes) garner no further scrutiny, and thus false
-      positives are unlikely to be caught.</p>
+    <p>A failure occurs when there is a deviation between the <span class="term">observed output</span> from a RUT and the <span class="term">ideal output</span>. When the ideal output is unavailable, a <span class="term">reference output</span> is often used in its place. When using reference outputs, the accuracy of test results depends on both the accuracy of the failure decider and the accuracy of the reference outputs themselves.</p>
 
-    <p>A failure occurs when there is a deviation between
-      the <span class="term">observed output</span> from a RUT and
-      the <span class="term">ideal output</span>. When the ideal output is not
-      available, a <span class="term">reference output</span> is often used in
-      its place. When using reference outputs, the accuracy of the test results
-      depends on both the accuracy of the failure decider and the accuracy of
-      the reference values themselves.</p>
+    <p>Some testers will refer to an <span class="term">observed output</span> as an <em>actual output</em>. Additionally, some testers will call <span class="term">reference outputs</span> <em>golden values</em>, particularly when those values are considered highly accurate. However, the terminology introduced earlier aligns more closely with that used in scientific experiments, which is fitting since testing is a form of experimentation.</p>
 
-    <p>Some folks will refer to an <span class="term">observed output</span> as
-      an <span class="term">actual output</span>. Also, some engineers will
-      refer to a <span class="term">reference value</span> as
-      a <span class="term">golden value</span>, especially when the reference
-      value is considered to be highly accurate. However, these alternative
-      terms are less precise, so in our shop, we prefer the terminology
-      introduced in the previous paragraph.</p>
+    <p>A fault is a flaw in the design, implementation, or realization of a
+    product that, if fixed, would eliminate the potential for a failure to be
+    observed. Faults are often localized to a specific point, but they can also
+    result from the mishandling of a confluence of events that arise during
+    product operation.</p>
 
-    <p>In testing, a <span class="term">fault</span> refers to an error or flaw
-      within a design, implementation, or realization that, under specific
-      conditions, would lead to an observable failure. While the origins of a
-      fault often be traced back further, perhaps to a root cause such as a
-      human error, providing a fix at such a root cause will not prevent the
-      failure in the next product release.</p>
+    <p>The goal of testing is to create conditions that make failures observable. Once a failure is observed, it is the responsibility of developers, or testers in a development role, to debug these failures, locate the faults, and implement fixes.</p>
 
-    <p>Thus the goal of testing is to create conditions that cause faults to
-      manifest as observed failures. The tester's responsibility is not to
-      identify or locate the underlying faults. Once a failure is observed, it
-      then becomes the task of a person playing a developer’s role to
-      investigate the cause, identify the fault, and to address it
-      appropriately.</p>
+    <p>Root cause analysis extends beyond the scope of development and test. It
+    involves examining project workflows to understand why a fault exists in the
+    product. Typically, root cause analysis will identify a root cause that, if
+    "fixed," would not eliminate the potential for a failure to be observed in
+    the current or near-term releases. Consequently, root cause analysis is
+    generally not a priority for design and testing but instead falls within the
+    domain of project management.</p>
 
-    <p>The Mosaic tool assists testers in finding failures, but it does not
-      directly help with identifying the underlying fault that led to the
-      failure.  Mosaic is a tool for testers.  However, these two tasks of
-      finding failures and faults are not entirely separate. Knowing where a
-      failure occurs can provide the developer with a good place to start for
-      looking for the fault, and also narrows down the possibilities.
-      Additionally, once a developer claims to have fixed a fault, that claim
-      can be verified by re-running the tests, which is useful.</p>
+    <p>A technique commonly used to increase the variety of conditions—and thus the likelihood of creating conditions that reveal faults—is to run more tests with different inputs. This is called increasing the <span class="term">test coverage</span>.</p>
+
+    <p>The Mosaic tool assists testers in finding failures, but it does not directly help with identifying the underlying fault that led to the failure. Mosaic is a tool for testers. However, these two tasks—finding failures and locating faults—are not entirely separate. Knowing where a failure occurs can provide the developer with a good starting point for locating the fault and help narrow down possible causes. Additionally, once a developer claims to have fixed a fault, that claim can be verified through further testing.</p>
+
 
     <h2>Unstructured Testing</h2>
 
-    <p>Unstructured testing forms the foundation of all testing strategies. This
-      section outlines some common approaches to unstructured testing.</p>
+    <p>This section outlines some common approaches
+      to <span class="term">unstructured testing</span>, often referred to
+      as <span class="term">black box testing</span>. Black boxes are inherent
+      in even the most structured testing approaches, as at the lowest levels of
+      analysis, elements will always remain opaque. Even in the most highly
+      detailed test of logic possible, one that examines a RUT down to the
+      individual logic gates, each gate would be treated as a black box.</p>
 
-    <h3>Reference-Value Based Testing</h3>
+    <h3>Reference Output Based Testing</h3>
 
-    <p>In <span class="term">reference-value based testing</span>, an ordering
+    <p>In <span class="term">reference output based testing</span>, an ordering
       is assigned to the <span class="term">inputs</span> for
       the routine under test, as well as to
       its <span class="term">outputs</span>. Through this ordering the inputs
@@ -249,23 +248,23 @@
     each observed output vector with its corresponding reference output vector. If
     they do not match, the test is deemed to have failed.</p>
 
-    <p>It follows that in reference-value based testing, the accuracy of
-    the <span class="term">failure detection function</span> depends solely on
-      the accuracy of the reference model.</p>
+    <p>It follows that in reference output based testing, the accuracy of the
+    test results depends solely on the accuracy of the Reference Model.</p>
 
-    <p>When the implementation of the reference model is unrelated to the
+    <p>When the implementation of the Reference Model is unrelated to the
       routine under test, we tend to expect that the errors produced by the
-      reference model will be uncorrelated with those produced by the routine
+      Reference Model will be uncorrelated with those produced by the routine
       under test, and thus not probable to coincide. This property will bias
-      tests towards delivering false negatives. As noted earlier, false negatives
-      are likely to be caught as test fails are followed up with further
-      scrutiny. Hence, reference-value based testing tends to be pretty
-      accurate even when the reference generator is not ideal.</p>
+      test routines towards delivering false fails. As noted earlier, false fails are
+      likely to be caught as test fails are followed up with further
+      scrutiny. It follows that reference output based testing can potentially
+      deliver a high degree of accuracy even though the reference model is not
+      ideal.</p>
 
-    <h3>Property-Check Testing</h3>
+    <h3>Property Check Testing</h3>
 
-    <p><span class="term">property-check testing</span> is an alternative to
-    reference-value based testing. Here, rather than comparing each observed
+    <p><span class="term">Property Check Testing</span> is an alternative to
+    reference output based testing. Here, rather than comparing each observed
     output to a reference output, the observed output is validated against
       known properties or expected characteristics.</p>
 
@@ -273,44 +272,143 @@
       this input will preserve the parity of the input, as an odd number squared
       will be odd, and an even number squared will be even. The failure decider
       can check this property for each test case, and if it does not hold, the
-      test case fails. Such a weak property check would be biased towards
-      false positive decisions. Those are the bad ones, as passing tests
-       typically receive no further scrutiny.</p>
+      test case fails.</p>
+
+    <p>Note for the square RUT test, this proposed property check is weak. Given
+      a uniform distribution, half the time an errant square will still have the
+      correct parity. There are stronger property checks that could be done for
+      squares, but the point here is one of illustration.  A weak property check
+      would not recognize many failures, and thus be biased towards false pass
+      decisions. Those are the bad ones, as passing tests typically receive no
+      further scrutiny.</p>
 
     <h3>Spot Checking</h3>
 
     <p>In spot checking, the function under test is checked against one or
       two input vectors.</p>
 
-    <p>Moving from zero to one, i.e., running a program for the first time,
-      can have a particularly high threshold of difficulty. A tremendous
-      amount is learned during development if even one test passes for
-      a function.</p>
+    <p>Moving from zero to one is an finite relative change, i.e., running a
+      program for the first time requires that many moving parts work together,
+      parts that have never been tried before; hence, a tremendous amount is
+      learned about the logic and setup when the first test runs. Such a first
+      test is called a <scan class="term">smoke test</scan>, a term that
+      has literal meaning in the field of electronics testing.</p>
 
-    <p>There are sometimes notorious edge cases. Zeros and values just off the
-      end of arrays come to mind. Checking a middle value and edge cases 
-      is often an effective approach.</p>
+    <p>There are notorious edge cases in software. Zeros and index values just
+      off the end of arrays come to mind. Checking a middle value and edge cases
+      is often an effective approach for finding failures.</p>
 
-    <p>It takes two points to determine a line. In Fourier analysis,
-      it takes two samples per period of the highest frequency component
-      to determine an entire waveform. A piece of code that works for both 
-      edge cases and values in between is often reliable. This effect 
-      explains why ad hoc testing has lead to so much working code.</p>
+    <p>It takes two points to determine a line. In Fourier analysis, it takes
+      two samples per period of the highest frequency component to determine an
+      entire waveform. Code also has patterns, patterns that are disjoint at
+      edge cases. Hence if a piece of code runs without failures for both edge
+      cases and spot check values in between, it will often run without
+      failures over an entire domain of values. This effect explains why ad hoc
+      testing has lead to so much relatively fail free code.</p>
 
-    <p>Spot checking is particularly useful during development. It provides 
-      the highest leverage in testing for the lowest investment. High 
-      investment is not appropriate for code still in development that 
-      is not yet stable and is open to being refactored.</p>
+    <p>Spot checking is especially valuable in early development, as it provides
+      useful insights with minimal investment. At this stage, investing more is
+      unwise while the code is still in flux.</p>
 
+    <h3>Exhaustive Testing</h3>
+
+    <p>A test routine will potentially run multiple test cases against a given
+      RUT. If the RUT is a pure function, then per test case, a single test
+      vector will be given to the RUT, and a single output vector will be
+      returned.  However, if the RUT is sequential in nature, for each test case
+      there will be a sequence of input vectors, and potentially a sequence of
+      output vectors.</p>
+
+    <p>The set of possible inputs for a RUT, were members are either individual
+      vectors, or vector sequences, constitutes the <span class="term">input
+      space</span>. Test <span class="term">coverage</span> is typically given
+      as the proportion or inputs tested to the total in the input space,
+      reported as a percentage./p>
+
+    <p>When the RUT is a pure function, the input space is an enumeration of all
+      possible input vectors. If the inputs include arbitrary long strings, then it
+      will not be possible to complete such an enumeration, the best that can
+      be done is to generate more and more inputs upon demand.
+    </p>
+
+     <p>When the RUT has sequential behavior, achieving full coverage requires
+      giving the RUT every possible starting input, and then sequencing it to a
+      point of hitting a stop state or cycle state in every possible way.  Again
+      if inputs can be arbitrarily long strings, such an enumeration can not be
+      completed. Furthermore, if the RUT state is encapsulated unseen in a black
+      box, it might be very difficult, or impossible, to detect when the state
+      has cycled.</p>
+
+    <p><span class="term">Exhaustive testing</span> is said to have been
+      done when every single input in the input space has been tested.
+      An exhaustive test will have obtained 100% coverage, with no rounding
+      done in the coverage computation.</p>
+
+    <p>Suppose that a fault appears at time t₀. Suppose there is a duration of
+      time of interest, Δ, that begins at or later than t₀. Suppose further
+      there exists a given test and test case that fails due to the fault, but
+      would not otherwise fail. Then a <span class="term">failure is
+      reproducible</span> during Δ, if and only if the given test and test case
+      would fail if run at any time during Δ, and no matter how many times it is
+      run.</p>
+
+    <p>For a RUT that is a pure function, this definition is the same as saying
+      the test case fails at the same input value every time during Δ, when
+      ideally is should have passed. For a sequential RUT, it is saying that the
+      same input vector sequence will always lead to a failure, when ideally it
+      would lead to a pass.</p>
+
+    <p>Although the same test routine is run with identical inputs, a failure
+      might not be reproducible due to other sources of variability, as
+      examples:</p>
+          <ol>
+            <li>The contract made with the programmer for using the exact same
+            inputs for the exact same test routine was broken.
+            <li>Use of uninitialized memory.
+            <li>Software updates or platform changes in between test runs during Δ.
+            <li>Green thread, or real thread, scheduling differences, whether done by the OS or by the interpreter.
+            <li>Using the system time as data, or other system parameter.
+            <li>Race conditions.
+            <li>Getting values from a randomly seeded pseudo random number generator.</li>
+            <li>Reaching out of the architecture model for values, as examples
+              using performance measures or by timing events.</li>
+            <li>A hardware fault that is sensitive to a myriad of possible environmental
+              influences.</li>
+          </ol>
+    
+    <p>Exhaustive testing will find all failures that are reproducible. It might
+      find failures that are not reproducible. The probability of witnessing
+      non-reproducible failures will typically go up when using the technique
+      of <span class="term">over testing</span>, i.e. running even more than an
+      exhaustive number of tests.</p>
 
     <h2>Structured Testing</h2>
 
     <h3>The need for structured testing</h3>
 
-    <p>Another name for unstructured testing is <span class="term">black box testing</span>. Black box testing has a serious problem in that
-      search space for failures becomes exponentially larger as the number of inputs grows.</p>
+    <p>All types of black box testing have a serious problem in that the search
+      space for failures becomes exponentially larger as the number of inputs
+      grow. Consider the case of the simplest of programs, one that adds two
+      numbers together. When the RUT is a black box, the test routine only has
+      access to the interface, so it appears like this.</p>
 
+    <code>
+      int8 sum(int8 a ,int8 b){
+        ...
+      }
+    </code>
     
+    
+
+
+  </div>
+</body>
+</html>
+  
+<!--
+discipline, if it was a bug, it should be test
+
+
 
     <p>A developer will use routines as building blocks for building
       a program. This leads to a hierarchy of routines.
@@ -326,17 +424,6 @@
       test their communication and interactions, and, finally, assess the complete
       integration of functions across a system.</p>
 
-    <p>When functions are composed without adding internal state (memory), the composition itself acts as a single <span class="term">function</span>. Therefore, a test designed for an individual function may also be applied to composed functions, provided they are stateless.</p>
-
-
-
-
-  </div>
-</body>
-</html>
-  
-<!--
-discipline, if it was a bug, it should be test
 
     structured testing
 
@@ -390,83 +477,6 @@ discipline, if it was a bug, it should be test
       all computer code is accessed through inputs and outputs.  
 
 
-
-    <h1>White Box Testing</h1>
-
-    <h2>Terminology</h2>
-
-    <p>Testing centers around three key components: the <span class="term">test
-    bench</span>, the <span class="term">test functions</span> (or tests), and
-    the <span class="term">functions under test</span>. In most cases, the
-    developer provides the functions under test. When this tool is used, Mosaic
-    supplies the test bench. This leaves the tester with role of creating and
-    running the tests. Often times, of course, the tester role and the developer
-    role are performed by the same person, still these roles are distinct.</p>
-
-    <p>The term <span class="term">function</span> refers to any program or
-    circuit where outputs are determined solely by inputs, without internal
-    state being kept, and without side effects. All inputs and outputs are
-    explicitly defined. By definition, a function returns a single result, but
-    this is not a very strong constraint because said single result can be a
-    collection, such as a vector or set.</p>
-
-    <p>We need this precise definition for function so as to make meaningful
-      statements in this document, but the Mosaic TestBench can be used with
-      tests that are designed to test any sort of subroutine. There is a later
-      chapter (provide that I get around to writing it) on testing stateful
-      subroutines.</p>
-
-    <p>There is also a nuanced distinction
-    between <span class="term">function</span> in singular and plural forms,
-    because a collection of functions can be viewed as a single larger function
-    with perhaps more inputs and outputs. Hence, when a test is said to work on
-    a function, we cannot conclude that it is a single function defined in the
-    code.</p>
-
-    <p>A test must have access to the function under test so that it can supply
-      inputs and harvest results from it. A test must also have a
-      <span class="term">failure detection function</span> that is when given
-      copies of the inputs and outputs will returns a result indicating if a
-      test failed, or not. Hopefully the failure detection function is accurate,
-      or even perfect, as then fewer failures will be missed, and less work must
-      be done to verify cases it has concluded have failed.</p>
-
-  <h2> Property-Check Testing
-
-    <p>Another form of testing is that of <span class="term">property-check
-        testing</span>.  With this type of testing input vectors are generated and
-      introduced to the function under test as before; however instead of using a
-      reference value, the actual result vector
-
-
-
-<h2> spot checking</h2>
-
-another form of testing, inputs are generated as for the 
-
-properties 
-
-<p>An ordered set of inputs used in testing is called an "input vector" or "test
-vector". When an input vector is given to the function under test, the result is
-  an "corresponding actual output vector".</p>
-
-<p>In one form of testing, there is a golden model that when given an input
-vector will produce the "corresponding expected output vector".  This is also
-called the "golden value".  The bit order in the expected output vector is made
-the same as for that of the actual output venctor.</p>
-
-<p>In a common for 
-
-
-    <p>As a test bench, Mosaic does not define failure functions directly; rather, the tester implements these functions within the tests.</p>
-
-    <p>The tester's goal is to identify <span class="term">failures</span>, which represent observable mistakes by the developer. The identified cause of failure is called a <span class="term">fault</span>, and it may relate to specific code lines, logic flaws, or physical hardware issues. In hardware testing, faults might also stem from manufacturing defects or component degradation.</p>
-
-    <p>Mosaic is a tool for finding failures. Once a failure is identified, the developer typically uses a debugger to trace the mechanism behind the failure, ultimately locating the fault. While Mosaic aids in failure detection, its primary role is not in the debugging process itself.</p>
-
-  </div>
-</body>
-</html>
 -->
 
 <!--  LocalWords:  decider's
