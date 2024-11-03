@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP&display=swap" rel="stylesheet">
+  <title>White Box Testing - Mosaic Project</title>
+  <style>
+    body {
+      font-family: 'Noto Sans JP', Arial, sans-serif;
+      background-color: hsl(0, 0%, 0%);
+      color: hsl(42, 100%, 80%);
+      padding: 2rem;
+    }
+    .page {
+      padding: 3rem; /* 20px */
+      margin: 1.25rem auto; /* 20px */
+      max-width: 46.875rem; /* 750px */
+      background-color: hsl(0, 0%, 0%);
+      box-shadow: 0 0 0.625rem hsl(42, 100%, 50%); /* 10px */
+    }
+    h1 {
+      font-size: 1.5rem;
+      text-align: center;
+      color: hsl(42, 100%, 84%);
+      text-transform: uppercase;
+      margin-top: 1.5rem;
+    }
+    h2 {
+      font-size: 1.25rem;
+      color: hsl(42, 100%, 84%);
+      text-align: center;
+      margin-top: 2rem;
+    }
+    h3 {
+      font-size: 1.125rem;
+      color: hsl(42, 100%, 75%);
+      margin-top: 1.5rem;
+    }
+    p, li {
+      color: hsl(42, 100%, 90%);
+      text-align: justify;
+      margin-bottom: 1rem;
+    }
+    .term {
+      font-family: 'Courier New', Courier, monospace;
+/*      background-color: hsl(0, 0%, 19%); */
+      padding: 0.125rem 0.25rem;
+      border-radius: 0.125rem;
+      text-decoration: underline;
+/*      font-style: italic;*/
+      color: hsl(42, 100%, 95%);
+    }
+    code {
+      font-family: 'Courier New', Courier, monospace;
+      background-color: hsl(0, 0%, 25%);
+      padding: 0.125rem 0.25rem;
+      color: hsl(42, 100%, 90%);
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <header>
+      <h1>An Introduction to Structured Testing</h1>
+      <p>© 2024 Thomas Walker Lynch - All Rights Reserved.</p>
+    </header>
+
+
+    <h2>Introduction</h2>
+
+    <p>This guide provides a general overview of testing concepts to help
+      readers understand how the Mosaic test bench integrates within a testing
+      setup. Note that this is not a reference manual for the Mosaic test bench
+      itself. At the time of writing, no such reference document exists, so
+      developers and testers are advised to consult the source code directly for
+      implementation details. A small example can be found in
+      the <code>Test_MockClass</code> file within the tester directory. Other
+      examples can be found in projects that make use of Mosaic.</p>
+
+    <p>A typical testing setup comprises three main components:
+    the <span class="term">test bench</span>, the <span class="term">test
+    routines</span>, and a collection of <span class="term">units under
+    test</span> (UUTs). Here, a UUT is any individual software or hardware
+    component intended for testing. Because this guide focuses on software, we
+    use the term <span class="term">RUT</span> (routine under test) to denote
+    the unit under test in software contexts. Although we use software-centric
+    terminology, the principles outlined here apply equally to hardware
+    testing.</p>
+
+    <p>Each test routine supplies inputs to a RUT, collects the resulting
+      outputs, and determines whether the test passes or fails based on those
+      values. The results are then relayed to the test bench.  Testers and
+      developers write the test routines and place them into the test bench.
+    </p>
+
+    <p>Mosaic is a test bench. It serves as a structured environment for
+    organizing and executing tests, and it provides a library of utility
+    routines for assisting the test writer. When run, the test bench sequences
+    through the set of test routines, one by one, providing each test routine
+    with an interface to control and examine standard input and output. (The
+    test routine, depending on its design, might in turn sequence through a
+    series of <span class="term">test cases</span>.) During execution, the test
+    bench records pass/fail results, lists the names of the tests that failed,
+    and generates a summary report with pass/fail totals.</p>
+
+    <p>At the time of this writing, Mosaic does not provide features for
+      breaking up large test runs into parallel pieces and then load balancing
+      those pieces. Perhaps such a feature will be developed for a future version.
+      However, this does not prevent an enterprising tester from running multiple
+      Mosaic runs with different tests in parallel in an ad hoc manner, or
+      with other tools.</p>
+
+    <h2>Function versus Routine</h2>
+
+    <p>A routine is an encapsulated sequence of instructions, with a symbol
+      table for local variables, and an interface for importing and exporting
+      data through the encapsulation boundary. This interface
+      maps <span class="term">arguments</span> from a caller
+      to <span class="term">parameters</span> within the routine, enabling data
+      transfer at runtime. In the context of testing, the arguments that bring
+      data into the routine are referred to as
+      <span class="term">inputs</span>, while those that carry data out are called
+      <span class="term">outputs</span>. Notably, in programming, outputs are often called 
+      <span class="term">return values</span>.</p>
+
+   <p>In computer science, a <span class="term">pure function</span> is a routine
+     in which outputs depend solely on the provided inputs, without reference to
+     any internal state or memory that would persist across calls. A pure function
+     produces the same output given the same inputs every time it is called. 
+     Side effects, such as changes to external states or reliance on external
+     resources, are not present in pure functions; any necessary interactions 
+     with external data must be represented explicitly as inputs or outputs. 
+     By definition, a function produces a single output, though this output can 
+     be a collection, such as a vector or set.</p>
+
+    <p>Routines with internal state variables that facilitate temporal behavior
+      can produce outputs that depend on the sequence and values of prior
+      inputs. This characteristic makes such routines challenging to
+      test. Generally, better testing results are achieved when testing pure
+      functions, where outputs depend only on current inputs.</p>
+
+
+    <h2>Block and Integration</h2>
+
+    <p>A test routine provides inputs to a RUT and collects its outputs, often
+    doing so repeatedly in a sequence of test cases. The test routine then
+    evaluates these values to determine if the test has passed or failed.</p>
+
+    <p>When a test routine evaluates a RUT that corresponds to a single function
+    or module within the program, it performs a <span class="term">block
+    test</span>.</p>
+
+    <p>When a test routine evaluates a RUT that encompasses multiple program
+    components working together, it is conducting
+    an <span class="term">integration test</span>.</p>
+
+    <p>Integration tests often involve combining significant components of a
+    program that were developed independently, and they may occur later in the
+    project schedule. This phase can be challenging for testers, as it may
+    reveal complex, unforeseen interactions. To mitigate such challenges, some
+    software development methodologies encourage introducing simpler versions of
+    such components early in development, then refining them over time.</p>
+
+
+  <h2>Failures and Faults</h2>
+
+    <p>A test routine has two primary responsibilities: supplying inputs and
+      collecting outputs from the RUT, and determining whether the RUT passed or
+      failed the test. This second responsibility is handled by
+      the <span class="term">failure decider</span>. The failure decider may not
+      always be an explicit function in the test routine, but its logical
+      functionality will be there.</p>
+
+    <p>A failure decider implementation can make false positive and false
+    negative decisions. A false positive occurs when the failure decider
+    indicates that a test has passed when ideally it would have
+    failed. Conversely, a false negative decision occurs when the decider
+    indicates failure when ideally it would have
+    passed. An <span class="term">ideal failure decider</span> would produce
+    neither false positives nor false negatives.</p>
+
+    <p>In general, false negatives are more likely to be caught, as all negative
+      results (fails) lead to debugging sessions and further scrutiny. In
+      contrast positives (passes) garner no further scrutiny, and thus false
+      positives are unlikely to be caught.</p>
+
+    <p>A failure occurs when there is a deviation between
+      the <span class="term">observed output</span> from a RUT and
+      the <span class="term">ideal output</span>. When the ideal output is not
+      available, a <span class="term">reference output</span> is often used in
+      its place. When using reference outputs, the accuracy of the test results
+      depends on both the accuracy of the failure decider and the accuracy of
+      the reference values themselves.</p>
+
+    <p>Some folks will refer to an <span class="term">observed output</span> as
+      an <span class="term">actual output</span>. Also, some engineers will
+      refer to a <span class="term">reference value</span> as
+      a <span class="term">golden value</span>, especially when the reference
+      value is considered to be highly accurate. However, these alternative
+      terms are less precise, so in our shop, we prefer the terminology
+      introduced in the previous paragraph.</p>
+
+    <p>In testing, a <span class="term">fault</span> refers to an error or flaw
+      within a design, implementation, or realization that, under specific
+      conditions, would lead to an observable failure. While the origins of a
+      fault often be traced back further, perhaps to a root cause such as a
+      human error, providing a fix at such a root cause will not prevent the
+      failure in the next product release.</p>
+
+    <p>Thus the goal of testing is to create conditions that cause faults to
+      manifest as observed failures. The tester's responsibility is not to
+      identify or locate the underlying faults. Once a failure is observed, it
+      then becomes the task of a person playing a developer’s role to
+      investigate the cause, identify the fault, and to address it
+      appropriately.</p>
+
+    <p>The Mosaic tool assists testers in finding failures, but it does not
+      directly help with identifying the underlying fault that led to the
+      failure.  Mosaic is a tool for testers.  However, these two tasks of
+      finding failures and faults are not entirely separate. Knowing where a
+      failure occurs can provide the developer with a good place to start for
+      looking for the fault, and also narrows down the possibilities.
+      Additionally, once a developer claims to have fixed a fault, that claim
+      can be verified by re-running the tests, which is useful.</p>
+
+    <h2>Unstructured Testing</h2>
+
+    <p>Unstructured testing forms the foundation of all testing strategies. This
+      section outlines some common approaches to unstructured testing.</p>
+
+    <h3>Reference-Value Based Testing</h3>
+
+    <p>In <span class="term">reference-value based testing</span>, an ordering
+      is assigned to the <span class="term">inputs</span> for
+      the routine under test, as well as to
+      its <span class="term">outputs</span>. Through this ordering the inputs
+      and outputs become vectors. Thus the routine under test is given
+      an <span class="term">input vector</span> and it returns
+      an <span class="term">observed output vector</span>.</p>
+
+    <p>A <span class="term">Reference Model</span> is then 
+      given the same input vector, and then it
+      produces a <span class="term">reference output vector</span>. The reference
+      output vector has the same component ordering as the 
+      <span class="term">observed output vector</span>.
+
+    <p>The <span class="term">failure detection function</span> then compares
+    each observed output vector with its corresponding reference output vector. If
+    they do not match, the test is deemed to have failed.</p>
+
+    <p>It follows that in reference-value based testing, the accuracy of
+    the <span class="term">failure detection function</span> depends solely on
+      the accuracy of the reference model.</p>
+
+    <p>When the implementation of the reference model is unrelated to the
+      routine under test, we tend to expect that the errors produced by the
+      reference model will be uncorrelated with those produced by the routine
+      under test, and thus not probable to coincide. This property will bias
+      tests towards delivering false negatives. As noted earlier, false negatives
+      are likely to be caught as test fails are followed up with further
+      scrutiny. Hence, reference-value based testing tends to be pretty
+      accurate even when the reference generator is not ideal.</p>
+
+    <h3>Property-Check Testing</h3>
+
+    <p><span class="term">property-check testing</span> is an alternative to
+    reference-value based testing. Here, rather than comparing each observed
+    output to a reference output, the observed output is validated against
+      known properties or expected characteristics.</p>
+
+    <p>For example, given an integer as input, a function that correctly squares
+      this input will preserve the parity of the input, as an odd number squared
+      will be odd, and an even number squared will be even. The failure decider
+      can check this property for each test case, and if it does not hold, the
+      test case fails. Such a weak property check would be biased towards
+      false positive decisions. Those are the bad ones, as passing tests
+       typically receive no further scrutiny.</p>
+
+    <h3>Spot Checking</h3>
+
+    <p>In spot checking, the function under test is checked against one or
+      two input vectors.</p>
+
+    <p>Moving from zero to one, i.e., running a program for the first time,
+      can have a particularly high threshold of difficulty. A tremendous
+      amount is learned during development if even one test passes for
+      a function.</p>
+
+    <p>There are sometimes notorious edge cases. Zeros and values just off the
+      end of arrays come to mind. Checking a middle value and edge cases 
+      is often an effective approach.</p>
+
+    <p>It takes two points to determine a line. In Fourier analysis,
+      it takes two samples per period of the highest frequency component
+      to determine an entire waveform. A piece of code that works for both 
+      edge cases and values in between is often reliable. This effect 
+      explains why ad hoc testing has lead to so much working code.</p>
+
+    <p>Spot checking is particularly useful during development. It provides 
+      the highest leverage in testing for the lowest investment. High 
+      investment is not appropriate for code still in development that 
+      is not yet stable and is open to being refactored.</p>
+
+
+    <h2>Structured Testing</h2>
+
+    <h3>The need for structured testing</h3>
+
+    <p>Another name for unstructured testing is <span class="term">black box testing</span>. Black box testing has a serious problem in that
+      search space for failures becomes exponentially larger as the number of inputs grows.</p>
+
+    
+
+    <p>A developer will use routines as building blocks for building
+      a program. This leads to a hierarchy of routines.
+
+
+
+    <p>A test of a single RUT that corresponds to a single routine in a program is
+      known as a <span class="term">block test</span>. When the RUT encompasses
+      multiple functions, it is called an <span class="term">integration 
+        test</span>.</p>
+
+    <p>A common structured testing approach is to first validate individual functions, then
+      test their communication and interactions, and, finally, assess the complete
+      integration of functions across a system.</p>
+
+    <p>When functions are composed without adding internal state (memory), the composition itself acts as a single <span class="term">function</span>. Therefore, a test designed for an individual function may also be applied to composed functions, provided they are stateless.</p>
+
+
+
+
+  </div>
+</body>
+</html>
+  
+<!--
+discipline, if it was a bug, it should be test
+
+    structured testing
+
+    <p>An important testing technique is to first test functions, then
+      to test the communication between them, and then as a last step
+      to test the integration of the functions.</p>
+
+
+    sequential
+
+
+    <p>To transform a routine with state variables into a more testable pure
+      function, the internal memory is replaced by additional inputs. These
+      inputs then  supply the memory values for each test.
+ The values to be written to the
+    memory can then be made into additional outputs. Additionally, the
+    sequencing logic must be arranged to <span class="term">single-step</span>
+    the routine, meaning that each call to the routine under test results in
+    exactly one update to memory.</p>
+
+
+
+
+    <p>A routine can be transformed into a function 
+      by replacing the memory with further inputs that
+      provide the memory value, adding further outputs that signify writes
+      to the memory, and organizing the sequencing logic such that the
+      routine <span class="term">single steps</span>, i.e. one write
+      update to the memory occurs per call to the routine under test.</p>
+
+    <p>Haskell, for example, provides a language semantic that makes testing
+      of stateful routines more convenient. Short of such language support
+      the process of converting routines to functions can be error prone
+      itself, and lead to testing of a function that does not necessarily
+      correspond to what would happen when testing the routine.</p>
+
+    <p>Many languages employ the term <span class="term">function</span>
+      to stand for a language construct, where said construct is not
+      a function according to the formal definition of the term, but
+      rather are routines. This started with the FORTRAN language, which
+      distinguished functions from other routines, because they could
+      return a single value that could be used in an expression, while
+      routines in the language only passed values through arguments.
+      In this guide, we will use the term routine to describe program
+      units that do not fit the formal definition of function.</p>
+
+
+
+    <p>Because the test routine only has access to the rut through its interfaces,
+      the rut is said to be a black box. However, this term is misleading, as
+      all computer code is accessed through inputs and outputs.  
+
+
+
+    <h1>White Box Testing</h1>
+
+    <h2>Terminology</h2>
+
+    <p>Testing centers around three key components: the <span class="term">test
+    bench</span>, the <span class="term">test functions</span> (or tests), and
+    the <span class="term">functions under test</span>. In most cases, the
+    developer provides the functions under test. When this tool is used, Mosaic
+    supplies the test bench. This leaves the tester with role of creating and
+    running the tests. Often times, of course, the tester role and the developer
+    role are performed by the same person, still these roles are distinct.</p>
+
+    <p>The term <span class="term">function</span> refers to any program or
+    circuit where outputs are determined solely by inputs, without internal
+    state being kept, and without side effects. All inputs and outputs are
+    explicitly defined. By definition, a function returns a single result, but
+    this is not a very strong constraint because said single result can be a
+    collection, such as a vector or set.</p>
+
+    <p>We need this precise definition for function so as to make meaningful
+      statements in this document, but the Mosaic TestBench can be used with
+      tests that are designed to test any sort of subroutine. There is a later
+      chapter (provide that I get around to writing it) on testing stateful
+      subroutines.</p>
+
+    <p>There is also a nuanced distinction
+    between <span class="term">function</span> in singular and plural forms,
+    because a collection of functions can be viewed as a single larger function
+    with perhaps more inputs and outputs. Hence, when a test is said to work on
+    a function, we cannot conclude that it is a single function defined in the
+    code.</p>
+
+    <p>A test must have access to the function under test so that it can supply
+      inputs and harvest results from it. A test must also have a
+      <span class="term">failure detection function</span> that is when given
+      copies of the inputs and outputs will returns a result indicating if a
+      test failed, or not. Hopefully the failure detection function is accurate,
+      or even perfect, as then fewer failures will be missed, and less work must
+      be done to verify cases it has concluded have failed.</p>
+
+  <h2> Property-Check Testing
+
+    <p>Another form of testing is that of <span class="term">property-check
+        testing</span>.  With this type of testing input vectors are generated and
+      introduced to the function under test as before; however instead of using a
+      reference value, the actual result vector
+
+
+
+<h2> spot checking</h2>
+
+another form of testing, inputs are generated as for the 
+
+properties 
+
+<p>An ordered set of inputs used in testing is called an "input vector" or "test
+vector". When an input vector is given to the function under test, the result is
+  an "corresponding actual output vector".</p>
+
+<p>In one form of testing, there is a golden model that when given an input
+vector will produce the "corresponding expected output vector".  This is also
+called the "golden value".  The bit order in the expected output vector is made
+the same as for that of the actual output venctor.</p>
+
+<p>In a common for 
+
+
+    <p>As a test bench, Mosaic does not define failure functions directly; rather, the tester implements these functions within the tests.</p>
+
+    <p>The tester's goal is to identify <span class="term">failures</span>, which represent observable mistakes by the developer. The identified cause of failure is called a <span class="term">fault</span>, and it may relate to specific code lines, logic flaws, or physical hardware issues. In hardware testing, faults might also stem from manufacturing defects or component degradation.</p>
+
+    <p>Mosaic is a tool for finding failures. Once a failure is identified, the developer typically uses a debugger to trace the mechanism behind the failure, ultimately locating the fault. While Mosaic aids in failure detection, its primary role is not in the debugging process itself.</p>
+
+  </div>
+</body>
+</html>
+-->
+
+<!--  LocalWords:  decider's
+ -->
