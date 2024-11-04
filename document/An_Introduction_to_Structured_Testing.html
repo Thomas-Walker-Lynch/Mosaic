@@ -87,7 +87,7 @@
     <h2>Introduction</h2>
 
     <p>This guide provides a general overview of testing concepts. It is
-      not a reference manual for the Mosaic test bench itself. At the
+      not a reference manual for the Mosaic Testbench itself. At the
       time of writing, no such reference document exists, so developers and
       testers are advised to consult the source code directly for implementation
       details. A small example can be found in the <code>Test_MockClass</code>
@@ -95,7 +95,7 @@
       that make use of Mosaic.</p>
 
     <p>A typical testing setup comprises three main components:
-    the <span class="term">test bench</span>, the <span class="term">test
+    the <span class="term">Testbench</span>, the <span class="term">test
     routines</span>, and a collection of <span class="term">units under
     test</span> (UUTs). Here, a UUT is any individual software or hardware
     component intended for testing. Because this guide focuses on software, we
@@ -108,12 +108,12 @@
       outputs, and determines whether the test passes or fails based on those
       values. A given test routine might repeat this procedure for any number
       of <span class="term">test cases</span>. The final result from the test
-      routine is then relayed to the test bench. Testers and developers write
-      the test routines and place them into the test bench.</p>
+      routine is then relayed to the Testbench. Testers and developers write
+      the test routines and place them into the Testbench.</p>
 
-    <p>Mosaic is a test bench. It serves as a structured environment for
+    <p>Mosaic is a Testbench. It serves as a structured environment for
     organizing and executing test routines, and it provides a library of utility
-    routines for assisting the test writer. When run, the test bench sequences
+    routines for assisting the test writer. When run, the Testbench sequences
     through the set of test routines, one by one, providing each test routine
     with an interface to control and examine standard input and output. Each 
     test routine, depending on its design, might in turn sequence through
@@ -234,6 +234,83 @@
 
     <p>The Mosaic tool assists testers in finding failures, but it does not directly help with identifying the underlying fault that led to the failure. Mosaic is a tool for testers. However, these two tasks—finding failures and locating faults—are not entirely separate. Knowing where a failure occurs can provide the developer with a good starting point for locating the fault and help narrow down possible causes. Additionally, once a developer claims to have fixed a fault, that claim can be verified through further testing.</p>
 
+    <h2>Testing Objectives</h2>
+
+    <ul>
+      <li>
+        <strong>Verification Testing</strong><br>
+        <em>Purpose</em>: To confirm that the software or system meets the specified requirements and design. Verification testing ensures that each component behaves as expected according to specifications, often conducted throughout development to catch any deviations from the original plan.
+      </li>
+      
+      <li>
+        <strong>Regression Testing</strong><br>
+        <em>Purpose</em>: To ensure that recent changes or additions to the codebase have not introduced new errors. This type of testing checks that previously tested functionalities still work as intended, making it essential for maintaining stability as updates are made.
+      </li>
+      
+      <li>
+        <strong>Development Testing</strong><br>
+        <em>Purpose</em>: To evaluate code correctness and functionality during the development process. Development testing is often exploratory, allowing developers to check whether their code performs as expected before formal testing. It can include unit testing, integration testing, and other quick checks to validate functionality on the fly.
+      </li>
+      
+      <li>
+        <strong>Exploratory Testing</strong><br>
+        <em>Purpose</em>: To uncover unexpected issues by testing the software in an unscripted manner. Exploratory testing allows testers to investigate the software's behavior outside of planned test cases, often discovering edge cases or flaws that structured tests may miss.
+      </li>
+      
+      <li>
+        <strong>Performance Testing</strong><br>
+        <em>Purpose</em>: To assess how the software performs under expected and extreme conditions. Performance testing evaluates response times, resource usage, and stability, often covering areas like load, stress, and scalability testing. This objective ensures the system can handle the demands it will face in production.
+      </li>
+      
+      <li>
+        <strong>Compliance Testing</strong><br>
+        <em>Purpose</em>: To confirm that the software adheres to regulatory, legal, and industry standards. Compliance testing ensures that the system meets external requirements, which may include accessibility, data privacy, and industry-specific standards.
+      </li>
+
+      <li>
+        <strong>Security Testing</strong><br>
+        <em>Purpose</em>: To identify vulnerabilities and ensure the software is protected against unauthorized access and threats. Security testing checks for risks like data breaches, weak authentication, and exposure to known vulnerabilities, helping to safeguard sensitive information and user privacy.
+      </li>
+
+      <li>
+        <strong>Compatibility Testing</strong><br>
+        <em>Purpose</em>: To verify that the software works across different environments, devices, and platforms. Compatibility testing ensures consistent functionality and appearance across browsers, operating systems, hardware configurations, and other setups.
+      </li>
+      
+      <li>
+        <strong>Acceptance Testing</strong><br>
+        <em>Purpose</em>: To determine if the software meets the end user's needs and expectations. Acceptance testing, often conducted by stakeholders or QA teams, validates that the software is usable and functional from a real-world perspective, acting as the final check before release.
+      </li>
+      
+      <li>
+        <strong>Documentation Testing</strong><br>
+        <em>Purpose</em>: To ensure that all documentation, guides, and user manuals are accurate and reflect the current software functionality. Documentation testing verifies that users have clear, up-to-date information for effective usage and troubleshooting.
+      </li>
+      
+      <li>
+        <strong>Usability Testing</strong><br>
+        <em>Purpose</em>: To confirm that the software is user-friendly and intuitive. Usability testing focuses on the ease of use, ensuring that end users can navigate and interact with the software without unnecessary friction, leading to a positive user experience.
+      </li>
+      
+    </ul>
+
+    <p>The Moasic Testbench is useful for any type of testing that can be
+      formulated as test routines testing RUTs. This certainly includes
+      verification, regression, development, exploratory testing. It will
+      include the portions of performance, compliance, security, compatibility,
+      and acceptance testing that fit the model of test routines and RUTs.  Only
+      recently has can it be imagined that the Mosaic TestBench can be used with
+      documentation testing. However, it is now possible to fit an AI API into a
+      test routine, and turn a document into a RUT.  Usability testing often
+      depends in other types of tests, so to this extent the Mosaic Testbench
+      can play a role. However, usability is often also in part feedback from
+      users. So short of putting users in the Matrix, this portion of usability
+      testing remains outside the domain of the Mosaic Testbench, though come to
+      think of it, the Mosaic Testbench could be used to reduce surveys to pass
+      fails.</p>
+      
+    <p>Each test objective will lead to writing tests of a different nature.</p>
+    
 
     <h2>Unstructured Testing</h2>
 
@@ -301,8 +378,9 @@
 
     <h3>Spot Checking</h3>
 
-    <p>In spot checking, the function under test is checked against one or
-      two input vectors.</p>
+    <p>In spot checking, the function under test is checked against one or two
+      input vectors. When using a black box approach, these are chosen at
+      random.</p>
 
     <p>Moving from zero to one is an finite relative change, i.e., running a
       program for the first time requires that many moving parts work together,
@@ -310,22 +388,6 @@
       learned about the logic and setup when the first test runs. Such a first
       test is called a <scan class="term">smoke test</scan>, a term that
       has literal meaning in the field of electronics testing.</p>
-
-    <p>There are notorious edge cases in software. Zeros and index values just
-      off the end of arrays come to mind. Checking a middle value and edge cases
-      is often an effective approach for finding failures.</p>
-
-    <p>It takes two points to determine a line. In Fourier analysis, it takes
-      two samples per period of the highest frequency component to determine an
-      entire waveform. Code also has patterns, patterns that are disjoint at
-      edge cases. Hence if a piece of code runs without failures for both edge
-      cases and spot check values in between, it will often run without
-      failures over an entire domain of values. This effect explains why ad hoc
-      testing has lead to so much relatively fail free code.</p>
-
-    <p>Spot checking is especially valuable in early development, as it provides
-      useful insights with minimal investment. At this stage, investing more is
-      unwise while the code is still in flux.</p>
 
     <h3>Exhaustive Testing</h3>
 
@@ -400,6 +462,10 @@
       exhaustive number of tests.</p>
 
     <h2>Structured Testing</h2>
+
+    <p>Structured testing is a form of white box testing, where the tester
+    examines the code being tested and applies various techniques to it
+    to increase the efficiency of the testing.</p>
 
     <h3>The Need for Structured Testing</h3>
 
@@ -548,17 +614,24 @@
       </tr>
     </table>
 
-    <p>
-      A typical response from people when they see this is that the knew it went up
-      fast, but did not know it went up this fast.
-    </p> 
+    <p>A typical response from people when they see this is that the knew it went up
+      fast, but did not know it went up this fast. It is also important to note, there
+      is a one to one relationship between percentage of time to achieving exhaustive
+      coverage, and percentage of coverage.  Half the time, 50 percent coverage. In
+      the last row of the table, to have reasonable test times, there would be coverage
+      10<sup>-18</sup> percentage coverage. At that level of coverage there is really
+      no reason to test. Hence, this table is not limited to speaking about exhaustive
+      testing, rather is speaks to black box testing in general.</p> 
 
-    <h3>White Box Testing</h3>
+    <h3>Informed Spot Checking</h3>
 
-    <p>White box testing is the simplest type of structured test. In white box
-       testing, we take the opposite approach to black box testing. Here, the
-       test writer does look at the code implementation and must understand how to
-       read the code. Take our 64-bit adder example. This is it as a black box:</p>
+    <p>In white box testing, we take the opposite approach to black box
+       testing. The test writer does look at the code implementation and
+      must understand how to read the code. Take our 64-bit adder example of
+      the prior section. Here in this section we will apply a white box
+      technique known as Informed Spot Checking.</p>
+
+    <p> This is the prior example as a black box:</p>
 
     <pre><code>
       int64 sum(int64 a, int64 b){
@@ -575,11 +648,13 @@
       }
     </code></pre>
 
-    <p>The tester examines the code and sees there is a special case for <code>a = 5717710</code> 
-       and <code>b = 27</code>, which becomes the first test case. There’s also a special case 
-       for when the sum exceeds the 64-bit integer range, both in the positive and negative 
-       directions; these become two more test cases. Finally, the tester includes a few 
-       additional cases that are not edge cases.</p>
+    <p>When following the approach of Informed Spot Checking, the tester examines
+       the code and sees there is a special case for <code>a = 5717710</code>
+       and <code>b = 27</code>, which becomes the first test case. There’s also
+       a special case for when the sum exceeds the 64-bit integer range, both in
+       the positive and negative directions; these become two more test
+       cases. Finally, the tester includes a few additional cases that are not
+       edge cases.</p>
 
     <p>Thus, by using white box testing instead of black box testing, the tester finds all 
        the failures with just 4 or so test cases instead of </p>
@@ -588,91 +663,372 @@
      </code></pre>
        <p>cases. Quite a savings, eh?</p>
 
+    <p>There are notorious edge cases in software, and these can often be seen
+      by looking at the RUT. Zeros and inputs that lead to index values just off
+      the end of arrays come to mind are common ones. Checking a middle value
+      and edge cases is often an effective approach for finding failures.</p>
 
+    <p>There is an underlying mechanism at play here. Note that it takes two
+      points to determine a line. In Fourier analysis, it takes two samples per
+      period of the highest frequency component to determine an entire
+      waveform. Code also has patterns, patterns that are disjoint at edge
+      cases. Hence if a piece of code runs without failures for both edge cases
+      and spot check values in between, it will often run without failures over
+      an entire domain of values. This effect explains why ad hoc testing has
+      lead to so much relatively fail free code.</p>
+
+    <p>Informed Spot Checking is especially valuable in early development, as it
+      provides useful insights with minimal investment. In the early development
+      stage, making more investment in test code is unwise due to the code being
+      in flux. Test work is likely to get ripped up and replaced.</p>
+
+    <p>The idea of test work being ripped up and replaced highlights a drawback
+      of white box testing. Analysis of code can become stale when implementations
+      are changed. However, due to the explosion in the size of the input space
+      with even a modest number of inputs, white box testing is necessary if there
+      is to be much commitment to producing reliable software or hardware.</p>
+
+    <h3>Refactoring the RUT</h3>
+
+    <p>Refactoring a RUT to make it more testable can be a powerful method for
+      turning testing problems that are exponentially hard due to state
+      variables, or very difficult to debug due to random variables, into
+      problems that are linearly hard. According to this method, the
+      tester is encouraged to examine the RUT to make the testing problem
+      easier.</p>
+
+    <p>By reconstructing the RUT I mean that we refactor the code to bring
+      any random variables or state variables to the interface where they
+      are then treated as inputs and outputs.</p>
+
+    <p>If placing state variables on the interface is adopted as a discipline by
+      the developers, reconstruction will not be needed in the test phase, or if
+      it is needed, white box testers will see this, and it will be a bug that
+      has been caught. Otherwise reconstruction leads to two versions of a
+      routine, one that has been reconstructed, and the other that has not. The
+      leverage gained on the testing problem by reconstructing a routine
+      typically more than outweighs the extra verification problem of comparing
+      the before and after routines.</p>
+
+    <p>As an example, consider our adder function with a random fault. As we
+      know from prior analysis, changing the fault to a random number makes
+      testing harder, but perhaps more importantly, it makes it nearly impossible
+      to debug, as the tester can not hand it to the developer and say,
+      'it fails in this case'.</p>
+    <pre><code>
+      int64 sum(int64 a, int64 b){
+        if( a == (5717710 * rand()) && b == (27 * rand()) ) return 5;
+        else return a + b;
+      }
+    </code></pre>
+
+    <p>The tester refactors this function as:</p>
+    <pre><code>
+      int64 sum( int64 a, int64 b, a0 = 5717710*rand() ,b0 = 27*rand() ){
+        if( a == a0 && b == b0 ) return 5;
+        else return a + b;
+      }
+    </code></pre>
+    
+    <p>Here <code>a0</code> and <code>b0</code> are added to the interface as
+      optional arguments. During testing their values will be supplied, during
+      production the defaults will be used. Thus, we have broken the one
+      test problem into two, the question if <code>sum</code> works, and the
+      question if the random number generation works.<p>
+
+    <p>Failures in <code>sum</code> found during testing are now reproducible.
+      If the tester employs the informed spot checking the failure will
+      be found with few tests, and the point in the input space where the
+      failure occurs can be reported to development and used for debugging.</p>
+    
+    <p>Here is a function that keeps a state variable between calls.</p>
+    <pre><code>
+    int state = 0;
+    int call_count = 0; 
+    void state_machine(int input) {
+        int choice = (input >> call_count) & 1; 
+        switch (state) {
+            case 0:
+                printf("State 0: Initializing...\n");
+                state = choice ? 0 : 1;
+                break;
+            case 1:
+                printf("State 1: Processing Path A...\n");
+                state = choice ? 0 : 2; 
+                break;
+            case 2:
+                printf("State 2: Processing Path B...\n");
+                state = choice ? 0 : 3;
+                break;
+        }
+        call_count++;
+    }
+    </code></pre>
+
+    <p>The Mosaic Testbench makes standard out available to the test routine in
+      an array so we can capture and examine the print value while testing this
+      RUT. Because of the state variables, <code>state</code>
+      and <code>count</code>, this routine will behave differently each time it
+      is called. A black box test will have a large number of input vector
+      sequences to try. The failure occurs in the call after being in state 2
+      and the count is such that the choice is to go to state 3.</p>
+
+    <pre><code>
+    int state = 0;
+    int call_count = 0; 
+    void state_machine(int input ,int state0 = state ,int call_count0 = call_count) {
+        int choice = (input >> call_count0) & 1; 
+        switch (state0) {
+            case 0:
+                printf("State 0: Initializing...\n");
+                state = choice ? 0 : 1;
+                break;
+            case 1:
+                printf("State 1: Processing Path A...\n");
+                state = choice ? 0 : 2; 
+                break;
+            case 2:
+                printf("State 2: Processing Path B...\n");
+                state = choice ? 0 : 3;
+                break;
+        }
+        call_count = call_count0 + 1;
+    }
+    </code></pre>
+
+    <p>Here the test routine supplies <code>state0</code> and <code>call_count0</code>
+      as inputs.  The test routine treats <code>state</code> and <code>call_ccount</code>
+      as outputs, so this is then a pure function. As a pure function it is a much easier
+      testing problem. Now instead of a combinatorially hard problem involving input
+      sequences, the test routine can visit each of the three states, and set the input
+      such that each visits the two next states. That is six test cases to see everything
+      that this function is capable of doing.</p>
+
+    <p>Any time the RUT is refactored in the testing phase, it raises the
+      question if the refactored code maintains the required functionality.
+      This becomes another verification problem, which might or might not
+      be verified through testing. One way to manage this issue is to
+      take the refactoring problems back to the developers to have them
+      adopt the code into the project. Then it becomes the original code.</p>
+   
+    <h3>Bottom Up Testing</h3>
+
+    <p>When a function corresponds directly to CPU instructions, such as is the
+      case for the <code>+</code> operator, we typically trust that it will give
+      the right answer. The same can be said for the call and return
+      dynamic. Unless we are working on a new compiler, it is typically assumed
+      that this works. Tests for it are not included for testing if calls work in
+      application program test suites.
+      </p>
+
+    <p>The reason for this trust is that CPU instructions, and function calls
+      are already extensively tested, both directly by the manufacturers, and
+      through widespread use. Though this trust is not always warranted as in
+      the case of the Intel Pentium divider, which had failure cases.</p>
+
+    <p>We can decompose a testing problem into trusted and untrusted components.
+       We call routines that are trusted <span class="term">building blocks</span>,
+       then we use the building blocks to build up larger routines, and then
+       test those to create larger building blocks. At the end we will have
+       built up a trustworthy program.</p>
+
+    <p>This approach parallels what developers do when they write programs. They
+      start with primitive programs that come with the language or from
+      libraries, and then they compose these to write custom functions.</p>
+
+    <p>The following is an expansion of our adder example for creating and
+      testing an adder for 1024 bit numbers. For purposes of presentation, we
+      will refer to <code>int256</code> as a type that corresponds to array of
+      32 bytes, and <code>uint1</code> as a 1 bit unsigned integer, i.e. 0 or
+      1.</p>
+
+    <pre><code>
+    {uint1, uint64} full_adder(uint64 a, uint64 b, uint1 c0) {
+        uint64 partial_sum = a + b;
+        uint64 sum = partial_sum + c0;
+        uint1 carry_out = (partial_sum < a) || (sum < partial_sum);
+        return {carry_out, sum};
+    }
+    </code></pre>
+
+    <p>Here is a 256 bit adder made from 64 bit adders.</p>
+
+    <pre><code>
+    {uint1, int256} add_256(int256 a, int256 b) {
+        uint1 carry_in = 0;
+        int64 sum_parts[4];  // Array to store each 64-bit segment of the sum
+
+        for i = 0 to 3 {
+            // Get the i-th 64-bit segments of a and b
+            int64 a_part = (a >> (i * 64)) & 0xFFFFFFFFFFFFFFFF;
+            int64 b_part = (b >> (i * 64)) & 0xFFFFFFFFFFFFFFFF;
+
+            // Perform the full addition on each 64-bit part
+            {carry_out, sum_parts[i]} = full_adder(a_part, b_part, carry_in);
+
+            // Update carry-in for the next 64-bit segment
+            carry_in = carry_out;
+        }
+
+        int256 sum = 0;
+        for i = 0 to 3 {
+            sum |= (sum_parts[i] << (i * 64));
+        }
+
+        return {carry_in, sum};
+    }
+    </code></pre>
+    
+    <p>According to the bottom up technique, we first test
+    the <code>full_adder</code>, which is not a difficult testing problem. It
+    employs well known trusted operations, and has a couple of interesting
+    special case conditions. Given the numeric nature of this code, these
+    special case conditions are probably better verified by proof than by
+      testing, but they can be tested.</p>
+
+    <p>Once the <code>full_adder</code> can be trusted, testing <code>add_256</code>
+      reduces to checking that the various 64 bit parts are extracted and then
+      packed correctly,
+      and are not, say, offset by one, and that the carries are properly communicated
+      during the add.</p>
+
+    <p>Note this test also trusts the fact that ripple carry addition is a valid
+      algorithm for assembling the pieces. Thus there is a new verification
+      problem, that for the algorithm. In this case, ripple carry addition is
+      already a trusted algorithm.</p>
+
+    <p>Testing of <code>full_adder</code> could be further simplified with
+      refactoring, by moving the loop control variables to the interface and the
+      <code>carry_in</code> and <code>carry_out</code> to the interface.
+      As <code>i</code> is recycled, it would become two variables,
+      say <code>i</code> and <code>j</code>.  Once the loop control variables
+      are on the interface it is straight forward to test the packing. Once the
+      carries are on the interface it is straight forward to test the
+      carries.</p>
+
+    <p>In general all programs and circuits can be conceptualized as functional
+      units, channels, and protocols. A test that shows that these work as specified,
+      shifts the test problem from the RUT to the specification.</p>
+
+    <h2>Adding to the code</h2>
+
+    <p>It is a common practice to add property checks to the code for gathering
+      data about failures or other potential problems. These will then write to
+      log files, or even send messages back to the code maintainers. By doing
+      this the testers benefit from the actual use of the product as though it
+      were a test run. When failures are found, such code might then trigger
+      remedial or recovery actions.</p>
+
+<h2>About Reference Outputs and Reference Properties</h2>
+
+<p>When testing during development, reference outputs often come from the
+   developers or testers themselves. They know what they expect from the 
+   routines, but they do not know if the code will meet these expectations, 
+   so they write tests. Typically, they try to imagine the hardest possible 
+   cases. However, sometimes a young developer avoids testing challenging 
+   cases to sidestep the risk of failures—this is, of course, a poor approach 
+   that can lead to undetected issues.</p>
+
+<p>Often, specification authors provide reference outputs or extensive test 
+   suites that must be passed to achieve certification. Architects also 
+   contribute by creating multi-level specifications—for the entire program, 
+   for the largest components, and for communication protocols between 
+   components. These specifications often serve as high-quality reference 
+   outputs and property checks that can be applied to the model during testing. 
+   The goal of developers and testers is to meet these specifications, making 
+   failures directly relevant to the development process and program design.</p>
+
+<p>Experts in a specific area sometimes provide test data, maintaining 
+   a database of reference data as a resource for validating outputs. 
+   For some types of code, experts also supply property checks, which 
+   evaluate whether outputs satisfy essential properties rather than specific 
+   values. Depending on the domain, these properties can be an important aspect 
+   of the testing process.</p>
+
+<p>Each time a bug is found, a test should be created to capture a failure
+   related to that bug. Ideally, such tests are written with minimal
+   implementation-specific details so they remain relevant even after code
+   changes. These tests are then added to a regression testing suite, ensuring
+   that future changes do not reintroduce the same issues.</p>
+
+<p>For applications involving multi-precision arithmetic, such as the earlier
+   adder example, reference data is often sourced from another established
+   multi-precision library, whether an open-source or commercial product. The
+   assumption is that an existing product will be more reliable than a newly
+   developed one, and since it’s implemented differently, its errors are likely
+   to be uncorrelated. This competitive testing, which is aspect of
+   compatibility testing, here being used for other objectives. In the limit, as
+   the RUT matures, this approach will tend to identify bugs in the reference
+   data from the other company as often it does in the RUT, which might be an
+   interesting effect.</p>
+
+<p>In some cases, reference data comes from historical sources or existing 
+   systems. When upgrading or replacing a legacy system, historical data 
+   serves as a benchmark for comparison. Similarly, industry standards 
+   and compliance datasets, particularly from regulatory organizations 
+   like IEEE, NIST, or ISO, provide reliable reference points for applications 
+   requiring standardized outputs. Compliance-driven tests are often required 
+   for certification or regulatory approval in fields such as finance, 
+   healthcare, and aerospace.</p>
+
+<p>For cases requiring many inputs without needing specific reference values,
+  random number generators can provide extensive test data. Examples include in
+  comparative testing and when property checking. Random number generators can
+  also be configured to concentrate cases in specific areas of the input domain
+  that for some reason concerns the testers.</p>
+
+<p>Customer and user feedback sometimes uncovers additional test cases, 
+   especially when dealing with complex or evolving software. Feedback 
+   reveals edge cases or expected behaviors that developers and testers 
+   may not have anticipated, allowing teams to create reference points 
+   for new test cases that cover real-world use cases and address user needs.</p>
+
+<h2>Conclusion</h2>
+
+<p>If you are a typical tester or developer reading through the previous list, 
+   you might feel a bit disappointed. Unless you work in a specialized area, 
+   are attempting to create a compatible product, or need to exercise the hardware, much 
+   of that list might seem inapplicable. For many developers, the most 
+   applicable advice remains: "During development, reference outputs often 
+   come from the developers or testers themselves." I apologize if this seems 
+   limiting, but consider this: the reason we run programs is to generate the 
+   very data we're looking for. If that data were easily available, we wouldn’t 
+   need the program.</p>
+
+<p>In many ways, testing is about making developers and testers the first 
+   users of the product. All products will have bugs; it’s far better for 
+   experts to encounter these issues first.</p>
+
+<p>Testing also facilitates communication among project members. Are the 
+   architects, developers, and testers all on the same page about how the 
+   product should work? The only way to find out is to run what has been built 
+   and observe it in action. For this, we need test cases.</p>
+
+<p>This circular problem—finding data that our program should generate - to test 
+   the program itself — illustrates a fundamental limitation in software testing. 
+   We encountered this in the discussion on unstructured, black-box testing: as 
+   soon as we open the box to inspect the code, we are no longer just testing it, 
+   but reasoning about it and even verifying it formally.</p>
+
+<p>This, perhaps, hints at a way forward. Our program is a restatement of the 
+   specification in another language. Verification, then, is an equivalence 
+   check. We can run examples to demonstrate equivalence, but black-box testing 
+   alone will have limited impact. Alternatively, we can examine our code and 
+   try to prove that it matches the specification. Though challenging, this 
+   approach is far more feasible than waiting ten times the age of the universe 
+   to confirm our solution through black box testing.</p>
+
+<p>Think of testing as a reasoning problem. Explain why the routine works and 
+   how it contributes to meeting the specification. Work from the top down: if 
+   the high-level components behave correctly, the program will meet the 
+   specification. That’s the first step. Then explain why the breakdown of 
+   those top-level components ensures correct behavior. Continue this process, 
+   and then use tests to validate each link in this chain of reasoning. In this 
+   way, you can generate meaningful reference values.</p>
 
   </div>
 </body>
 </html>
   
-<!--
-structure out random vars
-
-discipline, if it was a bug, it should be test
-
-
-where do we get reference values from?
-spot checking, manually
-others ...
-
-
-    <p>A developer will use routines as building blocks for building
-      a program. This leads to a hierarchy of routines.
-
-
-
-    <p>A test of a single RUT that corresponds to a single routine in a program is
-      known as a <span class="term">block test</span>. When the RUT encompasses
-      multiple functions, it is called an <span class="term">integration 
-        test</span>.</p>
-
-    <p>A common structured testing approach is to first validate individual functions, then
-      test their communication and interactions, and, finally, assess the complete
-      integration of functions across a system.</p>
-
-
-    structured testing
-
-    <p>An important testing technique is to first test functions, then
-      to test the communication between them, and then as a last step
-      to test the integration of the functions.</p>
-
-
-    sequential
-
-
-    <p>To transform a routine with state variables into a more testable pure
-      function, the internal memory is replaced by additional inputs. These
-      inputs then  supply the memory values for each test.
- The values to be written to the
-    memory can then be made into additional outputs. Additionally, the
-    sequencing logic must be arranged to <span class="term">single-step</span>
-    the routine, meaning that each call to the routine under test results in
-    exactly one update to memory.</p>
-
-
-
-
-    <p>A routine can be transformed into a function 
-      by replacing the memory with further inputs that
-      provide the memory value, adding further outputs that signify writes
-      to the memory, and organizing the sequencing logic such that the
-      routine <span class="term">single steps</span>, i.e. one write
-      update to the memory occurs per call to the routine under test.</p>
-
-    <p>Haskell, for example, provides a language semantic that makes testing
-      of stateful routines more convenient. Short of such language support
-      the process of converting routines to functions can be error prone
-      itself, and lead to testing of a function that does not necessarily
-      correspond to what would happen when testing the routine.</p>
-
-    <p>Many languages employ the term <span class="term">function</span>
-      to stand for a language construct, where said construct is not
-      a function according to the formal definition of the term, but
-      rather are routines. This started with the FORTRAN language, which
-      distinguished functions from other routines, because they could
-      return a single value that could be used in an expression, while
-      routines in the language only passed values through arguments.
-      In this guide, we will use the term routine to describe program
-      units that do not fit the formal definition of function.</p>
-
-
-
-    <p>Because the test routine only has access to the rut through its interfaces,
-      the rut is said to be a black box. However, this term is misleading, as
-      all computer code is accessed through inputs and outputs.  
-
-
--->
-
-<!--  LocalWords:  decider's sextillion
+<!--  LocalWords:  decider's sextillion Testbench
  -->
