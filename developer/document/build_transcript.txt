@@ -1,0 +1,58 @@
+> cd Mosaic
+> source env_developer
+> emacs &
+
+...
+
+2024-11-04T11:19:53Z[Mosaic_developer]
+Thomas-developer@Blossac§/var/user_data/Thomas-developer/Mosaic/developer§
+> clean_build_directories 
++ cd /var/user_data/Thomas-developer/Mosaic/developer
++ rm -r scratchpad/com
++ rm jvm/Mosaic.jar
++ rm shell/Mosaic
++ set +x
+clean_build_directories done.
+
+2024-11-04T11:20:14Z[Mosaic_developer]
+Thomas-developer@Blossac§/var/user_data/Thomas-developer/Mosaic/developer§
+> wipe_release
++ cd /var/user_data/Thomas-developer/Mosaic
++ rm -rf release/Mosaic release/Mosaic.jar
++ set +x
+wipe_release done.
+
+2024-11-04T11:20:18Z[Mosaic_developer]
+Thomas-developer@Blossac§/var/user_data/Thomas-developer/Mosaic/developer§
+> make
+Compiling files...
++ javac -g -d scratchpad javac/IO.java javac/Mosaic.java javac/TestBench.java javac/Util.java
++ set +x
+Creating JAR file...
++ jar_file=jvm/Mosaic.jar
++ mkdir -p jvm
++ jar cf jvm/Mosaic.jar -C scratchpad .
++ set +x
+JAR file created successfully: jvm/Mosaic.jar
+Creating shell wrappers...
+developer/tool/make done.
+
+2024-11-04T11:20:40Z[Mosaic_developer]
+Thomas-developer@Blossac§/var/user_data/Thomas-developer/Mosaic/developer§
+> release
+Starting release process...
+Installed Mosaic.jar to /var/user_data/Thomas-developer/Mosaic/release with permissions ug+r
+Installed Mosaic to /var/user_data/Thomas-developer/Mosaic/release with permissions ug+r+x
+developer/tool/release done.
+
+2024-11-04T11:20:44Z[Mosaic_developer]
+Thomas-developer@Blossac§/var/user_data/Thomas-developer/Mosaic/developer§
+> clean_make_output
++ cd /var/user_data/Thomas-developer/Mosaic/developer
++ rm -r scratchpad/com/ReasoningTechnology/Mosaic
++ rm jvm/Mosaic.jar
++ rm 'shell/{Mosaic}'
+rm: cannot remove 'shell/{Mosaic}': No such file or directory
++ set +x
+clean_make_output done.
+

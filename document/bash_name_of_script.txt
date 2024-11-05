@@ -1,6 +1,7 @@
 
-I had a lot of problems in bash scripting language, while trying to export a
-function that could report the name of the script it was called in. 
+Bash is inconsistent about returning the name of the running script in
+all scenarios (sourced, executed directly, from with in a function called
+by another function).
 
 1.
 
@@ -9,7 +10,7 @@ fact that is leveraged for detecting when in a sourced script).
 
 2.
 
-Hence, this did not work in general:
+However, this did not work in all scenarios:
 
   read -r -d '' script_afp_string <<'EOF'
   realpath "${BASH_SOURCE[0]}" 2>/dev/null
