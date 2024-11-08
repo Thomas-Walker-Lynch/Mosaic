@@ -1,9 +1,7 @@
 This shows all tests passing.
 
-It can be a bit confusing to read, but the failure results from the tests named
-'test_failure_X' are actually passing when they report that they failed. This is
-because we are testing a test bench, and we are testing the feature of the test
-bench where it fails bad code.
+Tests named `test_failure_<X>` should fail. We need to know that the `TestBench`
+can fail tests, so this is part of testing the `TestBench`.
 
 > cd Mosaic
 > source env_tester

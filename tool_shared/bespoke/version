@@ -2,5 +2,6 @@
 script_afp=$(realpath "${BASH_SOURCE[0]}")
 
 # 2024-10-24T14:56:09Z project skeleton and test bench files extracted from Ariadne 
-echo v2.0
+# 2024-11-08T07:18:03Z prefix `Mosaic_` to class names. See document/class_name.txt.
+echo v1.1
 

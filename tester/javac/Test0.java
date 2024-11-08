@@ -1,4 +1,4 @@
-import com.ReasoningTechnology.Mosaic.Util;
+import com.ReasoningTechnology.Mosaic.Mosaic_Util;
 
 /*
 Test Zero
@@ -18,7 +18,7 @@ public class Test0{
     condition[0] = test_is_true();
 
     int i = 0;
-    if( !Util.all(condition) ){
+    if( !Mosaic_Util.all(condition) ){
       System.out.println("Test0 failed");
       return 1;
     }

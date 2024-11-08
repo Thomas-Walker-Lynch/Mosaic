@@ -1,0 +1,74 @@
+This shows all tests passing.
+
+Tests named `test_failure_<X>` should fail. We need to know that the `TestBench`
+can fail tests, so this is part of testing the `TestBench`.
+
+Staring the environment:
+
+2024-11-08T07:41:48Z[]
+Thomas-developer@Blossac§/var/user_data/Thomas-developer§
+> bash
+
+2024-11-08T07:41:51Z[]
+Thomas-developer@Blossac§/var/user_data/Thomas-developer§
+> cd Mosaic
+
+2024-11-08T07:41:54Z[]
+Thomas-developer@Blossac§/var/user_data/Thomas-developer/Mosaic§
+> . env_tester
+REPO_HOME /var/user_data/Thomas-developer/Mosaic
+PROJECT Mosaic
+ENV tool_shared/bespoke/env
+ENV tester/tool/env
+
+2024-11-08T07:42:04Z[Mosaic_tester]
+Thomas-developer@Blossac§/var/user_data/Thomas-developer/Mosaic/tester§
+> emacs &
+
+Running the tests:
+
+2024-11-08T09:58:40Z[Mosaic_tester]
+Thomas-developer@Blossac§/var/user_data/Thomas-developer/Mosaic/tester§
+> clean_build_directories
++ cd /var/user_data/Thomas-developer/Mosaic/tester
++ rm -r scratchpad/Test0.class scratchpad/Test_IO.class 'scratchpad/Test_MockClass_0$TestSuite.class' scratchpad/Test_MockClass_0.class scratchpad/Test_Testbench.class scratchpad/Test_Util.class
++ rm jvm/Test_Mosaic.jar
++ rm shell/Test0 shell/Test_IO shell/test_log.txt shell/Test_MockClass_0 shell/Test_Testbench shell/Test_Util
++ set +x
+clean_build_directories done.
+
+2024-11-08T09:58:46Z[Mosaic_tester]
+Thomas-developer@Blossac§/var/user_data/Thomas-developer/Mosaic/tester§
+> make
+Compiling files...
++ cd /var/user_data/Thomas-developer/Mosaic/tester
++ javac -g -d scratchpad javac/Test0.java javac/Test_IO.java javac/Test_MockClass_0.java javac/Test_Testbench.java javac/Test_Util.java
++ jar cf jvm/Test_Mosaic.jar -C scratchpad .
++ set +x
+Creating shell wrappers...
+tester/tool/make done.
+
+2024-11-08T09:58:50Z[Mosaic_tester]
+Thomas-developer@Blossac§/var/user_data/Thomas-developer/Mosaic/tester§
+> run_tests
+Running Test0...Test0 passed
+Running Test_Util...Test_Util passed
+Running Test_IO...Test_IO passed
+Running Test_Testbench...Expected output: Structural problem message for dummy_invalid_return_method.
+Structural problem: dummy_invalid_return_method does not return Boolean.
+Test_Testbench Total tests run: 3
+Test_Testbench Total tests passed: 3
+Test_Testbench Total tests failed: 0
+Running Test_MockClass_0...Test failed: 'test_failure_0' reported failure.
+Structural problem: test_failure_1 does not return Boolean.
+Error: test_failure_1 has an invalid structure.
+Test failed: 'test_failure_2' threw an exception: java.lang.reflect.InvocationTargetException
+Test failed: 'test_failure_3' produced extraneous stdout.
+Test failed: 'test_failure_4' produced extraneous stderr.
+Total tests run: 9
+Total tests passed: 4
+Total tests failed: 5
+
+2024-11-08T09:58:55Z[Mosaic_tester]
+Thomas-developer@Blossac§/var/user_data/Thomas-developer/Mosaic/tester§
+> 

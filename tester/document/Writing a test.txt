@@ -1,0 +1,50 @@
+
+I did not use Mosaic to test itself, although Test_MockClass_0 comes close.
+
+TestMockClass has the general form of a test that uses Mosaic, though MockClass
+itself does not exist.  This general form:
+
+*. For block testing there conventionally be a correspondence between
+  The test classes and the a class being tested, so each test class will
+  be named:
+
+    `Test_<class being tested>_<number>'.  
+
+  Typically the lowest `number` will be zero, and it will correspond to
+  smoke tests.
+
+* A `Test_<class being tested>_<number>' class will have inside of it another class
+  called `TestSuite`.  By convention each method in this class is a test routine. For block
+  testing a test routine will has a correspondence to the method being tested,
+  and has the name:
+
+    `test_<method_name>_<number>`.
+
+  This convention is not always followed, no that in `Test_MackClass_0` you will
+  notice that tests are named after the expected results rather than a method
+  that is being tested.
+
+  Test routines can run a number of tests on a RUT, each of which is referred to
+  as a test case.  So we have this hierarchy:
+
+  `Test_<class being tested>_<number>' > `TestSuite` > test_routine > test_case
+
+*. The main call for a Test class will parse arguments and options, setup
+  the testing environment, make a `TestSuite` object, pass said object to
+  the `TestBench`, then take the return value from the `Testbench`, and set
+  the return value from the test.
+
+* A test routines will return `true` if the test passes. Any other return
+  value, any uncaught exception, or anything left on the stdout or stderr
+  will cause the test to be interpreted as a failure. (On the todo list is
+  an item to make unused stdin an error as well.)
+ 
+* A test reoutine (nor the contained test cases) should not themselves print
+  any messages. Generally it has always been this way, even before the Testbench
+  redirected and the i/o streams. Rather the test should simply return true
+  for a pass. This is because in testing we are looking for function failures,
+  and not for faults. The fault will be searched for later in the debugger.
+
+  If a test routine has an internal error, such that the routine itself
+  has a problem (not the RUT it is testing), this can be put in a log
+  entry. See the Mosaic_Util for the log methods.  

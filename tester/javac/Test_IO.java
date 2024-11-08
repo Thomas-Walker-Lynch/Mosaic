@@ -1,5 +1,5 @@
-import com.ReasoningTechnology.Mosaic.IO;
-import com.ReasoningTechnology.Mosaic.Util;
+import com.ReasoningTechnology.Mosaic.Mosaic_IO;
+import com.ReasoningTechnology.Mosaic.Mosaic_Util;
 
 public class Test_IO{
 
@@ -27,7 +27,7 @@ public class Test_IO{
   }
 
   public static int run(){
-    IO io = new IO();
+    Mosaic_IO io = new Mosaic_IO();
     Boolean[] condition = new Boolean[3];
 
     // Redirect IO streams
@@ -53,7 +53,7 @@ public class Test_IO{
     // Restore original IO streams
     io.restore();
 
-    if(!Util.all(condition)){
+    if(!Mosaic_Util.all(condition)){
       System.out.println("Test_IO failed");
       return 1;
     }

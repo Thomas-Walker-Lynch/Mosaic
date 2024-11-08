@@ -12,7 +12,7 @@ import java.io.FileDescriptor;
 import java.io.PrintStream;
 import java.io.InputStream;
 
-public class IO{
+public class Mosaic_IO{
 
   private PrintStream original_out;
   private PrintStream original_err;

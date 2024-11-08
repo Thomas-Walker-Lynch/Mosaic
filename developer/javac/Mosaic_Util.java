@@ -11,7 +11,7 @@ import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.util.function.Predicate;
 
-public class Util{
+public class Mosaic_Util{
 
   // Linear search with a predicate
   public static <T> T find( T[] elements ,Predicate<T> predicate ){

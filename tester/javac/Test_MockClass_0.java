@@ -1,14 +1,14 @@
 /* --------------------------------------------------------------------------------
-   Integration tests directly simulate the use cases for TestBench.
-   Each test method validates a specific feature of TestBench ,including pass,
+   Integration tests directly simulate the use cases for Mosaic_Testbench.
+   Each test method validates a specific feature of Mosaic_Testbench ,including pass,
    fail ,error handling ,and I/O interactions.
 */
 
 import java.util.Scanner;
-import com.ReasoningTechnology.Mosaic.IO;
-import com.ReasoningTechnology.Mosaic.TestBench;
+import com.ReasoningTechnology.Mosaic.Mosaic_IO;
+import com.ReasoningTechnology.Mosaic.Mosaic_Testbench;
 
-public class Test_MockClass{
+public class Test_MockClass_0{
 
   public class TestSuite{
 
@@ -16,39 +16,39 @@ public class Test_MockClass{
       // no special initialization of data for this test
     }
 
-    public Boolean test_failure_0(IO io){
+    public Boolean test_failure_0(Mosaic_IO io){
       return false;
     }
 
     // returns a non-Boolean
-    public Object test_failure_1(IO io){
+    public Object test_failure_1(Mosaic_IO io){
       return 1;
     }
 
     // has an uncaught error
-    public Boolean test_failure_2(IO io) throws Exception {
+    public Boolean test_failure_2(Mosaic_IO io) throws Exception {
       throw new Exception("Intentional exception for testing error handling");
     }
 
     // extraneous characters on stdout
-    public Boolean test_failure_3(IO io) throws Exception {
+    public Boolean test_failure_3(Mosaic_IO io) throws Exception {
       System.out.println("Intentional extraneous chars to stdout for testing");
       return true;
     }
 
     // extraneous characters on stderr
-    public Boolean test_failure_4(IO io) throws Exception {
+    public Boolean test_failure_4(Mosaic_IO io) throws Exception {
       System.err.println("Intentional extraneous chars to stderr for testing.");
       return true;
     }
 
-    public Boolean test_success_0(IO io){
+    public Boolean test_success_0(Mosaic_IO io){
       return true; 
     }
 
     // pushing input for testing
 
-    public Boolean test_success_1(IO io){
+    public Boolean test_success_1(Mosaic_IO io){
       io.push_input("input for the fut");
 
       Scanner scanner = new Scanner(System.in);
@@ -60,7 +60,7 @@ public class Test_MockClass{
     }
 
     // checking fut stdout
-    public Boolean test_success_2(IO io){
+    public Boolean test_success_2(Mosaic_IO io){
       System.out.println("fut stdout"); // suppose the fut does this:
       String peek_at_futs_output = io.get_out_content();
       Boolean flag0 = io.has_out_content();
@@ -70,7 +70,7 @@ public class Test_MockClass{
     }
 
     // checking fut stderr
-    public Boolean test_success_3(IO io){
+    public Boolean test_success_3(Mosaic_IO io){
       System.err.print("fut stderr"); // suppose the fut does this:
       String peek_at_futs_output = io.get_err_content();
       Boolean flag0 = io.has_err_content();
@@ -82,16 +82,16 @@ public class Test_MockClass{
   }
 
   public static void main(String[] args) {
-    Test_MockClass outer = new Test_MockClass();
+    Test_MockClass_0 outer = new Test_MockClass_0();
     TestSuite suite = outer.new TestSuite(); // Non-static instantiation
 
     /* for debug
-    IO io = new IO();
+    Mosaic_IO io = new Mosaic_IO();
     io.redirect();
     suite.test_success_2(io);
     */
 
-    int result = TestBench.run(suite); // Pass the suite instance to TestBench
+    int result = Mosaic_Testbench.run(suite); // Pass the suite instance to Mosaic_Testbench
     System.exit(result);
   }
 

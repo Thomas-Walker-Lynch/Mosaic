@@ -1,0 +1,84 @@
+1. Tool
+
+The directory called `tool` has tools for the developer.  There are comments at
+the top of each that says what it does.
+
+In the tool directory, `env` sets the PATH, CLASSPATH, and prepares the developer's
+environment. Noting will work right until this is sourced.  (This is similar to
+Python's `venv`.)
+
+The tool called `make` builds the project. This is not the venerable `/bin/make`
+but is a simple bash script.  It is going to compile everything in the `javac`
+directory.
+
+The tool called `shall_wrapper_list` gives a list of classes names that are to
+be given direct call shell wrappers. `make` will put these in the `shell`
+directory.
+
+The `clean_<x>` scripts are there to delete files so that developers do not have
+to type `rm` commands.  This helps prevent accidents.  Note the
+$REPO_HOME/tool_shared/bespoke/wipe_release script will remove files from the
+../release directory.
+
+2. build
+
+`make` runs `javac` which puts the class files into the `scratch_pad` directory.
+It will `makedir` a directory hierarchy in `scratch_pad` that mirrors the
+package name.
+
+After compiling `make` then gathers the class files found in the scratchpad
+directory hierarchy and puts them into a `.jar` file. Said `.jar` file will
+be located in the directory `jvm`.
+
+The `scratch_pad` directory is not pushed to the repo. It can be cleaned
+at any time, because it can always be rebuilt.
+
+3. release
+
+The `release` script will make a copy of the scripts in `shell` and the `.jar`
+file in `jvm` and put them in the `$REPO_HOME/release` directory.  This
+comprises the release candidate. After a release branch is made, this becomes
+the actual release.  Note the script in `$REPO_HOME/bespoke/version` which
+outputs the version for released code.
+
+
+4. debug
+
+If you use emacs note the file `$REPO_HOME/test_shared/bespoke/emacs.el'.
+
+Edit `make` to add or remove the `-g` flag from `javac`.  This controls putting
+source code information into the class files.
+
+After `javac` is compiled with the `-g` flag, and in the `jdb` debugger, `jdb`
+will look into the `scratchpad` directory hierarchy where the sources were
+put to find the sources files to display when single stepping etc.
+
+The `distribute_source` tool adds links into the `scratchpad` directory hierarchy
+the point back into the `javac` directory. After these links are made, `jdb`
+will show the sources, and should the sources be edited, the originals located
+in the `javac` directory will be modified.
+
+5. debug from the `tester` environment
+
+The tester environment points at the release candidate located in the
+$REPO_HOME/release directory to find the java classes.  
+
+If this release candidate was compiled with the `-g` flag, then it will have
+embedded in it source information pointing back into the
+`$REPO_HOME/developer/scratchpad` directory. 
+
+If the `distribute_source` was not called by the developer, or the scratchpad
+contents have been cleaned, jdb will not be able to find the sources.
+If jdb does find the sources, and the tester edits them, then the originals
+in the `$REPO_HOME/developer/javac` directory will be modified.  If this
+behavior is not desired, then put the tester on a `core_tester_branch`, then
+inspect changes before merging them back to the `core_developer_branch`.
+
+This setup makes it possible for developers to use the tester environment
+to work, without having to be on a separate branch, or for testers to
+work separately.
+
+
+
+
+

@@ -2,7 +2,7 @@ package com.ReasoningTechnology.Mosaic;
 
 import java.lang.reflect.Method;
 
-public class TestBench {
+public class Mosaic_Testbench {
 
   /* --------------------------------------------------------------------------------
     Validate the structure of a test method
@@ -14,10 +14,10 @@ public class TestBench {
       return false;
     }
 
-    // Check if the method has exactly one argument of type IO
+    // Check if the method has exactly one argument of type Mosaic_IO
     Class<?>[] parameterTypes = method.getParameterTypes();
-    if(parameterTypes == null || parameterTypes.length != 1 || !parameterTypes[0].equals(IO.class)){
-      System.out.println("Structural problem: " + method.getName() + " does not accept a single IO argument.");
+    if(parameterTypes == null || parameterTypes.length != 1 || !parameterTypes[0].equals(Mosaic_IO.class)){
+      System.out.println("Structural problem: " + method.getName() + " does not accept a single Mosaic_IO argument.");
       return false;
     }
 
@@ -27,7 +27,7 @@ public class TestBench {
   /* --------------------------------------------------------------------------------
     Run a single test method
   */
-  public static Boolean run_test(Object test_suite, Method method, IO io){
+  public static Boolean run_test(Object test_suite, Method method, Mosaic_IO io){
     String test_name = method.getName();
 
     // Tracking possible test failures
@@ -49,7 +49,7 @@ public class TestBench {
     if(successful_redirect){
       io.clear_buffers();  // Start each test with empty buffers
     } else {
-      Util.log_message(test_name, "Error: I/O redirection failed before running the test.");
+      Mosaic_Util.log_message(test_name, "Error: I/O redirection failed before running the test.");
       System.out.println("Warning: Failed to redirect I/O for test: " + test_name);
     }
 
@@ -71,11 +71,11 @@ public class TestBench {
     if(fail_exception) System.out.println("Test failed: '" + test_name + "' threw an exception: " + exception_string);
     if(fail_extraneous_stdout){
       System.out.println("Test failed: '" + test_name + "' produced extraneous stdout.");
-      Util.log_output(test_name, "stdout", io.get_out_content());
+      Mosaic_Util.log_output(test_name, "stdout", io.get_out_content());
     }
     if(fail_extraneous_stderr){
       System.out.println("Test failed: '" + test_name + "' produced extraneous stderr.");
-      Util.log_output(test_name, "stderr", io.get_err_content());
+      Mosaic_Util.log_output(test_name, "stderr", io.get_err_content());
     }
 
     // Determine final test result
@@ -89,7 +89,7 @@ public class TestBench {
     int failed_tests = 0;
     int passed_tests = 0;
     Method[] methods = test_suite.getClass().getDeclaredMethods();
-    IO io = new IO();
+    Mosaic_IO io = new Mosaic_IO();
 
     for(Method method : methods){
       if(run_test(test_suite, method, io)) passed_tests++; else failed_tests++;

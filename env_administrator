@@ -6,5 +6,5 @@ if [[ "${BASH_SOURCE[0]}" == "$0" ]]; then
 fi
 
 source tool_shared/bespoke/env
-
+source tool/env
 

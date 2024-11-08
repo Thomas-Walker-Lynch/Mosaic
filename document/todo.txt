@@ -1,31 +1,25 @@
 
-Updates for Ariadne
+1. More languages support, notably nodejs.
 
-1. reflect project skeleton changes.
-   replaced literal `Ariadne` with `$PROJECT`
-   in top level env choices, PROJECT -> PROMPT_DECOR
+2. This message:
 
-   note in 'release' there is a variable name with the project name embedded in it:
-   Ariadne_jar_fp -> project_jar_fp
-   Change slashes to dots in the wrapper maker of 'make'
+    Running Test_File_0...Structural problem: unpack_file_path_0 does not accept a single IO argument.
+    Error: unpack_file_path_0 has an invalid structure.
 
-2. should do something about `wrapper` as it appears in multiple places making
-   editing it a pain.
-   in all places `wrapper` appears, now calls `shell_wrapper_list`
-   in both developer and tester
+  Perhaps only the second one, getting rid of 'Error:'
 
-3. clean_make -> clean_make_output
+    "Bad type signature for method: unpack_file_path_0 does not accept a single IO argument."
 
-4. version outputs a `v` in front of the number
+3. TestBench -> Testbench perhaps?
 
-5. fix many shebangs to be: #!/usr/bin/env bash
-
-6. scratch_pad -> scratchpad
-
-5. make_source_tree also integrated into make
-
-6. replacement for bespoke/env and all other env files, related document.
+4. fix emacs.el so that jdbx doesn't always start with Test_Util.  (note the
+   prior start can be found with M-x p
 
 
+5. should include a tool for aggregating test suite runs
+    FYI, I'm using 
 
+6. need an example .bashrc for setting the prompt now that I removed references
+to the 'resource' project and plan to deprecate it.
 
+7. should check stdin for unused input and report error also.

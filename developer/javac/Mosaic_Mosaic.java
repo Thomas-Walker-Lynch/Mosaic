@@ -1,13 +1,13 @@
 package com.ReasoningTechnology.Mosaic;
-import com.ReasoningTechnology.Mosaic.Util;
 
 /*
-Mosaic currently does not have shell commands.
+The Mosaic shell callable wrapper is currently a placeholder. Perhaps someday we
+can find something for this to do.
 
 */
 
 
-public class Mosaic{
+public class Mosaic_Mosaic{
 
   public static Boolean test_is_true(){
     return true;
