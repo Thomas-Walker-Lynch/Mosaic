@@ -23,3 +23,5 @@
 to the 'resource' project and plan to deprecate it.
 
 7. should check stdin for unused input and report error also.
+
+8. move 'unlock_class` from Ariadne tests to Mosaic_Util.
