@@ -8,7 +8,7 @@ fi
 # --------------------------------------------------------------------------------
 # project definition
 
-# actual absolute director path for this script file
+# actual absolute directory path for this script file
 
   script_adp(){
     dirname "$script_afp"
