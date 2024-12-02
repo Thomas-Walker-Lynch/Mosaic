@@ -5,11 +5,15 @@ import java.io.ByteArrayOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintStream;
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
+import java.lang.reflect.Proxy;
 import java.time.Instant;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.util.function.Predicate;
+
 
 public class Mosaic_Util{
 
@@ -82,5 +86,41 @@ public class Mosaic_Util{
       e.printStackTrace(System.err);
     }
   }
+
+  public static Object make_all_public_methods_proxy( Class<?> class_metadata ) {
+    try {
+      // Check if the class is public
+      int modifiers = class_metadata.getModifiers();
+      if (!java.lang.reflect.Modifier.isPublic( modifiers )) {
+        throw new IllegalAccessException(
+          "The class " + class_metadata.getName() + " is not public and cannot be proxied."
+        );
+      }
+
+      // Create the proxy
+      Object proxy = java.lang.reflect.Proxy.newProxyInstance(
+        class_metadata.getClassLoader()
+       ,class_metadata.getInterfaces()
+       ,(proxy_object ,method ,args) -> {
+           Method original_method = class_metadata.getDeclaredMethod(
+             method.getName()
+            ,method.getParameterTypes()
+           );
+           original_method.setAccessible( true );
+           Object real_instance = class_metadata.getDeclaredConstructor().newInstance();
+           return original_method.invoke( real_instance ,args );
+         }
+      );
+
+      return proxy;
+
+    } catch (Exception e) {
+      throw new RuntimeException(
+        "Failed to create proxy for class: " + class_metadata.getName()
+       ,e
+      );
+    }
+  }
+
 
 }
