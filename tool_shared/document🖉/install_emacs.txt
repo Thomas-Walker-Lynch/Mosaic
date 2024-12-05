@@ -1,0 +1,19 @@
+
+# install and build script:
+
+cd "$REPO_HOME"/tool_shared/third_party
+mkdir -p emacs/{src build bin}
+
+pushd upstream
+curl -L -O https://ftp.gnu.org/gnu/emacs/emacs-29.4.tar.gz
+popd
+
+tar -xzf upstream/emacs-29.4.tar.gz -C emacs/src --strip-components=1
+
+pushd emacs/src
+/configure --prefix=emacs/build
+make -j$(nproc)
+make install DESTDIR=../bin
+popd
+
+rm -r emacs/build
