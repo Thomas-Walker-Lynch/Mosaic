@@ -5,6 +5,6 @@ if [[ "${BASH_SOURCE[0]}" == "$0" ]]; then
   exit 1
 fi
 
-source tool_shared/bespoke/env
-source tool/env
+source tool_shared/bespoke🖉/env
+source tool🖉/env
 

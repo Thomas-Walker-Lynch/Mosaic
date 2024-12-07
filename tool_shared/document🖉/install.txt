@@ -16,7 +16,7 @@ This pulls in documents and commonly used scripts. The project has symbolic link
 into RT-icommon, so this is not optional.
 
   cd "$REPO_HOME/tool_shared/third_party/"
-  git clone https://github.com/Thomas-Walker-Lynch/resource.git
+  git clone https://github.com/Thomas-Walker-Lynch/RT-incommon.git
   ln -s "$REPO_HOME/tool_shared/third_party/resource/document" see_also
 
 ----------------------------------------
@@ -37,7 +37,12 @@ jdk-23
 ----------------------------------------
 IDE
 
-This is not strictly necessary, but a local install of an IDE will assure it is
+See
+$REPO_HOME/tool_shared/document/install_emacs.txt
+$REPO_HOME/tool_shared/document/install_IntelliJ_IDEA.txt
+
+
+but a local install of an IDE will assure it is
 sync with the rest of the project build for configuration files and tools built
 in to it.
 

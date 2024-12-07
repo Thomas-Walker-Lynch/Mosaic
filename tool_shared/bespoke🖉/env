@@ -29,7 +29,11 @@ fi
 # --------------------------------------------------------------------------------
 # The project administrator sets up the following tools for all roles to use:
 #
-  export JAVA_HOME="$REPO_HOME/tool_shared/third_party/jdk-11"
+  export PATH="$REPO_HOME/tool_shared/third_party/RT-incommon/release/bash:$PATH"
+  export PATH="$REPO_HOME/tool_shared/third_party/RT-incommon/release/amd64:$PATH"
+  export JAVA_HOME="$REPO_HOME/tool_shared/third_party/jdk-23.0.1:$PATH"
+  export PATH="$REPO_HOME/tool_shared/third_party/emacs/bin:$PATH"
+#  export PATH="$REPO_HOME/tool_shared/third_party/idea-IC-243.21565.193/:$PATH"
 
 # --------------------------------------------------------------------------------
 # the following functions are provided for other scripts to use.
