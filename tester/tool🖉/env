@@ -20,8 +20,7 @@ script_afp=$(realpath "${BASH_SOURCE[0]}")
 # so we can do testing
 
 export PATH=\
-"$REPO_HOME"/tester/tool/\
-:"$REPO_HOME"/tool_shared/bespoke/\
+"$REPO_HOME"/tester/tool🖉/\
 :"$JAVA_HOME"/bin\
 :"$PATH"
 
@@ -32,6 +31,7 @@ export CLASSPATH=\
 :"$CLASSPATH"
 
 export SOURCEPATH=\
+"$REPO_HOME"/tester/bash\
 "$REPO_HOME"/tester/javac/\
 :"$REPO_HOME"/developer/scratchpad/\
 

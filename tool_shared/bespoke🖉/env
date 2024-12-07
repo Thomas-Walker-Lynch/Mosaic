@@ -26,14 +26,24 @@ fi
   # set the prompt decoration to the name of the project
   PROMPT_DECOR=$PROJECT
 
+  # include the project bespoke tools
+  PATH="$REPO_HOME"/tool_shared/bespoke🖉:"$PATH"
+
+  export REPO_HOME PROJECT PROMPT_DECOR PATH
+
 # --------------------------------------------------------------------------------
 # The project administrator sets up the following tools for all roles to use:
 #
-  export PATH="$REPO_HOME/tool_shared/third_party/RT-incommon/release/bash:$PATH"
-  export PATH="$REPO_HOME/tool_shared/third_party/RT-incommon/release/amd64:$PATH"
-  export JAVA_HOME="$REPO_HOME/tool_shared/third_party/jdk-23.0.1:$PATH"
-  export PATH="$REPO_HOME/tool_shared/third_party/emacs/bin:$PATH"
-#  export PATH="$REPO_HOME/tool_shared/third_party/idea-IC-243.21565.193/:$PATH"
+  PATH="$REPO_HOME/tool_shared/third_party/RT-incommon/release/bash:$PATH"
+  PATH="$REPO_HOME/tool_shared/third_party/RT-incommon/release/amd64:$PATH"
+  PATH="$REPO_HOME/tool_shared/third_party/emacs/bin:$PATH"
+
+# after having installed Itellij IDEA
+#  PATH="$REPO_HOME/tool_shared/third_party/idea-IC-243.21565.193/:$PATH"
+
+  JAVA_HOME="$REPO_HOME/tool_shared/third_party/jdk-23.0.1"
+
+  export PATH JAVA_HOME
 
 # --------------------------------------------------------------------------------
 # the following functions are provided for other scripts to use.
@@ -61,7 +71,6 @@ fi
 # Bash has no 'closure' hence when exporting a function, one must also export all the pieces.
 # do not export script_afp
 
-  export REPO_HOME PROJECT PROMPT_DECOR
   export -f script_adp script_fn script_dp script_fp
 
   export ENV=$(script_fp)

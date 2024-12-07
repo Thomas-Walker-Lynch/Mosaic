@@ -20,8 +20,7 @@ script_afp=$(realpath "${BASH_SOURCE[0]}")
 # so we can do the build
 
 export PATH=\
-"$REPO_HOME"/developer/tool/\
-:"$REPO_HOME"/tool_shared/bespoke/\
+"$REPO_HOME"/developer/tool🖉/\
 :"$JAVA_HOME"/bin\
 :"$PATH"
 
@@ -34,7 +33,7 @@ export CLASSPATH=\
 :"$CLASSPATH"
 
 export PATH=\
-"$REPO_HOME"/developer/shell\
+"$REPO_HOME"/developer/bash\
 :"$PATH"
 
 # misc

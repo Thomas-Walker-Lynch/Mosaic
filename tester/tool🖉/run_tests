@@ -7,7 +7,7 @@ if [ -z "$REPO_HOME" ]; then
 fi
 
 # Navigate to the shell directory
-cd "$REPO_HOME/tester/shell" || exit
+cd "$REPO_HOME/tester/bash" || exit
 
 # Get the list of test scripts in the specific order from shell_wrapper_list
 test_list=$(shell_wrapper_list)
