@@ -10,13 +10,13 @@ the project and source the env_administrator environment.
   source env_administrator
 
 ----------------------------------------
-RT-incommon 
+RT-project-share 
 
 This pulls in documents and commonly used scripts. The project has symbolic links
 into RT-icommon, so this is not optional.
 
   cd "$REPO_HOME/tool_shared/third_party/"
-  git clone https://github.com/Thomas-Walker-Lynch/RT-incommon.git
+  git clone https://github.com/Thomas-Walker-Lynch/RT-project-share.git
   ln -s "$REPO_HOME/tool_shared/third_party/resource/document" see_also
 
 ----------------------------------------

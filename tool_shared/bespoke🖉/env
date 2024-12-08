@@ -34,8 +34,8 @@ fi
 # --------------------------------------------------------------------------------
 # The project administrator sets up the following tools for all roles to use:
 #
-  PATH="$REPO_HOME/tool_shared/third_party/RT-incommon/release/bash:$PATH"
-  PATH="$REPO_HOME/tool_shared/third_party/RT-incommon/release/amd64:$PATH"
+  PATH="$REPO_HOME/tool_shared/third_party/RT-project-share/release/bash:$PATH"
+  PATH="$REPO_HOME/tool_shared/third_party/RT-project-share/release/amd64:$PATH"
   PATH="$REPO_HOME/tool_shared/third_party/emacs/bin:$PATH"
 
 # after having installed Itellij IDEA
