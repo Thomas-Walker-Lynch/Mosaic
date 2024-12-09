@@ -2,9 +2,9 @@
 script_afp=$(realpath "${BASH_SOURCE[0]}")
 
 # Removes all files found in the build directories. It asks no questions as to
-# how or why the files got there. Be especially careful with the 'shell'
-# directory if you have authored scripts for release, add a `shell-leaf`
-# directory instead of putting them in `shell`.
+# how or why the files got there. Be especially careful with the 'bash'
+# directory if you have authored scripts for release, add a `bash🖉`
+# directory instead of putting them in `bash`.
 
 # input guards
   env_must_be="developer/tool🖉/env"
@@ -16,9 +16,12 @@ script_afp=$(realpath "${BASH_SOURCE[0]}")
 # remove files
   set -x
   cd "$REPO_HOME"/developer
-  rm_na -r scratchpad/*
+
+  # rm_na currently does not handle links correctly 
+  rm -r scratchpad/*
+
   rm_na jvm/*
-  rm_na shell/*
+  rm_na bash/*
   set +x
 
 echo "$(script_fn) done."

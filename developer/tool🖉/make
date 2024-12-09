@@ -13,7 +13,7 @@ script_afp=$(realpath "${BASH_SOURCE[0]}")
 
 echo "Compiling files..."
   set -x
-  javac -g -d scratchpad javac/*.java
+  javac -g -d scratchpad javac🖉/*.java
   set +x
   if [ $? -ne 0 ]; then
     echo "Compilation failed."
@@ -33,16 +33,16 @@ echo "Creating JAR file..."
     exit 1
   fi
 
-echo "Creating shell wrappers..."
-  mkdir -p shell
+echo "Creating bash wrappers..."
+  mkdir -p bash
   # wrapper is a space separated list
-  wrapper=$(shell_wrapper_list)
+  wrapper=$(bash_wrapper_list)
   for file in $wrapper;do
-    cat > shell/$file << EOL
+    cat > bash/$file << EOL
 #!/bin/bash
 java com.ReasoningTechnology."$PROJECT".$file
 EOL
-    chmod +x shell/$file
+    chmod +x bash/$file
   done
 
 echo "$(script_fp) done."

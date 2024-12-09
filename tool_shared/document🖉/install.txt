@@ -10,17 +10,28 @@ the project and source the env_administrator environment.
   source env_administrator
 
 ----------------------------------------
+General notes on third party tools
+
+A project will have paths and/or symbolic links pointing into the third party
+tools, so as to make use of them.  
+
+The contents of the third_party directory is .gititnored, though the upstream
+directory has its own gitignore.
+
+If you already have the project installed, perhaps because you
+are working on it, then a new install is not needed, rather the
+existing install can be linked, for example for RT-project-share:
+
+  ln -snf ~/RT-project-share "$REPO_HOME"/tool_shared/third_party
+
+Otherwise, follow the directions below to make a local
+install of the third party tool.
+
+----------------------------------------
 RT-project-share 
 
 This pulls in documents and commonly used scripts. The project has symbolic links
 into RT-icommon, so this is not optional.
-
-If the project is installed on you system, perhaps so that it can be shared
-with many projects without duplicating it:
-
-  ln -snf ~/RT-project-share "$REPO_HOME"/tool_shared/third_party
-
-If you want a local install:
 
   cd "$REPO_HOME/tool_shared/third_party/"
   git clone https://github.com/Thomas-Walker-Lynch/RT-project-share.git

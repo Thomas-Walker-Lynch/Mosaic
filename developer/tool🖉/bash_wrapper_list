@@ -11,5 +11,5 @@ script_afp=$(realpath "${BASH_SOURCE[0]}")
 
   cd "$REPO_HOME"/developer
 
-# list of classes that have main calls and get shell wrappers
+# list of classes that have main calls and get bash wrappers
 echo Mosaic

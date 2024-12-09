@@ -17,9 +17,9 @@ script_afp=$(realpath "${BASH_SOURCE[0]}")
 # script local environment
 
   release_dir="$REPO_HOME/release"
-  shell_dir="$REPO_HOME/developer/shell"
+  bash_dir="$REPO_HOME/developer/bash"
   project_jar_fp="$REPO_HOME/developer/jvm/"$PROJECT".jar"
-  wrapper=$(shell_wrapper_list)
+  wrapper=$(bash_wrapper_list)
 
 
   if [ ! -d "$release_dir" ]; then
@@ -54,9 +54,9 @@ script_afp=$(realpath "${BASH_SOURCE[0]}")
   # Install the JAR file
   install_file "$project_jar_fp" "$release_dir" "ug+r"
 
-  # Install shell wrappers
+  # Install bash wrappers
   for wrapper in $wrapper; do
-    install_file "$shell_dir/$wrapper" "$release_dir" "ug+r+x"
+    install_file "$bash_dir/$wrapper" "$release_dir" "ug+r+x"
   done
 
 echo "$(script_fp) done."
