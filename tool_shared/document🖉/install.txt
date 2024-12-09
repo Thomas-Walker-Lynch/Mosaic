@@ -15,9 +15,18 @@ RT-project-share
 This pulls in documents and commonly used scripts. The project has symbolic links
 into RT-icommon, so this is not optional.
 
+If the project is installed on you system, perhaps so that it can be shared
+with many projects without duplicating it:
+
+  ln -snf ~/RT-project-share "$REPO_HOME"/tool_shared/third_party
+
+If you want a local install:
+
   cd "$REPO_HOME/tool_shared/third_party/"
   git clone https://github.com/Thomas-Walker-Lynch/RT-project-share.git
-  ln -s "$REPO_HOME/tool_shared/third_party/resource/document" see_also
+
+  note this link should already be present:
+    ln -s "$REPO_HOME/tool_shared/third_party/resource/document" see_also
 
 ----------------------------------------
 jdk-23

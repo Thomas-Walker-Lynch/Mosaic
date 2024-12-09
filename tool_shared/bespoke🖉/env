@@ -66,12 +66,10 @@ fi
     dirname "$(script_fp)"
   }
 
-# --------------------------------------------------------------------------------
-# Exports
-# Bash has no 'closure' hence when exporting a function, one must also export all the pieces.
-# do not export script_afp
-
   export -f script_adp script_fn script_dp script_fp
+
+# --------------------------------------------------------------------------------
+# closing
 
   export ENV=$(script_fp)
   echo ENV "$ENV"

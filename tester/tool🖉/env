@@ -31,9 +31,13 @@ export CLASSPATH=\
 :"$CLASSPATH"
 
 export SOURCEPATH=\
-"$REPO_HOME"/tester/bash\
 "$REPO_HOME"/tester/javac/\
 :"$REPO_HOME"/developer/scratchpad/\
+
+# so we can run individual built tests wrappers
+export PATH=\
+"$REPO_HOME"/tester/bash\
+:"$PATH"
 
 
 # misc
