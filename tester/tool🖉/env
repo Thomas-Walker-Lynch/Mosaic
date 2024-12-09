@@ -17,12 +17,12 @@ script_afp=$(realpath "${BASH_SOURCE[0]}")
   if $error_not_sourced; then exit 1; fi
   if $error_bad_env; then return 1; fi
 
-# so we can do testing
 
-export PATH=\
-"$REPO_HOME"/tester/tool🖉/\
-:"$JAVA_HOME"/bin\
-:"$PATH"
+#--------------------------------------------------------------------------------
+# class/source paths
+
+# ----
+# debug to find failing tests 
 
 export CLASSPATH=\
 "$JAVA_HOME"/lib\
@@ -30,11 +30,40 @@ export CLASSPATH=\
 :"$REPO_HOME"/tester/jvm/Test_"$PROJECT".jar\
 :"$CLASSPATH"
 
+# note the developer sources on the scratchpad, if they are even there
+# can be out of sync with those in the release jar
 export SOURCEPATH=\
-"$REPO_HOME"/tester/javac/\
+"$REPO_HOME"/tester/javac🖉/\
 :"$REPO_HOME"/developer/scratchpad/\
+:"$SOURCEPATH"
+
+# ----
+# debug directly from developer sources
+#
+# export CLASSPATH=\
+# "$JAVA_HOME"/lib\
+# :"$REPO_HOME"/developer/scratchpad\
+# :"$REPO_HOME"/tester/jvm/Test_"$PROJECT".jar\
+# :"$CLASSPATH"
+
+# export SOURCEPATH=\
+# "$REPO_HOME"/tester/java🖉/\
+# :"$REPO_HOME"/developer/scratchpad\
+# :"$SOURCEPATH"
+
+# end of the class/source path settings
+#`--------------------------------------------------------------------------------
+
+# so we can do testing
+
+export PATH=\
+"$REPO_HOME"/tester/tool🖉/\
+:"$JAVA_HOME"/bin\
+:"$PATH"
+
 
 # so we can run individual built tests wrappers
+#
 export PATH=\
 "$REPO_HOME"/tester/bash\
 :"$PATH"
