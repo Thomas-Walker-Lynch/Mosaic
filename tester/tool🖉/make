@@ -17,10 +17,10 @@ echo "Compiling files..."
   jar cf jvm/Test_"$PROJECT".jar -C scratchpad .
   set +x 
 
-echo "Creating shell wrappers..."
+echo "Creating bash wrappers..."
   mkdir -p bash
   # wrapper is a space separated list
-  wrapper=$(shell_wrapper_list)
+  wrapper=$(bash_wrapper_list)
   for file in $wrapper;do
     cat > bash/$file << EOL
 #!/bin/env bash

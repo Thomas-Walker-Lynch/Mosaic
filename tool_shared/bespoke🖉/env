@@ -42,8 +42,10 @@ fi
 #  PATH="$REPO_HOME/tool_shared/third_party/idea-IC-243.21565.193/:$PATH"
 
   JAVA_HOME="$REPO_HOME/tool_shared/third_party/jdk-23.0.1"
+  LOGGER_FACADE="$REPO_HOME"/tool_shared/third_party/slf4j-api-2.0.9.jar
+  LOGGER="$REPO_HOME"/tool_shared/third_party/logback-classic-1.5.12.jar
 
-  export PATH JAVA_HOME
+  export PATH JAVA_HOME LOGGER_FACADE LOGGER
 
 # --------------------------------------------------------------------------------
 # the following functions are provided for other scripts to use.

@@ -24,13 +24,20 @@ export PATH=\
 :"$JAVA_HOME"/bin\
 :"$PATH"
 
-# so we can run the stuff we built locally.
 
+# for the developers ad hoc testing
+#
 export CLASSPATH=\
-"$REPO_HOME"/developer/jvm\
-:"$REPO_HOME"/developer/jvm/"$PROJECT".jar\
-:"$JAVA_HOME"/lib\
+"$JAVA_HOME"/lib\
+:"$REPO_HOME"/developer/config\
+:"$REPO_HOME"/developer/scratchpad\
+:"$LOGGER_FACADE"\
+:"$LOGGER"\
 :"$CLASSPATH"
+
+export SOURCEPATH=\
+"$REPO_HOME"/developer/javac🖉/\
+:"$SOURCEPATH"
 
 export PATH=\
 "$REPO_HOME"/developer/bash\

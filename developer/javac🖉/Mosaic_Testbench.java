@@ -49,7 +49,7 @@ public class Mosaic_Testbench {
     if(successful_redirect){
       io.clear_buffers();  // Start each test with empty buffers
     } else {
-      Mosaic_Util.log_message(test_name, "Error: I/O redirection failed before running the test.");
+      Mosaic_Logger.message(test_name, "Error: I/O redirection failed before running the test.");
       System.out.println("Warning: Failed to redirect I/O for test: " + test_name);
     }
 
@@ -71,11 +71,11 @@ public class Mosaic_Testbench {
     if(fail_exception) System.out.println("Test failed: '" + test_name + "' threw an exception: " + exception_string);
     if(fail_extraneous_stdout){
       System.out.println("Test failed: '" + test_name + "' produced extraneous stdout.");
-      Mosaic_Util.log_output(test_name, "stdout", io.get_out_content());
+      Mosaic_Logger.output(test_name, "stdout", io.get_out_content());
     }
     if(fail_extraneous_stderr){
       System.out.println("Test failed: '" + test_name + "' produced extraneous stderr.");
-      Mosaic_Util.log_output(test_name, "stderr", io.get_err_content());
+      Mosaic_Logger.output(test_name, "stderr", io.get_err_content());
     }
 
     // Determine final test result

@@ -10,23 +10,28 @@ script_afp=$(realpath "${BASH_SOURCE[0]}")
 
   env_must_be="developer/tool🖉/env"
   if [ "$ENV" != "$env_must_be" ]; then
-    echo "$(script_fp):: error: must be run in the $env_must_be environment"
+    echo "$(script_fp):: must be run in the $env_must_be environment"
     exit 1
   fi
 
-# script local environment
+  cd "$REPO_HOME"/developer
 
-  release_dir="$REPO_HOME/release"
-  bash_dir="$REPO_HOME/developer/bash"
-  project_jar_fp="$REPO_HOME/developer/jvm/"$PROJECT".jar"
-  wrapper=$(bash_wrapper_list)
-
-
-  if [ ! -d "$release_dir" ]; then
-    mkdir -p "$release_dir"
+  if [ ! -d scratchpad ]; then
+    echo "$(script_fp):: no scratchpad directory"
+    exit 1
   fi
 
-  # Function to copy and set permissions
+
+# Inform the user
+
+  echo "The pwd for this script is `pwd`."
+  echo "Expanding .jar files to be included with Mosaic into scratchpad."
+  echo "Gathering all the contents of scrathpad into jvm/\$PROJECT.jar"
+  echo "Will copy jvm/\$PROJECT.jar and other files for release to ../release"
+  echo "..."
+
+# Function to copy and set permissions
+
   install_file() {
     source_fp="$1"
     target_dp="$2"
@@ -46,17 +51,49 @@ script_afp=$(realpath "${BASH_SOURCE[0]}")
       echo "Installed $(basename "$source_fp") to $target_dp with permissions $perms"
     fi
   }
- 
-# do the release
 
-  echo "Starting release process..."
+# script local environment
 
-  # Install the JAR file
+  release_dir="$REPO_HOME/release"
+  bash_dir="$REPO_HOME/developer/bash"
+  project_jar_fp="$REPO_HOME/developer/jvm/"$PROJECT".jar"
+  wrapper=$(bash_wrapper_list)
+
+  mkdir -p "$release_dir"
+  mkdir -p jvm
+
+# third party tools to be included
+
+  third_party_jars=(
+    "$LOGGER_FACADE"
+    "$LOGGER"
+  )
+
+  for jar in "${third_party_jars[@]}"; do
+    if [ -f "$jar" ]; then
+      set -x
+      jar -xf "$jar" -C scratchpad
+      set +x
+    else
+      echo "Warning: JAR file not found: $jar"
+    fi
+  done
+
+  jar_file=jvm/"$PROJECT".jar
+  set -x
+  jar cf $jar_file -C scratchpad .
+  set +x
+  if [ $? -ne 0 ]; then
+    echo "Failed to create $jar_file file."
+    exit 1
+  fi
+
+# move files to the release dir
+
   install_file "$project_jar_fp" "$release_dir" "ug+r"
 
-  # Install bash wrappers
   for wrapper in $wrapper; do
-    install_file "$bash_dir/$wrapper" "$release_dir" "ug+r+x"
+    install_file "$bash_dir"/"$wrapper" "$release_dir" "ug+r+x"
   done
 
 echo "$(script_fp) done."

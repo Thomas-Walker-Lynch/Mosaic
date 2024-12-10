@@ -25,3 +25,17 @@ to the 'resource' project and plan to deprecate it.
 7. should check stdin for unused input and report error also.
 
 8. move 'unlock_class` from Ariadne tests to Mosaic_Util.
+
+9. consider adding Maven for the third party tools dependencies.
+
+10. really should move the developer/release 'install' script to the bespoke🖉/env script
+
+2024-12-10T14:25:40Z
+
+  Gives an error, but still passes? Is this right?
+  ... Running Test_Testbench
+  Expected output: Structural problem message for dummy_invalid_return_method.
+  Structural problem: dummy_invalid_return_method does not return Boolean.
+  Test_Testbench Total tests run: 3
+  Test_Testbench Total tests passed: 3
+  Test_Testbench Total tests failed: 0

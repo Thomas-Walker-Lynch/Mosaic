@@ -6,16 +6,18 @@ if [ -z "$REPO_HOME" ]; then
   exit 1
 fi
 
-# Navigate to the shell directory
+# Navigate to the bash directory
 cd "$REPO_HOME/tester/bash" || exit
 
-# Get the list of test scripts in the specific order from shell_wrapper_list
-test_list=$(shell_wrapper_list)
+# Get the list of test scripts in the specific order from bash_wrapper_list
+test_list=$(bash_wrapper_list)
+echo test_list: $test_list
 
 # Execute each test in the specified order
 for file in $test_list; do
+  echo
   if [[ -x "$file" && ! -d "$file" ]]; then
-    echo -n "Running $file..."
+    echo "... Running $file"
     ./"$file"
   else
     echo "Skipping $file (not executable or is a directory)"

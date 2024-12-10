@@ -5,6 +5,9 @@ import java.io.ByteArrayOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintStream;
+import java.lang.invoke.MethodHandle;
+import java.lang.invoke.MethodHandles;
+import java.lang.invoke.MethodType;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
@@ -13,7 +16,6 @@ import java.time.Instant;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.util.function.Predicate;
-
 
 public class Mosaic_Util{
 
@@ -55,72 +57,43 @@ public class Mosaic_Util{
     return Instant.now().atOffset(ZoneOffset.UTC).format(DateTimeFormatter.ISO_INSTANT);
   }
 
-  // used to report if a test completed with data still on an output streams
-  public static void log_output(String test_name ,String stream ,String output_data){
-    try(FileWriter log_writer = new FileWriter("test_log.txt" ,true)){  // Append mode
-      log_writer.write("\n" + iso_utc_time() + " -----------------------------------------------------------\n");
-      log_writer.write("Test: " + test_name + "\n");
-      log_writer.write("Stream: " + stream + "\n");
-      log_writer.write("Output:\n" + output_data + "\n");
-    } catch(IOException e) {
-      System.err.println("Error writing to log for test: " + test_name + ", stream: " + stream);
-      e.printStackTrace(System.err);
-    }
-  }
-
-  // used to log a general message about a test
-  public static void log_message(String test_name ,String message){
-    try(FileWriter log_writer = new FileWriter("test_log.txt" ,true)){  // Append mode
-      log_writer.write("\n" + iso_utc_time() + " -----------------------------------------------------------\n");
-      log_writer.write("Test: " + test_name + "\n");
-      log_writer.write("Message:\n" + message + "\n");
-    } catch(IOException e){
-      System.err.println
-        (
-         "Error writing message \"" 
-         + message 
-         + "\" to log for test \'"
-         + test_name
-         + "\'"
-         );
-      e.printStackTrace(System.err);
-    }
-  }
-
-  public static Object make_all_public_methods_proxy( Class<?> class_metadata ) {
+  public static Object make_all_public_proxy( Class<?> class_metadata ) {
     try {
-      // Check if the class is public
-      int modifiers = class_metadata.getModifiers();
-      if (!java.lang.reflect.Modifier.isPublic( modifiers )) {
-        throw new IllegalAccessException(
-          "The class " + class_metadata.getName() + " is not public and cannot be proxied."
+      // Validate that the class implements at least one interface
+      if( class_metadata.getInterfaces().length == 0 ) {
+        throw new IllegalArgumentException(
+          "The class " + class_metadata.getName() + " does not implement any interfaces."
         );
       }
 
-      // Create the proxy
-      Object proxy = java.lang.reflect.Proxy.newProxyInstance(
-        class_metadata.getClassLoader()
-       ,class_metadata.getInterfaces()
-       ,(proxy_object ,method ,args) -> {
-           Method original_method = class_metadata.getDeclaredMethod(
-             method.getName()
-            ,method.getParameterTypes()
-           );
-           original_method.setAccessible( true );
-           Object real_instance = class_metadata.getDeclaredConstructor().newInstance();
-           return original_method.invoke( real_instance ,args );
+      Object proxy = Proxy.newProxyInstance(
+         class_metadata.getClassLoader()
+        ,class_metadata.getInterfaces()
+        ,(proxy_object ,method ,args) -> {
+            // Ensure the target method is accessible
+            Method target_method = class_metadata.getDeclaredMethod(
+               method.getName()
+              ,method.getParameterTypes()
+            );
+            target_method.setAccessible( true );
+
+            // Create an instance of the target class
+            Object real_instance = class_metadata.getDeclaredConstructor().newInstance();
+
+            // Invoke the target method
+            return target_method.invoke( real_instance ,args );
          }
       );
 
       return proxy;
 
-    } catch (Exception e) {
+    } catch( Throwable e ) {
+      // Log the error to assist with debugging
+      Mosaic_Logger.message( "make_all_public_proxy" ,"Failed to create proxy: " + e.getMessage() );
       throw new RuntimeException(
-        "Failed to create proxy for class: " + class_metadata.getName()
-       ,e
+         "Failed to create proxy for class: " + class_metadata.getName() ,e
       );
     }
   }
-
 
 }

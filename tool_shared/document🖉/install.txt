@@ -55,6 +55,15 @@ jdk-23
     export JAVA_HOME="$REPO_HOME/tool_shared/third_party/jdk-23.0.1"
 
 ----------------------------------------
+Logging
+
+curl -O https://repo1.maven.org/maven2/org/slf4j/slf4j-api/2.0.9/slf4j-api-2.0.9.jar
+
+curl -O https://repo1.maven.org/maven2/ch/qos/logback/logback-classic/1.5.12/logback-classic-1.5.12.jar
+
+add to bespoke🖉/env names for these for use in CLASSPATH
+
+----------------------------------------
 IDE
 
 See

@@ -13,23 +13,10 @@ script_afp=$(realpath "${BASH_SOURCE[0]}")
 
 echo "Compiling files..."
   set -x
-  javac -g -d scratchpad javac🖉/*.java
+  javac -Xlint:deprecation -g -d scratchpad javac🖉/*.java
   set +x
   if [ $? -ne 0 ]; then
     echo "Compilation failed."
-    exit 1
-  fi
-
-echo "Creating JAR file..."
-  set -x
-  jar_file=jvm/"$PROJECT".jar
-  mkdir -p jvm
-  jar cf $jar_file -C scratchpad .
-  set +x
-  if [ $? -eq 0 ]; then
-    echo "JAR file created successfully: $jar_file"
-  else
-    echo "Failed to create JAR file."
     exit 1
   fi
 
