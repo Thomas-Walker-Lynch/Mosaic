@@ -1,0 +1,69 @@
+2024-12-13T02:40:40Z[]
+Thomas-developer@Blossac§/var/user_data/Thomas-developer/Mosaic/tester§
+> run_tests
+test_list: Test_Logger Test0 Test_Util Test_IO Test_Testbench Test_MockClass_0 Test_Util_proxy
+
+... Running Test_Logger
+Test passed: 'smoke_test_logging'
+
+... Running Test0
+Test0 passed
+
+... Running Test_Util
+Test_Util passed
+
+... Running Test_IO
+Test_IO passed
+
+... Running Test_Testbench
+Expected output: Structural problem message for dummy_invalid_return_method.
+Structural problem: dummy_invalid_return_method does not return Boolean.
+Test_Testbench Total tests run: 3
+Test_Testbench Total tests passed: 3
+Test_Testbench Total tests failed: 0
+
+... Running Test_MockClass_0
+Test failed: 'test_failure_0' reported failure.
+Structural problem: test_failure_1 does not return Boolean.
+Error: test_failure_1 has an invalid structure.
+Test failed: 'test_failure_2' threw an exception: java.lang.reflect.InvocationTargetException
+Test failed: 'test_failure_3' produced extraneous stdout.
+Test failed: 'test_failure_4' produced extraneous stderr.
+Total tests run: 9
+Total tests passed: 4
+Total tests failed: 5
+
+... Running Test_Util_proxy
+Total tests run: 3
+Total tests passed: 3
+Total tests failed: 0
+
+2024-12-13T02:40:46Z[]
+Thomas-developer@Blossac§/var/user_data/Thomas-developer/Mosaic/tester§
+> cat log/log.txt
+2024-12-13T02:40:45.582Z [main] INFO  c.R.Mosaic.Mosaic_Logger - 
+2024-12-13T02:40:45.580717856Z -----------------------------------------------------------
+Test: smoke_test_logging
+Message:
+This is a smoke test for logging.
+
+2024-12-13T02:40:45.962Z [main] INFO  c.R.Mosaic.Mosaic_Logger - 
+2024-12-13T02:40:45.961627900Z -----------------------------------------------------------
+Test: test_failure_3
+Stream: stdout
+Output:
+Intentional extraneous chars to stdout for testing
+
+
+2024-12-13T02:40:45.963Z [main] INFO  c.R.Mosaic.Mosaic_Logger - 
+2024-12-13T02:40:45.963744794Z -----------------------------------------------------------
+Test: test_failure_4
+Stream: stderr
+Output:
+Intentional extraneous chars to stderr for testing.
+
+
+
+2024-12-13T02:40:52Z[]
+Thomas-developer@Blossac§/var/user_data/Thomas-developer/Mosaic/tester§
+> 

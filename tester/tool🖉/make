@@ -14,7 +14,6 @@ echo "Compiling files..."
   set -x
   cd $REPO_HOME/tester
   javac -g -d scratchpad javac🖉/*.java
-  jar cf jvm/Test_"$PROJECT".jar -C scratchpad .
   set +x 
 
 echo "Creating bash wrappers..."

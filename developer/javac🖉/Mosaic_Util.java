@@ -9,6 +9,7 @@ import java.lang.invoke.MethodHandle;
 import java.lang.invoke.MethodHandles;
 import java.lang.invoke.MethodType;
 import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.Proxy;
@@ -16,6 +17,7 @@ import java.time.Instant;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.util.function.Predicate;
+
 
 public class Mosaic_Util{
 
@@ -57,43 +59,69 @@ public class Mosaic_Util{
     return Instant.now().atOffset(ZoneOffset.UTC).format(DateTimeFormatter.ISO_INSTANT);
   }
 
-  public static Object make_all_public_proxy( Class<?> class_metadata ) {
+  public static Object make_all_public_proxy(Class<?> class_metadata) {
     try {
       // Validate that the class implements at least one interface
-      if( class_metadata.getInterfaces().length == 0 ) {
-        throw new IllegalArgumentException(
-          "The class " + class_metadata.getName() + " does not implement any interfaces."
-        );
-      }
+      Class<?>[] interfaces = class_metadata.getInterfaces();
+      if(interfaces.length == 0){
+        throw new IllegalArgumentException
+          (
+           "The class " + class_metadata.getName() + " does not implement any interfaces."
+           );}
 
-      Object proxy = Proxy.newProxyInstance(
-         class_metadata.getClassLoader()
-        ,class_metadata.getInterfaces()
-        ,(proxy_object ,method ,args) -> {
-            // Ensure the target method is accessible
-            Method target_method = class_metadata.getDeclaredMethod(
-               method.getName()
-              ,method.getParameterTypes()
-            );
-            target_method.setAccessible( true );
+      // Create a Lookup for the target class that gives us access to private members
+      MethodHandles.Lookup lookup = MethodHandles.privateLookupIn(class_metadata, MethodHandles.lookup());
 
-            // Create an instance of the target class
-            Object real_instance = class_metadata.getDeclaredConstructor().newInstance();
+      InvocationHandler handler = (proxy_object, method, args) -> {
+        // Find the corresponding method in the target class
+        Method target_method = class_metadata.getDeclaredMethod(method.getName(), method.getParameterTypes());
 
-            // Invoke the target method
-            return target_method.invoke( real_instance ,args );
-         }
-      );
+        // Convert the reflective method into a MethodHandle
+        MethodHandle mh = lookup.unreflect(target_method);
 
-      return proxy;
+        // Create an instance of the target class
+        Constructor<?> ctor = class_metadata.getDeclaredConstructor();
+        MethodHandle ctorHandle = lookup.unreflectConstructor(ctor);
+        Object real_instance = ctorHandle.invoke();
 
-    } catch( Throwable e ) {
-      // Log the error to assist with debugging
-      Mosaic_Logger.message( "make_all_public_proxy" ,"Failed to create proxy: " + e.getMessage() );
-      throw new RuntimeException(
-         "Failed to create proxy for class: " + class_metadata.getName() ,e
-      );
+        // Invoke the target method via the MethodHandle
+        if (args == null) {
+          args = new Object[0];
+        }
+
+
+        // replaces former return code:
+        Object result;
+        if (args == null || args.length == 0) {
+          // No arguments, just the instance
+          result = mh.invokeWithArguments(real_instance);
+        } else {
+          // One argument for the instance + all method arguments
+          Object[] callArgs = new Object[args.length + 1];
+          callArgs[0] = real_instance;
+          System.arraycopy(args, 0, callArgs, 1, args.length);
+          result = mh.invokeWithArguments(callArgs);
+        }
+        return result;
+
+        // former return code
+        //   return mh.invokeWithArguments(real_instance, args);
+
+      };
+
+      // Create the proxy
+      return Proxy.newProxyInstance
+        (
+         class_metadata.getClassLoader(),
+         interfaces,
+         handler
+         );
+
+    } catch (Throwable e) {
+      Mosaic_Logger.message("make_all_public_proxy", "Failed to create proxy: " + e.getMessage());
+      throw new RuntimeException("Failed to create proxy for class: " + class_metadata.getName(), e);
     }
   }
+
 
 }

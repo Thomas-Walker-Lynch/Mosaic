@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 script_afp=$(realpath "${BASH_SOURCE[0]}")
 
+# before running this script, gather everything needed for the release on the scratchpad
+
 # input guards
 
   if [ -z "$REPO_HOME" ]; then
@@ -25,10 +27,6 @@ script_afp=$(realpath "${BASH_SOURCE[0]}")
 # Inform the user
 
   echo "The pwd for this script is `pwd`."
-  echo "Expanding .jar files to be included with Mosaic into scratchpad."
-  echo "Gathering all the contents of scrathpad into jvm/\$PROJECT.jar"
-  echo "Will copy jvm/\$PROJECT.jar and other files for release to ../release"
-  echo "..."
 
 # Function to copy and set permissions
 
@@ -52,45 +50,29 @@ script_afp=$(realpath "${BASH_SOURCE[0]}")
     fi
   }
 
-# script local environment
+# scratchpad --> .jar file 
 
-  release_dir="$REPO_HOME/release"
-  bash_dir="$REPO_HOME/developer/bash"
-  project_jar_fp="$REPO_HOME/developer/jvm/"$PROJECT".jar"
-  wrapper=$(bash_wrapper_list)
-
-  mkdir -p "$release_dir"
   mkdir -p jvm
+  jar_file=$(realpath jvm/"$PROJECT".jar)
 
-# third party tools to be included
+  pushd scratchpad
 
-  third_party_jars=(
-    "$LOGGER_FACADE"
-    "$LOGGER"
-  )
-
-  for jar in "${third_party_jars[@]}"; do
-    if [ -f "$jar" ]; then
-      set -x
-      jar -xf "$jar" -C scratchpad
-      set +x
-    else
-      echo "Warning: JAR file not found: $jar"
-    fi
-  done
-
-  jar_file=jvm/"$PROJECT".jar
-  set -x
-  jar cf $jar_file -C scratchpad .
-  set +x
+  echo "scratchpad -> $jar_file"
+  jar cf $jar_file *
   if [ $? -ne 0 ]; then
     echo "Failed to create $jar_file file."
     exit 1
   fi
 
+  popd
+
 # move files to the release dir
 
-  install_file "$project_jar_fp" "$release_dir" "ug+r"
+  release_dir="$REPO_HOME/release"
+  bash_dir="$REPO_HOME/developer/bash"
+  wrapper=$(bash_wrapper_list)
+
+  install_file "$jar_file" "$release_dir" "ug+r"
 
   for wrapper in $wrapper; do
     install_file "$bash_dir"/"$wrapper" "$release_dir" "ug+r+x"

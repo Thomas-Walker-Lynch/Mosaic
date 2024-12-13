@@ -17,65 +17,14 @@ script_afp=$(realpath "${BASH_SOURCE[0]}")
   if $error_not_sourced; then exit 1; fi
   if $error_bad_env; then return 1; fi
 
+#--------------------------------------------------------------------------------
+# arguments
+
+  if [[ -x "$1" ]]; then MODE=$1; else MODE=release; fi
+  export MODE
+  echo "MODE: $MODE"
 
 #--------------------------------------------------------------------------------
-# class/source paths
-
-# ----
-# Settings to debug to find failing tests on release candidate.
-# See next section for settings for debugging the sources.
-
-# note the possible aliasing between the Test_$PROJECT and release classes
-export CLASSPATH=\
-"$JAVA_HOME"/lib\
-:"$REPO_HOME"/tester/config\
-:"$REPO_HOME"/tester/jvm/Test_"$PROJECT".jar\
-:"$REPO_HOME"/release/"$PROJECT".jar\
-:"$CLASSPATH"
-
-# note the developer sources on the scratchpad, if they are even there
-# can be out of sync with those in the release jar
-export SOURCEPATH=\
-"$REPO_HOME"/tester/javac🖉/\
-:"$REPO_HOME"/developer/scratchpad/\
-:"$SOURCEPATH"
-
-# ----
-# for debugging developer sources
-#
-# export CLASSPATH=\
-# "$JAVA_HOME"/lib\
-# :"$REPO_HOME"/tester/config\
-# :"$REPO_HOME"/tester/jvm/Test_"$PROJECT".jar\
-# :"$REPO_HOME"/developer/scratchpad\
-# :"$LOGGER_FACADE"
-# :"$LOGGER"
-# :"$CLASSPATH"
-
-# developer must `distribute_source` for this to work
-# export SOURCEPATH=\
-# "$REPO_HOME"/tester/javac🖉/\
-# :"$REPO_HOME"/developer/scratchpad\
-# :"$SOURCEPATH"
-
-# ----
-# Another possible configuration is expand the developer release into scratchpad along with the tests. Then everything points at scratcpad. If the developer `distributed_source` to put the sources into the release candidate jar, the sources will be available in the debugger; however, editing them will not effect the developer's version (the origin version) of the sources.
-#
-# export CLASSPATH=\
-# "$JAVA_HOME"/lib\
-# :"$REPO_HOME"/tester/config\
-# :"$REPO_HOME"/tester/scratchpad\
-# :"$CLASSPATH"
-
-# developer must `distribute_source` for this to work
-# export SOURCEPATH=\
-# "$REPO_HOME"/tester/javac🖉/\
-# "$REPO_HOME"/tester/scratchpad/\
-# :"$SOURCEPATH"
-
-# end of the class/source path settings
-#`--------------------------------------------------------------------------------
-
 # so we can do testing
 
 export PATH=\
@@ -83,21 +32,102 @@ export PATH=\
 :"$JAVA_HOME"/bin\
 :"$PATH"
 
-
 # so we can run individual built tests wrappers
-#
 export PATH=\
 "$REPO_HOME"/tester/bash\
 :"$PATH"
 
+#--------------------------------------------------------------------------------
+# class/source paths
 
+BASE_CLASSPATH="$JAVA_HOME"/lib:"$REPO_HOME"/tester/log
+BASE_SOURCEPATH="$REPO_HOME"/tester/javac🖉
+
+case "$MODE" in
+
+# Classes, and other-than-tester sources if present, come from the release candidate. This is the normal MODE for regression testing.
+#  
+# Release candidate sources, if present, are for viewing only. If sources are present in the release, but can not be read directly from the jar file, expand the jar file onto the scratchpad and replace that include line with this one:
+#
+# :$REPO_HOME/release/scratchpad\
+#
+  release)
+
+export CLASSPATH=\
+"$BASE_CLASSPATH\
+:$REPO_HOME/tester/scratchpad
+:$REPO_HOME/release/${PROJECT}.jar\
+:$CLASSPATH"
+
+export SOURCEPATH=\
+"$BASE_SOURCEPATH\
+:$REPO_HOME/release/${PROJECT}.jar\
+:$SOURCEPATH"
+
+    ;;
+
+
+# Classes and other-than-tester sources come from developer/scratchpad. This is the normal MODE for the developer when debugging test failures.
+#
+# While in env_developer, the developer must make the project and gather third party
+# tools and sources into the scratchpad for this to work.
+#
+  developer)
+
+export CLASSPATH=\
+"$BASE_CLASSPATH\
+:$REPO_HOME/tester/scratchpad\
+:$REPO_HOME/developer/scratchpad\
+:$CLASSPATH"
+
+export SOURCEPATH=\
+"$BASE_SOURCEPATH\
+:$REPO_HOME/developer/scratchpad\
+:$SOURCEPATH"
+
+    ;;
+
+# Classes and other-than-tester sources come from tester/scratchpad. This MODE gives the tester complete control over what to include in the test environment.
+#
+# Tester expands everything to be included into the test environment into the scratchpad.
+# 
+# Any changes made to must be exported to the environment the files came from if they are to persist.
+#
+  local)
+
+export CLASSPATH=\
+"$BASE_CLASSPATH
+:$REPO_HOME/tester/scratchpad\
+:$CLASSPATH"
+
+export SOURCEPATH=\
+"$BASE_SOURCEPATH\
+:$REPO_HOME/tester/scratchpad\
+:$SOURCEPATH"
+
+    ;;
+
+# default
+  
+  *)
+    echo "Unknown MODE: $MODE"
+    return 1
+    ;;
+  
+  esac
+
+echo CLASSPATH:
+vl echo "$CLASSPATH"
+echo SOURCEPATH:
+vl echo "$SOURCEPATH"
+echo PATH:
+vl echo $PATH
+
+#--------------------------------------------------------------------------------
 # misc
 
   # make .githolder and .gitignore visible
   alias ls="ls -a"
-
-# some feedback to show all went well
-
   export PROMPT_DECOR="$PROJECT"_tester
   export ENV=$(script_fp)
   echo ENV "$ENV"

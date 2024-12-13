@@ -25,14 +25,18 @@ export PATH=\
 :"$PATH"
 
 
-# for the developers ad hoc testing
+# Developed sources always come from javac🖉.
+# Everything else comes from scratchpad.
+# Run `make` to compile sources to the scratchpad
+# Run `release` to put the third party tools (that are included with the release) on the scratchpad. 
 #
 export CLASSPATH=\
 "$JAVA_HOME"/lib\
-:"$REPO_HOME"/developer/config\
+:"$REPO_HOME"/developer/log\
 :"$REPO_HOME"/developer/scratchpad\
-:"$LOGGER_FACADE"\
-:"$LOGGER"\
+:$LOGGER_FACADE\
+:$LOGGER_CLASSIC\
+:$LOGGER_CORE\
 :"$CLASSPATH"
 
 export SOURCEPATH=\

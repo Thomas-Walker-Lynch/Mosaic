@@ -1,7 +1,7 @@
 #!/bin/env bash
 script_afp=$(realpath "${BASH_SOURCE[0]}")
 
-# This script links the sources into the directory tree in parallel to the package.
+# This script links the sources into the scratchpad directory tree according to the package directory hiearchy.
 
 # Input guards
 
