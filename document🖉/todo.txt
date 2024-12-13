@@ -39,3 +39,12 @@ to the 'resource' project and plan to deprecate it.
   Test_Testbench Total tests run: 3
   Test_Testbench Total tests passed: 3
   Test_Testbench Total tests failed: 0
+
+2024-12-13T02:48:08Z
+
+  Java has a love-hate-relationship with reflections ability to access
+  private methods; however, access is needed for white box testing.  It
+  might be in the future for this feature to work that the Mosaic
+  project will have to expanded into the same module as that being
+  tested, rather than having its jar file accessed through the class
+  path.
