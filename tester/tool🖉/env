@@ -55,7 +55,7 @@ case "$MODE" in
 
 export CLASSPATH=\
 "$BASE_CLASSPATH\
-:$REPO_HOME/tester/scratchpad
+:$REPO_HOME/tester/scratchpad\
 :$REPO_HOME/release/${PROJECT}.jar\
 :$CLASSPATH"
 

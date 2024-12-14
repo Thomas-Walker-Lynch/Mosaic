@@ -16,6 +16,7 @@ public class Mosaic_IsPrimitive {
   }
 
   public Class<?> get_type(){
+    if( value == null ) return null;
     if( value instanceof Integer ) return int.class;
     if( value instanceof Boolean ) return boolean.class;
     if( value instanceof Double ) return double.class;

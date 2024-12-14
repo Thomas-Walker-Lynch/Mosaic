@@ -20,3 +20,25 @@ Output:
 Intentional extraneous chars to stderr for testing.
 
 
+2024-12-14T05:51:43.096Z [main] INFO  c.R.Mosaic.Mosaic_Logger - 
+2024-12-14T05:51:43.094778420Z -----------------------------------------------------------
+Test: smoke_test_logging
+Message:
+This is a smoke test for logging.
+
+2024-12-14T05:51:43.496Z [main] INFO  c.R.Mosaic.Mosaic_Logger - 
+2024-12-14T05:51:43.494998052Z -----------------------------------------------------------
+Test: test_failure_3
+Stream: stdout
+Output:
+Intentional extraneous chars to stdout for testing
+
+
+2024-12-14T05:51:43.497Z [main] INFO  c.R.Mosaic.Mosaic_Logger - 
+2024-12-14T05:51:43.497259959Z -----------------------------------------------------------
+Test: test_failure_4
+Stream: stderr
+Output:
+Intentional extraneous chars to stderr for testing.
+
+
