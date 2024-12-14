@@ -187,6 +187,26 @@ public class Mosaic_AllMethodsPublicProxy {
     this.map = new FunctionSignature_To_Handle_Map(target_type);
   }
 
+  // Constructor accepting a fully qualified class name
+  public Mosaic_AllMethodsPublicProxy(String fully_qualified_class_name) throws ClassNotFoundException {
+    try {
+      Class<?> clazz = Class.forName(fully_qualified_class_name);
+
+      // Use MethodHandles to ensure access to private classes
+      MethodHandles.Lookup lookup = MethodHandles.lookup();
+      MethodHandles.Lookup private_lookup = MethodHandles.privateLookupIn(clazz, lookup);
+
+      this.target_type = clazz;
+      this.map = new FunctionSignature_To_Handle_Map(clazz);
+
+    } catch (ClassNotFoundException e) {
+      throw new ClassNotFoundException("Class not found: " + fully_qualified_class_name, e);
+    } catch (IllegalAccessException e) {
+      throw new RuntimeException("Failed to access private class: " + fully_qualified_class_name, e);
+    }
+  }
+
+
   public Object construct(String constructor_name, Object... arg_list) {
     try {
       // Resolve the constructor signature
