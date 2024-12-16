@@ -48,3 +48,10 @@ to the 'resource' project and plan to deprecate it.
   project will have to expanded into the same module as that being
   tested, rather than having its jar file accessed through the class
   path.
+
+
+2024-12-16T10:47:06Z
+
+  FunctionSignature used with AllMethodsPublic currently does not
+  include the return type. It needs to have that.
+

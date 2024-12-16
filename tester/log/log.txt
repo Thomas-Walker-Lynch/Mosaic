@@ -1,44 +1,92 @@
-2024-12-13T02:40:45.582Z [main] INFO  c.R.Mosaic.Mosaic_Logger - 
-2024-12-13T02:40:45.580717856Z -----------------------------------------------------------
-Test: smoke_test_logging
-Message:
-This is a smoke test for logging.
-
-2024-12-13T02:40:45.962Z [main] INFO  c.R.Mosaic.Mosaic_Logger - 
-2024-12-13T02:40:45.961627900Z -----------------------------------------------------------
-Test: test_failure_3
+2024-12-16T10:34:45.427Z [main] INFO  c.R.Mosaic.Mosaic_Logger - 
+2024-12-16T10:34:45.426403953Z -----------------------------------------------------------
+Test: test_publicClass_publicMethod
 Stream: stdout
 Output:
-Intentional extraneous chars to stdout for testing
+Mosaic_AllMethodsPublicProxy::construct exception:
 
 
-2024-12-13T02:40:45.963Z [main] INFO  c.R.Mosaic.Mosaic_Logger - 
-2024-12-13T02:40:45.963744794Z -----------------------------------------------------------
-Test: test_failure_4
+2024-12-16T10:34:45.428Z [main] INFO  c.R.Mosaic.Mosaic_Logger - 
+2024-12-16T10:34:45.428781379Z -----------------------------------------------------------
+Test: test_publicClass_publicMethod
 Stream: stderr
 Output:
-Intentional extraneous chars to stderr for testing.
+java.lang.NoSuchMethodException: No constructor found for signature: <init>
+	at com.ReasoningTechnology.Mosaic.Mosaic_AllMethodsPublicProxy.construct(Mosaic_AllMethodsPublicProxy.java:188)
+	at Test_Access_0$TestSuite.test_publicClass_publicMethod(Test_Access_0.java:24)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at com.ReasoningTechnology.Mosaic.Mosaic_Testbench.run_test(Mosaic_Testbench.java:58)
+	at com.ReasoningTechnology.Mosaic.Mosaic_Testbench.run(Mosaic_Testbench.java:95)
+	at Test_Access_0.main(Test_Access_0.java:64)
 
 
-2024-12-14T05:51:43.096Z [main] INFO  c.R.Mosaic.Mosaic_Logger - 
-2024-12-14T05:51:43.094778420Z -----------------------------------------------------------
-Test: smoke_test_logging
-Message:
-This is a smoke test for logging.
-
-2024-12-14T05:51:43.496Z [main] INFO  c.R.Mosaic.Mosaic_Logger - 
-2024-12-14T05:51:43.494998052Z -----------------------------------------------------------
-Test: test_failure_3
+2024-12-16T11:02:12.892Z [main] INFO  c.R.Mosaic.Mosaic_Logger - 
+2024-12-16T11:02:12.891300901Z -----------------------------------------------------------
+Test: test_publicClass_publicMethod
 Stream: stdout
 Output:
-Intentional extraneous chars to stdout for testing
+Mosaic_AllMethodsPublicProxy::construct exception:
 
 
-2024-12-14T05:51:43.497Z [main] INFO  c.R.Mosaic.Mosaic_Logger - 
-2024-12-14T05:51:43.497259959Z -----------------------------------------------------------
-Test: test_failure_4
+2024-12-16T11:02:12.894Z [main] INFO  c.R.Mosaic.Mosaic_Logger - 
+2024-12-16T11:02:12.894076730Z -----------------------------------------------------------
+Test: test_publicClass_publicMethod
 Stream: stderr
 Output:
-Intentional extraneous chars to stderr for testing.
+java.lang.NoSuchMethodException: No constructor found for signature: <init>
+	at com.ReasoningTechnology.Mosaic.Mosaic_AllMethodsPublicProxy.construct(Mosaic_AllMethodsPublicProxy.java:188)
+	at Test_Access_0$TestSuite.test_publicClass_publicMethod(Test_Access_0.java:24)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at com.ReasoningTechnology.Mosaic.Mosaic_Testbench.run_test(Mosaic_Testbench.java:58)
+	at com.ReasoningTechnology.Mosaic.Mosaic_Testbench.run(Mosaic_Testbench.java:95)
+	at Test_Access_0.main(Test_Access_0.java:64)
+
+
+2024-12-16T11:03:52.982Z [main] INFO  c.R.Mosaic.Mosaic_Logger - 
+2024-12-16T11:03:52.981361838Z -----------------------------------------------------------
+Test: test_publicClass_publicMethod
+Stream: stdout
+Output:
+Mosaic_AllMethodsPublicProxy::construct exception:
+
+
+2024-12-16T11:03:52.984Z [main] INFO  c.R.Mosaic.Mosaic_Logger - 
+2024-12-16T11:03:52.984090088Z -----------------------------------------------------------
+Test: test_publicClass_publicMethod
+Stream: stderr
+Output:
+java.lang.NoSuchMethodException: No constructor found for signature: <init>
+	at com.ReasoningTechnology.Mosaic.Mosaic_AllMethodsPublicProxy.construct(Mosaic_AllMethodsPublicProxy.java:188)
+	at Test_Access_0$TestSuite.test_publicClass_publicMethod(Test_Access_0.java:24)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at com.ReasoningTechnology.Mosaic.Mosaic_Testbench.run_test(Mosaic_Testbench.java:58)
+	at com.ReasoningTechnology.Mosaic.Mosaic_Testbench.run(Mosaic_Testbench.java:95)
+	at Test_Access_0.main(Test_Access_0.java:64)
+
+
+2024-12-16T11:05:17.523Z [main] INFO  c.R.Mosaic.Mosaic_Logger - 
+2024-12-16T11:05:17.521819930Z -----------------------------------------------------------
+Test: test_publicClass_publicMethod
+Stream: stdout
+Output:
+Mosaic_AllMethodsPublicProxy::construct exception:
+
+
+2024-12-16T11:05:17.524Z [main] INFO  c.R.Mosaic.Mosaic_Logger - 
+2024-12-16T11:05:17.524857224Z -----------------------------------------------------------
+Test: test_publicClass_publicMethod
+Stream: stderr
+Output:
+java.lang.NoSuchMethodException: No constructor found for signature: <init>
+	at com.ReasoningTechnology.Mosaic.Mosaic_AllMethodsPublicProxy.construct(Mosaic_AllMethodsPublicProxy.java:188)
+	at Test_Access_0$TestSuite.test_publicClass_publicMethod(Test_Access_0.java:24)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at com.ReasoningTechnology.Mosaic.Mosaic_Testbench.run_test(Mosaic_Testbench.java:58)
+	at com.ReasoningTechnology.Mosaic.Mosaic_Testbench.run(Mosaic_Testbench.java:95)
+	at Test_Access_0.main(Test_Access_0.java:64)
 
 

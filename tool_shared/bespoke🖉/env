@@ -38,8 +38,8 @@ fi
   PATH="$REPO_HOME/tool_shared/third_party/RT-project-share/release/amd64:$PATH"
   PATH="$REPO_HOME/tool_shared/third_party/emacs/bin:$PATH"
 
-# after having installed Itellij IDEA
-#  PATH="$REPO_HOME/tool_shared/third_party/idea-IC-243.21565.193/:$PATH"
+  # after having installed Itellij IDEA
+  PATH="$REPO_HOME/tool_shared/third_party/idea-IC-243.21565.193/bin:$PATH"
 
   JAVA_HOME="$REPO_HOME/tool_shared/third_party/jdk-23.0.1"
 
@@ -47,7 +47,6 @@ fi
   LOGGER_FACADE="$REPO_HOME"/tool_shared/third_party/slf4j-api-2.0.9.jar
   LOGGER_CLASSIC="$REPO_HOME"/tool_shared/third_party/logback-classic-1.4.11.jar
   LOGGER_CORE="$REPO_HOME"/tool_shared/third_party/logback-core-1.4.11.jar
-
 
   export PATH JAVA_HOME LOGGER_FACADE LOGGER_CLASSIC LOGGER_CORE
 

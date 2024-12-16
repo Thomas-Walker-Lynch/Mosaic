@@ -11,6 +11,7 @@ script_afp=$(realpath "${BASH_SOURCE[0]}")
 # remove files
   set -x
   cd "$REPO_HOME"/tester
+  rm_na log/log.txt
   rm_na -r scratchpad/*
   rm_na bash/*
   set +x

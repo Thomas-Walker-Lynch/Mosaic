@@ -3,7 +3,9 @@ package com.ReasoningTechnology.Mosaic;
 import java.lang.invoke.MethodHandle;
 import java.lang.invoke.MethodHandles;
 import java.lang.invoke.MethodType;
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -93,20 +95,20 @@ class FunctionSignature_To_Handle_Map {
 
       // Map constructors
       for(Constructor<?> constructor : class_metadata.getDeclaredConstructors()){
-        Class<?>[] parameter_types = constructor.getParameterTypes();
-        MethodType method_type = MethodType.methodType(class_metadata, parameter_types);
-        MethodHandle constructor_handle;
+        try{
+          Class<?>[] parameter_types = constructor.getParameterTypes();
+          MethodType method_type = MethodType.methodType(class_metadata, parameter_types);
+          MethodHandle constructor_handle = private_lookup.findConstructor(class_metadata, method_type);
 
-        if((constructor.getModifiers() & Modifier.PRIVATE) != 0){
-          constructor_handle = private_lookup.findConstructor(class_metadata, method_type);
-        } else{
-          constructor_handle = lookup.findConstructor(class_metadata, method_type);
+          FunctionSignature signature = new FunctionSignature("<init>", parameter_types);
+          map.put(signature, constructor_handle);
+        }catch (NoSuchMethodException e){
+          System.err.println("Skipping constructor: " + constructor);
+        }catch(Throwable t){
+          t.printStackTrace();
         }
-
-        FunctionSignature signature = new FunctionSignature("<init>", parameter_types);
-        map.put(signature, constructor_handle);
       }
-
+   
       // Map methods
       for(Method method : class_metadata.getDeclaredMethods()){
         Class<?>[] parameter_types = method.getParameterTypes();
@@ -124,43 +126,12 @@ class FunctionSignature_To_Handle_Map {
         FunctionSignature signature = new FunctionSignature(method);
         map.put(signature ,method_handle);
       }
-    } catch(Throwable t){
-      System.out.println("FunctionSignature_To_Handle_Map::add_class exception:");
-      t.printStackTrace();
-    }
-  }
 
-
-  /*
-
-  private void add_class(Class<?> class_metadata){
-    try{
-      MethodHandles.Lookup lookup = MethodHandles.lookup();
-      MethodHandles.Lookup private_lookup = MethodHandles.privateLookupIn(class_metadata ,lookup);
-
-      for( Method method : class_metadata.getDeclaredMethods() ){
-        Class<?>[] parameter_types = method.getParameterTypes();
-        MethodType method_type = MethodType.methodType(
-          method.getReturnType() ,parameter_types
-        );
-        MethodHandle method_handle;
-
-        if((method.getModifiers() & java.lang.reflect.Modifier.PRIVATE) != 0 ){
-          method_handle = private_lookup.findSpecial(class_metadata ,method.getName() ,method_type ,class_metadata);
-        }else{
-          method_handle = lookup.findVirtual(class_metadata ,method.getName() ,method_type);
-        }
-
-        FunctionSignature signature = new FunctionSignature(method);
-        map.put(signature ,method_handle);
-      }
     }catch(Throwable t){
       System.out.println("FunctionSignature_To_Handle_Map::add_class exception:");
       t.printStackTrace();
     }
   }
-  */
-
 
   public MethodHandle get_handle(FunctionSignature signature){
     return map.get(signature);

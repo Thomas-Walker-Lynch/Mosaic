@@ -1,8 +1,7 @@
 #!/bin/env bash
 script_afp=$(realpath "${BASH_SOURCE[0]}")
 
-# each test listed here will receive a shell wrapper, and run_tests will
-# include the test in the test run, in the order it appears in the list.
+# returns the list of tests for 'make' and for 'run_tests'.
 
 # input guards
 env_must_be="tester/tool🖉/env"
@@ -19,7 +18,6 @@ echo\
   Test_IO\
   Test_Testbench\
   Test_MockClass_0\
-  Test_Util_proxy\
   Test_IsPrimitive\
-  Test_FunctionSignature\
+  Test_Access_0\
   ""
