@@ -1,0 +1,16 @@
+
+(setq gud-jdb-use-separate-io-buffer t)
+
+(defun jdbx ()
+  "Run jdb with a separate input/output buffer."
+  (interactive)
+  (let ((sourcepath (getenv "SOURCEPATH"))
+        (class-name (read-string "Enter class to debug: " "Test_Util")))
+    ;; Create a separate buffer for I/O
+    (let ((io-buffer (get-buffer-create "*gud-jdb-io*")))
+      (with-current-buffer io-buffer
+        (comint-mode))
+      ;; Run jdb
+      (jdb (concat "jdb " (if sourcepath (concat "-sourcepath " sourcepath " ") "") class-name)))
+    ;; Switch to the I/O buffer
+    (pop-to-buffer "*gud-jdb-io*")))

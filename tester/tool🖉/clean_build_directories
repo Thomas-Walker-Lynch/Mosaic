@@ -13,7 +13,8 @@ script_afp=$(realpath "${BASH_SOURCE[0]}")
   cd "$REPO_HOME"/tester
   rm_na log/log.txt
   rm_na -r scratchpad/*
-  rm_na bash/*
+  rm_na jvm/*
+  rm_na jdwp_server/*
   set +x
 
 echo "$(script_fn) done."

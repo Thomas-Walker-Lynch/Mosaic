@@ -2,7 +2,7 @@ import com.ReasoningTechnology.Mosaic.Mosaic_AllMethodsPublicProxy;
 import com.ReasoningTechnology.Mosaic.Mosaic_IO;
 import com.ReasoningTechnology.Mosaic.Mosaic_Testbench;
 
-public class Test_FunctionSignature_0 {
+public class FunctionSignature_0 {
 
   public static class TestSuite {
 

@@ -1,7 +1,7 @@
 import com.ReasoningTechnology.Mosaic.Mosaic_IO;
 import com.ReasoningTechnology.Mosaic.Mosaic_Logger;
 
-public class Test_Logger{
+public class Logger{
 
   public class TestSuite{
     public Boolean smoke_test_logging(Mosaic_IO io){
@@ -17,7 +17,7 @@ public class Test_Logger{
   }
 
   public static void main(String[] args){
-    TestSuite suite = new Test_Logger().new TestSuite();
+    TestSuite suite = new Logger().new TestSuite();
     boolean result = suite.smoke_test_logging(null);
 
     if(result){

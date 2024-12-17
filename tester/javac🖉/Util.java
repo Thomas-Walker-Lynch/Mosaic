@@ -1,11 +1,11 @@
 import com.ReasoningTechnology.Mosaic.Mosaic_Util;
 
 /*
-Test_Util
+Util
 
 */
 
-public class Test_Util{
+public class Util{
 
   public static Boolean test_all(){
     // Test with zero condition
@@ -66,10 +66,10 @@ public class Test_Util{
        || !condition_list[1] 
        || !condition_list[2] 
       ){
-      System.out.println("Test_Util failed");
+      System.out.println("Util failed");
       return 1;
     }
-    System.out.println("Test_Util passed");
+    System.out.println("Util passed");
     return 0;
   }
 

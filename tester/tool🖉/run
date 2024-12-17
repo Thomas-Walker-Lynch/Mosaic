@@ -7,10 +7,10 @@ if [ -z "$REPO_HOME" ]; then
 fi
 
 # Navigate to the bash directory
-cd "$REPO_HOME/tester/bash" || exit
+cd "$REPO_HOME/tester/jvm" || exit
 
 # Get the list of test scripts in the specific order from bash_wrapper_list
-test_list=$(bash_wrapper_list)
+test_list=$(test_list)
 echo test_list: $test_list
 
 # Execute each test in the specified order

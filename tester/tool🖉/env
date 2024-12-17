@@ -34,7 +34,7 @@ export PATH=\
 
 # so we can run individual built tests wrappers
 export PATH=\
-"$REPO_HOME"/tester/bash\
+"$REPO_HOME"/tester/jvm\
 :"$PATH"
 
 #--------------------------------------------------------------------------------

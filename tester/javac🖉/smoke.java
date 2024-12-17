@@ -1,13 +1,11 @@
 import com.ReasoningTechnology.Mosaic.Mosaic_Util;
 
 /*
-Test Zero
-
 Plug it in, see if there is smoke. There usually is.
 
 */
 
-public class Test0{
+public class smoke{
 
   public static Boolean test_is_true(){
     return true;

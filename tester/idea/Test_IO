@@ -1,0 +1,2 @@
+#!/bin/env bash
+java -agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=*:5005 Test_IO

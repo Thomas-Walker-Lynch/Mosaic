@@ -1,7 +1,7 @@
 #!/bin/env bash
 script_afp=$(realpath "${BASH_SOURCE[0]}")
 
-# returns the list of tests for 'make' and for 'run_tests'.
+# returns list of tests to be used by 'make' and for 'run'
 
 # input guards
 env_must_be="tester/tool🖉/env"
@@ -10,14 +10,15 @@ if [ "$ENV" != "$env_must_be" ]; then
   exit 1
 fi
 
-# space separated list of bash interface wrappers
+# the list
+
 echo\
-  Test_Logger\
-  Test0\
-  Test_Util\
-  Test_IO\
-  Test_Testbench\
-  Test_MockClass_0\
-  Test_IsPrimitive\
-  Test_Access_0\
-  ""
+  smoke\
+  Logger\
+  Util\
+  IO\
+  Testbench\
+  MockClass_0\
+  IsPrimitive\
+  Access_0\
+""

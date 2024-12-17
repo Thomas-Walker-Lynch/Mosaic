@@ -8,31 +8,31 @@ package com.ReasoningTechnology.Mosaic;
 */
 
 // Public class with public and private methods
-public class Mosaic_TestClasses {
-  public boolean publicMethod() {
+public class Mosaic_TestClasses_0 {
+  public boolean a_public_method_1() {
     return true;
   }
 
-  private boolean privateMethod() {
+  private boolean a_private_method_2() {
     return true;
   }
 
   public class PublicClass {
-    public boolean publicMethod() {
+    public boolean a_public_method_3() {
       return true;
     }
 
-    private boolean privateMethod() {
+    private boolean a_private_method_4() {
       return true;
     }
   }
 
   private class PrivateClass {
-    public boolean publicMethod() {
+    public boolean a_public_method_5() {
       return true;
     }
 
-    private boolean privateMethod() {
+    private boolean a_private_method_6() {
       return true;
     }
   }
@@ -40,11 +40,11 @@ public class Mosaic_TestClasses {
 
 // Default (package-private) class with public and private methods
 class DefaultClass {
-  public boolean publicMethod() {
+  public boolean a_public_method_7() {
     return true;
   }
 
-  private boolean privateMethod() {
+  private boolean a_private_method_8() {
     return true;
   }
 }

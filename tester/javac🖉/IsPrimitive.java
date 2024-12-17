@@ -13,7 +13,7 @@ import com.ReasoningTechnology.Mosaic.Mosaic_IO;
 import com.ReasoningTechnology.Mosaic.Mosaic_Testbench;
 import com.ReasoningTechnology.Mosaic.Mosaic_IsPrimitive;
 
-public class Test_IsPrimitive{
+public class IsPrimitive{
 
   public class TestSuite{
 
@@ -111,7 +111,7 @@ public class Test_IsPrimitive{
   }
 
   public static void main(String[] args){
-    TestSuite suite = new Test_IsPrimitive().new TestSuite();
+    TestSuite suite = new IsPrimitive().new TestSuite();
     int result = Mosaic_Testbench.run(suite);
     System.exit(result);
   }

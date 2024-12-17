@@ -1,4 +1,5 @@
 #!/bin/env bash
+set -x
 script_afp=$(realpath "${BASH_SOURCE[0]}")
 
 # input guards
@@ -16,24 +17,36 @@ cd $REPO_HOME/tester
 
 # Get the list of tests to compile
 # wrapper is a space-separated list
-wrapper_list=$(test_list)
+list=$(list)
 
 # make class files
-for file in $wrapper_list; do
+for file in $list; do
   javac -g -d scratchpad "javac🖉/$file.java"
 done
 set +x 
 
-echo "Creating bash wrappers..."
-mkdir -p bash
-
-# make shell call wrappers
-for file in $wrapper_list; do
-  cat > bash/$file << EOL
+echo "Making jvm scripts ..."
+mkdir -p jvm
+for file in $list; do
+  cat > jvm/$file << EOL
 #!/bin/env bash
 java $file
 EOL
-  chmod +x bash/$file
+  chmod +x jvm/$file
+  done
+
+echo "Making jdwp debug server scripts..."
+mkdir -p jdwp_server
+for file in $list; do
+  cat > jdwp_server/$file << EOL
+#!/bin/env bash
+java -agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=*:5005 $file
+EOL
+  chmod +x jdwp_server/$file
   done
 
 echo "$(script_fp) done."
+
+
+
+set +x

@@ -3,7 +3,7 @@ import com.ReasoningTechnology.Mosaic.Mosaic_IO;
 import com.ReasoningTechnology.Mosaic.Mosaic_Testbench;
 import com.ReasoningTechnology.Mosaic.Mosaic_TestClasses;
 
-public class Test_AllMethodsPublicProxy_0 {
+public class AllMethodsPublicProxy_0 {
 
   public static class TestSuite {
 

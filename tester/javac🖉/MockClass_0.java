@@ -8,7 +8,7 @@ import java.util.Scanner;
 import com.ReasoningTechnology.Mosaic.Mosaic_IO;
 import com.ReasoningTechnology.Mosaic.Mosaic_Testbench;
 
-public class Test_MockClass_0{
+public class MockClass_0{
 
   public class TestSuite{
 
@@ -82,7 +82,7 @@ public class Test_MockClass_0{
   }
 
   public static void main(String[] args) {
-    Test_MockClass_0 outer = new Test_MockClass_0();
+    MockClass_0 outer = new MockClass_0();
     TestSuite suite = outer.new TestSuite(); // Non-static instantiation
 
     /* for debug
