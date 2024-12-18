@@ -15,6 +15,11 @@ echo "Compiling files..."
 set -x
 cd $REPO_HOME/tester
 
+# setup a couple of test classes
+
+javac -g -d scratchpad javac🖉/TestClasses*
+
+
 # Get the list of tests to compile
 # wrapper is a space-separated list
 list=$(list)

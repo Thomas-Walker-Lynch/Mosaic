@@ -169,26 +169,28 @@ Dispatcher instance.
 
  */
 class MethodSignature_To_Handle_Map{
-  private Map<MethodSignature ,MethodHandle> map;
 
-  // test facilities
+  // Static test messaging
   //
-    private boolean test = false;
-    public void test_switch(boolean test){
-      if(this.test && !test){
-        test_print("test messages off");
-        this.test = test;
+    private static boolean test = false;
+    public static void test_switch(boolean test){
+      if (MethodSignature_To_Handle_Map.test && !test){
+        test_print("MethodSignature_To_Handle_Map:: test messages off");
       }
-      if( !this.test && test){
-        this.test = test;
-        test_print("test messages on");
+      if (!MethodSignature_To_Handle_Map.test && test){
+        test_print("MethodSignature_To_Handle_Map:: test messages on");
+      }
+      MethodSignature_To_Handle_Map.test = test;
+    }
+    private static void test_print(String message){
+      if (test){
+        System.out.println(message);
       }
     }
-    private void test_print(String message){
-      if(test){
-        System.out.println("MethodSignature_To_Handle_Map::" + message);
-      }
-    }
+
+  // instance data
+  //
+    private Map<MethodSignature ,MethodHandle> map;
 
   // field access and strings
   // 
@@ -204,22 +206,29 @@ class MethodSignature_To_Handle_Map{
     private void add_entry(MethodSignature key ,MethodHandle value){
       test_print
         (
-         "add_entry::" 
-         + "(" 
-         + key
-         + ","  
-         +value
+         "(add_entry:: " + "(key " + key + ") " + "(value " + value + ")" + ")"
          );
       map.put(key ,value);
     }
 
     public void add_class(Class<?> class_metadata){
       try{
+        test_print("adding public methods");
         add_methods_public(class_metadata);
+
+        test_print("adding private methods");
         add_methods_private(class_metadata);
+
+        test_print("adding constructors");
         add_constructors(class_metadata);
+
+        /*
+        test_print("adding static methods");
+        add_methods_static(class_metadata);
+        */
+
       }catch(Throwable t){
-        System.out.println("MethodSignature_To_Handle_Map::add_class exception:");
+        System.out.println("MethodSignature_To_Handle_Map::add_class exception: ");
         t.printStackTrace();
       }
     }
@@ -310,6 +319,35 @@ class MethodSignature_To_Handle_Map{
       }
     }
 
+    public void add_methods_static(Class<?> class_metadata) {
+      MethodHandles.Lookup lookup = MethodHandles.lookup();
+
+      for (Method method : class_metadata.getDeclaredMethods()) {
+        try {
+          if (Modifier.isStatic(method.getModifiers())) { // Only static methods
+            Class<?>[] parameter_type_list = method.getParameterTypes();
+            MethodType method_type = MethodType.methodType(method.getReturnType(), parameter_type_list);
+            MethodHandle method_handle = lookup.findStatic(class_metadata, method.getName(), method_type);
+
+            MethodSignature signature = new MethodSignature(
+              method.getReturnType(),
+              class_metadata.getName(),
+              method.getName(),
+              parameter_type_list
+            );
+
+            add_entry(signature, method_handle);
+          }
+        } catch (NoSuchMethodException e) {
+          System.err.println("Skipping static method: " + method);
+          e.printStackTrace();
+        } catch (Throwable t) {
+          t.printStackTrace();
+        }
+      }
+    }
+
+
   // methods for looking up handles
   //
     public MethodHandle lookup(MethodSignature s){
@@ -321,7 +359,7 @@ class MethodSignature_To_Handle_Map{
     @Override
     public String toString(){
       StringBuilder sb = new StringBuilder();
-      sb.append("MethodSignature_To_Handle_Map: {").append(System.lineSeparator());
+      sb.append("MethodSignature_To_Handle_Map:{").append(System.lineSeparator());
 
       for (Map.Entry<MethodSignature ,MethodHandle> entry : map.entrySet()){
         sb.append("  ")
@@ -342,28 +380,31 @@ class MethodSignature_To_Handle_Map{
 
 */
 public class Mosaic_Dispatcher{
-  private MethodSignature_To_Handle_Map map;
-  private Class<?> target;
 
-  // test facilities
+  // Static test messaging
   //
-    private boolean test = false;
-    public void test_switch(boolean test){
-      if(this.test && !test){
+    private static boolean test = false;
+    public static void test_switch(boolean test){
+      if (Mosaic_Dispatcher.test && !test){
         test_print("Mosaic_Dispatcher:: test messages off");
-        this.test = test;
       }
-      if(!this.test && test){
-        this.test = test;
+      if (!Mosaic_Dispatcher.test && test){
         test_print("Mosaic_Dispatcher:: test messages on");
-        map.test_switch(true);
+        MethodSignature_To_Handle_Map.test_switch(true);
+      }
+      Mosaic_Dispatcher.test = test;
+    }
+    private static void test_print(String message){
+      if (test){
+        System.out.println(message);
       }
     }
-    private void test_print(String message){
-      if(test){
-        System.out.println("Mosaic_Dispatcher::" + message);
-      }
-    }
+
+  // instance data
+  //
+    private MethodSignature_To_Handle_Map map;
+    private Class<?> target;
+
 
   // field access and strings
   //
@@ -385,19 +426,17 @@ public class Mosaic_Dispatcher{
     // construct given the class metadata for the target class
     public Mosaic_Dispatcher(Class<?> target){
       this.map = new MethodSignature_To_Handle_Map();
-      test_switch(true);
       this.target = target;
-      test_print("Mosaic_Dispatcher:: mapping class from metadata:" + to_string_target());
+      test_print("Mosaic_Dispatcher:: mapping methods given class_metadata object: " + to_string_target());
       this.map.add_class(target);
     }
 
     // Constructor accepting a fully qualified class name of the target class
     public Mosaic_Dispatcher(String fully_qualified_class_name) throws ClassNotFoundException{
       this.map = new MethodSignature_To_Handle_Map();
-      test_switch(true);
       try{
         this.target = Class.forName(fully_qualified_class_name);
-        test_print("Mosaic_Dispatcher:: mapping class from name string:" + to_string_target());
+        test_print("Mosaic_Dispatcher:: mapping methods from class specified by string:" + to_string_target());
         this.map.add_class(target);
       }catch(ClassNotFoundException e){
         throw new ClassNotFoundException("Class not found: " + fully_qualified_class_name ,e);
@@ -409,6 +448,7 @@ public class Mosaic_Dispatcher{
 
     // Factory method to create an instance (dispatch a constructor)
     public Object make(Object... arg_list){
+      test_print("Call to Mosaic_Dispatcher::make");
       return dispatch_1
         (
          null       // there is no instance passed in when calling a constructor
@@ -418,91 +458,64 @@ public class Mosaic_Dispatcher{
          );
     }
 
+    // dispatch static methods
+    public <T> T dispatch
+      (
+       Class<T> return_type
+       ,String method_name
+       ,Object... arg_list
+       ){
+      test_print("Call to Mosaic_Dispatcher::dispatch for a static method.");
+      return dispatch_1
+        (
+         null          // No instance for static methods
+         ,return_type   // Return type
+         ,method_name   // Method name
+         ,arg_list       // Argument list
+         );
+    }
+
+    // dispatch instance binded methods
     @SuppressWarnings("unchecked")
     public <T> T dispatch
-        (
-         Object instance
-         ,Class<T> return_type
-         ,String method_name
-         ,Object... arg_list
-         ){
+      (
+       Object instance,
+       Class<T> return_type,
+       String method_name,
+       Object... arg_list
+       ){
+      test_print("Call to Mosaic_Dispatcher::dispatch for a method bound to an instance.");
       if(instance == null || !target.isInstance(instance)){
         throw new IllegalArgumentException
           (
-           "Provided instance is not of target type: " 
-           + target.getName() 
-           + ", but received: " 
+           "Provided instance is not of target type: "
+           + target.getName()
+           + ", but received: "
            + (instance == null ? "null" : instance.getClass().getName())
            );
       }
-
-      Object result = dispatch_1(
-          instance
-          ,return_type
-          ,method_name
-          ,arg_list
-      );
-
-      // Handle primitive return types explicitly
-      if(return_type.isPrimitive()){
-        if(return_type == boolean.class) return (T) (Boolean) result;
-        if(return_type == int.class)     return (T) (Integer) result;
-        if(return_type == double.class)  return (T) (Double) result;
-        if(return_type == float.class)   return (T) (Float) result;
-        if(return_type == long.class)    return (T) (Long) result;
-        if(return_type == short.class)   return (T) (Short) result;
-        if(return_type == byte.class)    return (T) (Byte) result;
-        if(return_type == char.class)    return (T) (Character) result;
-      }
-
-      // For non-primitives, cast normally
-      return return_type.cast(result);
+      return dispatch_1(instance, return_type, method_name, arg_list);
     }
 
-
-  /*
-    public <T> T dispatch
-        (
-         Object instance
-         ,Class<T> return_type
-         ,String method_name
-         ,Object... arg_list
-         ){
-
-      if(instance == null || !target.isInstance(instance)){
-        throw new IllegalArgumentException
-          (
-           "Provided instance is not of target type: " 
-           + target.getName() 
-           + ", but received: " 
-           + (instance == null ? "null" : instance.getClass().getName())
-           );
-      }
-
-      return return_type.cast(dispatch_1(
-        instance
-        ,return_type
-        ,method_name
-        ,arg_list
-      ));
-    }
-  */
-
-    private Object dispatch_1(
-        Object instance
-        ,Class<?> return_type
-        ,String method_name
-        ,Object... arg_list
+    private <T> T dispatch_1(
+        Object instance,
+        Class<T> return_type,
+        String method_name,
+        Object... arg_list
     ){
       try{
+        if(arg_list == null){
+          arg_list = new Object[0]; // Treat null as an empty argument list
+        }
+
         // Resolve method/constructor signature
         MethodSignature signature = new MethodSignature(
-            return_type
-            ,to_string_target()
-            ,method_name
-            ,arg_list
+            return_type,
+            to_string_target(),
+            method_name,
+            arg_list
         );
-        test_print("dispatch_1:: signature is:" + signature.toString());
+        test_print("dispatch_1:: signature key:" + signature.toString());
 
         MethodHandle handle = map.lookup(signature);
 
@@ -513,19 +526,37 @@ public class Mosaic_Dispatcher{
         // Unwrap Mosaic_IsPrimitive arguments
         Object[] unwrapped_arg_list = new Object[arg_list.length];
         for(int i = 0; i < arg_list.length; i++){
-          if (arg_list[i] instanceof Mosaic_IsPrimitive){
+          if(arg_list[i] instanceof Mosaic_IsPrimitive){
             unwrapped_arg_list[i] = ((Mosaic_IsPrimitive) arg_list[i]).get_value();
-          } else {
+          }else{
             unwrapped_arg_list[i] = arg_list[i];
           }
         }
 
-        // Handle constructor vs method
+        // Handle method invocation
+        Object result;
         if("<init>".equals(method_name)){
-          return handle.invokeWithArguments(unwrapped_arg_list); // Constructor: no binding needed
+          result = handle.invokeWithArguments(unwrapped_arg_list); // Constructor: no binding needed
+        }else if(instance == null){
+          result = handle.invokeWithArguments(unwrapped_arg_list); // Static method
         }else{
-          return handle.bindTo(instance).invokeWithArguments(unwrapped_arg_list); // Method: bind instance
+          result = handle.bindTo(instance).invokeWithArguments(unwrapped_arg_list); // Instance method
         }
+
+        // Handle primitive return types explicitly
+        if(return_type.isPrimitive()){
+          if(return_type == boolean.class) return(T)(Boolean) result;
+          if(return_type == int.class) return(T)(Integer) result;
+          if(return_type == double.class) return(T)(Double) result;
+          if(return_type == float.class) return(T)(Float) result;
+          if(return_type == long.class) return(T)(Long) result;
+          if(return_type == short.class) return(T)(Short) result;
+          if(return_type == byte.class) return(T)(Byte) result;
+          if(return_type == char.class) return(T)(Character) result;
+        }
+
+        // For non-primitives, cast normally
+        return return_type.cast(result);
 
       }catch(Throwable t){
         System.out.println("Mosaic_Dispatcher::dispatch exception:");
@@ -539,7 +570,7 @@ public class Mosaic_Dispatcher{
     @Override
     public String toString(){
       return 
-        "Mosaic_Dispatcher {" 
+        "Mosaic_Dispatcher{" 
         + "target=" 
         + to_string_target() 
         + " ,map=" 

@@ -1,7 +1,7 @@
 import com.ReasoningTechnology.Mosaic.Mosaic_AllMethodsPublicProxy;
 import com.ReasoningTechnology.Mosaic.Mosaic_IO;
 import com.ReasoningTechnology.Mosaic.Mosaic_Testbench;
-import com.ReasoningTechnology.Mosaic.Mosaic_TestClasses;
+import com.ReasoningTechnology.Mosaic.TestClasses;
 
 public class AllMethodsPublicProxy_0 {
 

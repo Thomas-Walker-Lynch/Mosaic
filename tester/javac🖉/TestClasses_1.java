@@ -1,4 +1,4 @@
-package com.ReasoningTechnology.Mosaic;
+package tester;
 
 /*
   These are used for testing that Mosaic can be used for white box
@@ -8,19 +8,19 @@ package com.ReasoningTechnology.Mosaic;
 */
 
 // Public class with public and private methods
-public class Mosaic_TestClasses_1 {
+public class TestClasses_1 {
 
   private int i;
 
-  public Mosaic_TestClasses_1(){
+  public TestClasses_1(){
     i = 0;
   }
 
-  public Mosaic_TestClasses_1(int a){
+  public TestClasses_1(int a){
     i = a;
   }
 
-  public Mosaic_TestClasses_1(int a ,int b){
+  public TestClasses_1(int a ,int b){
     i = a + b;
   }
 
