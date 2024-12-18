@@ -446,16 +446,20 @@ public class Mosaic_Dispatcher{
   // methods unique to the class
   //
 
-    // Factory method to create an instance (dispatch a constructor)
-    public Object make(Object... arg_list){
+    @SuppressWarnings("unchecked")
+    public <T> T make(Object... arg_list) {
       test_print("Call to Mosaic_Dispatcher::make");
-      return dispatch_1
-        (
-         null       // there is no instance passed in when calling a constructor
-         ,void.class      // constructor has void return type
-         ,"<init>"  // all contructors in Javaland are called `<init>`
-         ,arg_list
-         );
+
+      // Use dispatch_1 to invoke the constructor
+      Object result = dispatch_1(
+          null,         // no instance for constructor
+          void.class,   // return type for signature matching
+          "<init>",     // constructors are always named `<init>` in Java
+          arg_list
+      );
+
+      // Cast the result to the target type
+      return (T) target.cast(result);
     }
 
     // dispatch static methods
@@ -476,7 +480,6 @@ public class Mosaic_Dispatcher{
     }
 
     // dispatch instance binded methods
-    @SuppressWarnings("unchecked")
     public <T> T dispatch
       (
        Object instance,
@@ -497,6 +500,7 @@ public class Mosaic_Dispatcher{
       return dispatch_1(instance, return_type, method_name, arg_list);
     }
 
+    @SuppressWarnings("unchecked")
     private <T> T dispatch_1(
         Object instance,
         Class<T> return_type,
@@ -523,40 +527,59 @@ public class Mosaic_Dispatcher{
           throw new NoSuchMethodException("No method or constructor found for signature: " + signature.toString());
         }
 
-        // Unwrap Mosaic_IsPrimitive arguments
-        Object[] unwrapped_arg_list = new Object[arg_list.length];
+        // Strip off any IsPrimitive tags
+        Object[] untagged_arg_list = new Object[arg_list.length];
         for(int i = 0; i < arg_list.length; i++){
           if(arg_list[i] instanceof Mosaic_IsPrimitive){
-            unwrapped_arg_list[i] = ((Mosaic_IsPrimitive) arg_list[i]).get_value();
+            untagged_arg_list[i] = ((Mosaic_IsPrimitive) arg_list[i]).get_value();
           }else{
-            unwrapped_arg_list[i] = arg_list[i];
+            untagged_arg_list[i] = arg_list[i];
           }
         }
 
-        // Handle method invocation
-        Object result;
-        if("<init>".equals(method_name)){
-          result = handle.invokeWithArguments(unwrapped_arg_list); // Constructor: no binding needed
-        }else if(instance == null){
-          result = handle.invokeWithArguments(unwrapped_arg_list); // Static method
-        }else{
-          result = handle.bindTo(instance).invokeWithArguments(unwrapped_arg_list); // Instance method
-        }
+        // call the Handle and cast the result
+        //
+          if("<init>".equals(method_name)){
+            // Constructor invocation 
+            return (T) target.cast(handle.invokeWithArguments(untagged_arg_list));
+          }
 
-        // Handle primitive return types explicitly
-        if(return_type.isPrimitive()){
-          if(return_type == boolean.class) return(T)(Boolean) result;
-          if(return_type == int.class) return(T)(Integer) result;
-          if(return_type == double.class) return(T)(Double) result;
-          if(return_type == float.class) return(T)(Float) result;
-          if(return_type == long.class) return(T)(Long) result;
-          if(return_type == short.class) return(T)(Short) result;
-          if(return_type == byte.class) return(T)(Byte) result;
-          if(return_type == char.class) return(T)(Character) result;
-        }
+          if(return_type == void.class || return_type == null){
+            if(instance == null){ 
+              // static method call
+              handle.invokeWithArguments(untagged_arg_list); 
+            }else{
+              // method bound to instance call
+              handle.bindTo(instance).invokeWithArguments(untagged_arg_list); 
+            }
+            return null; // generic code void return type must return null
+          }
 
-        // For non-primitives, cast normally
-        return return_type.cast(result);
+          Object result;
+          if(instance == null){ 
+            // static method call
+            result = handle.invokeWithArguments(untagged_arg_list);
+          }else{
+            // method bound to instance call
+            result = handle.bindTo(instance).invokeWithArguments(untagged_arg_list); // Instance method
+          }
+
+          if(result == null) return null;
+
+          // Handle primitive return types explicitly
+          if(return_type.isPrimitive()){
+            if(return_type == boolean.class) return(T)(Boolean) result;
+            if(return_type == int.class) return(T)(Integer) result;
+            if(return_type == double.class) return(T)(Double) result;
+            if(return_type == float.class) return(T)(Float) result;
+            if(return_type == long.class) return(T)(Long) result;
+            if(return_type == short.class) return(T)(Short) result;
+            if(return_type == byte.class) return(T)(Byte) result;
+            if(return_type == char.class) return(T)(Character) result;
+          }
+
+          // For non-primitives, cast normally
+          return return_type.cast(result);
 
       }catch(Throwable t){
         System.out.println("Mosaic_Dispatcher::dispatch exception:");
