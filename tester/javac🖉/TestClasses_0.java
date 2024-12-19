@@ -37,7 +37,6 @@ public class TestClasses_0{
     }
   }
 
-  /*
   public static boolean a_public_static_method_7(){
     return true;
   }
@@ -45,7 +44,6 @@ public class TestClasses_0{
   private static boolean a_private_static_method_9(){
     return true;
   }
-  */
 
 }
 

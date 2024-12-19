@@ -211,142 +211,89 @@ class MethodSignature_To_Handle_Map{
       map.put(key ,value);
     }
 
-    public void add_class(Class<?> class_metadata){
+    public void add_methods(Class<?> class_metadata){
       try{
-        test_print("adding public methods");
-        add_methods_public(class_metadata);
+        MethodHandles.Lookup lookup = MethodHandles.lookup();
+        MethodHandles.Lookup private_lookup = MethodHandles.privateLookupIn(class_metadata,lookup);
 
-        test_print("adding private methods");
-        add_methods_private(class_metadata);
-
-        test_print("adding constructors");
-        add_constructors(class_metadata);
-
-        /*
-        test_print("adding static methods");
-        add_methods_static(class_metadata);
-        */
-
-      }catch(Throwable t){
-        System.out.println("MethodSignature_To_Handle_Map::add_class exception: ");
-        t.printStackTrace();
-      }
-    }
-
-    public void add_methods_public(Class<?> class_metadata){
-      MethodHandles.Lookup lookup = MethodHandles.lookup();
-
-      for( Method method : class_metadata.getDeclaredMethods() ){
-        try{
-          if((method.getModifiers() & Modifier.PRIVATE) == 0){ // Skip private methods
-            Class<?>[] parameter_type_list = method.getParameterTypes();
-            MethodType method_type = MethodType.methodType(method.getReturnType() ,parameter_type_list);
-            MethodHandle method_handle = lookup.findVirtual(class_metadata ,method.getName() ,method_type);
-
-            MethodSignature signature = new MethodSignature
-              (
-               method.getReturnType()
-               ,class_metadata.getName()
-               ,method.getName()
-               ,parameter_type_list
-               );
-            add_entry(signature ,method_handle);
-          }
-        }catch(NoSuchMethodException e){
-          System.err.println("Skipping public/protected method: " + method);
-          e.printStackTrace();
-        }catch(Throwable t){
-          t.printStackTrace();
-        }
-      }
-    }
-
-   public void add_methods_private(Class<?> class_metadata) throws IllegalAccessException{
-     MethodHandles.Lookup lookup = MethodHandles.lookup();
-     MethodHandles.Lookup private_lookup = MethodHandles.privateLookupIn(class_metadata ,lookup);
-
-     for(Method method : class_metadata.getDeclaredMethods()){
-       try{
-         if((method.getModifiers() & Modifier.PRIVATE) != 0){ // Only private methods
-           Class<?>[] parameter_type_list = method.getParameterTypes();
-           MethodType method_type = MethodType.methodType(method.getReturnType() ,parameter_type_list);
-           MethodHandle method_handle = private_lookup.findSpecial(
-             class_metadata ,method.getName() ,method_type ,class_metadata
-           );
-
-           MethodSignature signature = new MethodSignature
-             (
-              method.getReturnType()
-              ,class_metadata.getName()
-              ,method.getName()
-              ,parameter_type_list
-              );
-           add_entry(signature ,method_handle);
-         }
-       }catch(NoSuchMethodException e){
-         System.err.println("Skipping private method: " + method);
-       }catch(Throwable t){
-         t.printStackTrace();
-       }
-     }
-   }
-
-    public void add_constructors(Class<?> class_metadata) throws IllegalAccessException{
-      MethodHandles.Lookup lookup = MethodHandles.lookup();
-      MethodHandles.Lookup private_lookup = MethodHandles.privateLookupIn(class_metadata ,lookup);
-
-      for( Constructor<?> constructor : class_metadata.getDeclaredConstructors() ){
-        try{
-          Class<?>[] parameter_type_list = constructor.getParameterTypes();
-          MethodType method_type = MethodType.methodType(void.class, parameter_type_list);
-          MethodHandle constructor_handle = private_lookup.findConstructor(class_metadata ,method_type);
-
-          // Signature for constructors: <init> with parameter types
-          MethodSignature signature = new MethodSignature
-            (
-             void.class
-             ,class_metadata.getName() 
-             ,"<init>" 
-             ,parameter_type_list
-             );
-          add_entry(signature ,constructor_handle);
-
-        }catch(NoSuchMethodException e){
-          System.err.println("Skipping constructor: " + constructor);
-        }catch(Throwable t){
-          t.printStackTrace();
-        }
-      }
-    }
-
-    public void add_methods_static(Class<?> class_metadata) {
-      MethodHandles.Lookup lookup = MethodHandles.lookup();
-
-      for (Method method : class_metadata.getDeclaredMethods()) {
-        try {
-          if (Modifier.isStatic(method.getModifiers())) { // Only static methods
-            Class<?>[] parameter_type_list = method.getParameterTypes();
-            MethodType method_type = MethodType.methodType(method.getReturnType(), parameter_type_list);
-            MethodHandle method_handle = lookup.findStatic(class_metadata, method.getName(), method_type);
-
-            MethodSignature signature = new MethodSignature(
+        for(Method method:class_metadata.getDeclaredMethods()){
+          try{
+            Class<?>[] parameter_type_list=method.getParameterTypes();
+            MethodSignature signature=new MethodSignature(
               method.getReturnType(),
               class_metadata.getName(),
               method.getName(),
               parameter_type_list
             );
 
-            add_entry(signature, method_handle);
+            MethodType method_type=MethodType.methodType(method.getReturnType(),parameter_type_list);
+            MethodHandle method_handle;
+
+            if((method.getModifiers() & Modifier.STATIC) != 0){
+              if((method.getModifiers() & Modifier.PRIVATE) != 0){
+                // Private static method
+                method_handle = private_lookup.findStatic(class_metadata, method.getName(), method_type);
+              }else{
+                // Public or protected static method
+                method_handle = lookup.findStatic(class_metadata, method.getName(), method_type);
+              }
+            }else if((method.getModifiers() & Modifier.PRIVATE) != 0){
+              // Private instance method
+              method_handle = private_lookup.findSpecial(class_metadata, method.getName(), method_type, class_metadata);
+            }else{
+              // Public or protected instance method
+              method_handle = lookup.findVirtual(class_metadata, method.getName(), method_type);
+            }
+
+            add_entry(signature,method_handle);
+
+          }catch(IllegalAccessException|NoSuchMethodException e){
+            System.err.println("Mosaic_Dispatcher::add_methods unexpectedly failed to register method: "+method.getName());
+            e.printStackTrace();
           }
-        } catch (NoSuchMethodException e) {
-          System.err.println("Skipping static method: " + method);
-          e.printStackTrace();
-        } catch (Throwable t) {
-          t.printStackTrace();
         }
+
+      }catch(IllegalAccessException e){
+        System.err.println("Mosaic_Dispatcher::add_methods unexpectedly failed to initialize lookup for class: "+class_metadata.getName());
+        e.printStackTrace();
       }
     }
 
+
+    public void add_constructors(Class<?> class_metadata){
+      try{
+
+        MethodHandles.Lookup lookup = MethodHandles.lookup();
+        MethodHandles.Lookup private_lookup = MethodHandles.privateLookupIn(class_metadata ,lookup);
+
+        for( Constructor<?> constructor : class_metadata.getDeclaredConstructors() ){
+          try{
+
+            Class<?>[] parameter_type_list = constructor.getParameterTypes();
+            MethodType method_type = MethodType.methodType(void.class, parameter_type_list);
+            MethodHandle constructor_handle = private_lookup.findConstructor(class_metadata ,method_type);
+
+            // Signature for constructors: <init> with parameter types
+            MethodSignature signature = new MethodSignature
+              (
+               void.class
+               ,class_metadata.getName() 
+               ,"<init>" 
+               ,parameter_type_list
+               );
+            add_entry(signature ,constructor_handle);
+
+          }catch(IllegalAccessException|NoSuchMethodException e){
+            System.err.println("Mosaic_Dispatcher::add_methods unexpectedly failed to register constructor: " + class_metadata.getName());
+            e.printStackTrace();
+          }
+        }
+
+      }catch(IllegalAccessException e){
+        System.err.println("Mosaic_Dispatcher::add_methods unexpectedly failed to initialize lookup for class: " + class_metadata.getName());
+        e.printStackTrace();
+      }
+    }
 
   // methods for looking up handles
   //
@@ -361,7 +308,7 @@ class MethodSignature_To_Handle_Map{
       StringBuilder sb = new StringBuilder();
       sb.append("MethodSignature_To_Handle_Map:{").append(System.lineSeparator());
 
-      for (Map.Entry<MethodSignature ,MethodHandle> entry : map.entrySet()){
+      for(Map.Entry<MethodSignature ,MethodHandle> entry : map.entrySet()){
         sb.append("  ")
           .append(entry.getKey().toString()) // MethodSignature's toString
           .append(" -> ")
@@ -385,17 +332,17 @@ public class Mosaic_Dispatcher{
   //
     private static boolean test = false;
     public static void test_switch(boolean test){
-      if (Mosaic_Dispatcher.test && !test){
+      if(Mosaic_Dispatcher.test && !test){
         test_print("Mosaic_Dispatcher:: test messages off");
       }
-      if (!Mosaic_Dispatcher.test && test){
+      if(!Mosaic_Dispatcher.test && test){
         test_print("Mosaic_Dispatcher:: test messages on");
         MethodSignature_To_Handle_Map.test_switch(true);
       }
       Mosaic_Dispatcher.test = test;
     }
-    private static void test_print(String message){
-      if (test){
+    public static void test_print(String message){
+      if(test){
         System.out.println(message);
       }
     }
@@ -428,19 +375,17 @@ public class Mosaic_Dispatcher{
       this.map = new MethodSignature_To_Handle_Map();
       this.target = target;
       test_print("Mosaic_Dispatcher:: mapping methods given class_metadata object: " + to_string_target());
-      this.map.add_class(target);
+      this.map.add_methods(target);
+      this.map.add_constructors(target);
     }
 
     // Constructor accepting a fully qualified class name of the target class
     public Mosaic_Dispatcher(String fully_qualified_class_name) throws ClassNotFoundException{
       this.map = new MethodSignature_To_Handle_Map();
-      try{
-        this.target = Class.forName(fully_qualified_class_name);
-        test_print("Mosaic_Dispatcher:: mapping methods from class specified by string:" + to_string_target());
-        this.map.add_class(target);
-      }catch(ClassNotFoundException e){
-        throw new ClassNotFoundException("Class not found: " + fully_qualified_class_name ,e);
-      }
+      this.target = Class.forName(fully_qualified_class_name);
+      test_print("Mosaic_Dispatcher:: mapping methods from class specified by string:" + to_string_target());
+      this.map.add_methods(target);
+      this.map.add_constructors(target);
     }
 
   // methods unique to the class

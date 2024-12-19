@@ -12,6 +12,10 @@ public class Dispatch_0{
   static{
     // Initialize the dispatcher for TestClasses_0
     Mosaic_Dispatcher.test_switch(true);
+  }
+
+  public Dispatch_0(){
+    Mosaic_Dispatcher.test_print("making map for TestClasses_0");
     dispatcher = new Mosaic_Dispatcher(TestClasses_0.class);
   }
 
@@ -73,7 +77,6 @@ public class Dispatch_0{
     try{
       boolean result = true;
 
-      /*
       System.out.println("");
       System.out.println("running test: publicClass_publicMethod");
       if (Boolean.TRUE.equals(test_publicClass_publicMethod())){
@@ -82,7 +85,6 @@ public class Dispatch_0{
         System.out.println("FAILED");
         result = false;
       }
-      */
 
       System.out.println("");
       System.out.println("running test: make_0");
@@ -93,7 +95,6 @@ public class Dispatch_0{
         result = false;
       }
 
-      /*
       System.out.println("");
       System.out.println("running test: publicStaticMethod_7");
       if (Boolean.TRUE.equals(test_publicStaticMethod_7())){
@@ -111,7 +112,6 @@ public class Dispatch_0{
         System.out.println("FAILED");
         result = false;
       }
-      */
 
       System.out.println("");
       return result;
@@ -125,6 +125,7 @@ public class Dispatch_0{
 
   public static void main(String[] args){
     // Execute the run method and return its result as the exit code
+    new Dispatch_0();
     if( run() ) 
       System.exit(0);
     else
