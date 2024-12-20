@@ -13,7 +13,7 @@ public class Dispatcher_2{
 
   public static boolean test_publicStaticField(){
     try{
-      Integer value=dispatcher.read(Integer.class,"i_200");
+      Integer value=dispatcher.read("i_200");
       return value != null && value == 200;
     }catch(Throwable t){
       t.printStackTrace();
@@ -23,7 +23,7 @@ public class Dispatcher_2{
 
   public static boolean test_privateStaticField(){
     try{
-      String value=dispatcher.read(String.class,"s_201");
+      String value=dispatcher.read("s_201");
       return value != null && value.equals("Static Private String");
     }catch(Throwable t){
       t.printStackTrace();
@@ -57,8 +57,8 @@ public class Dispatcher_2{
 
   public static boolean test_writePublicStaticField(){
     try{
-      dispatcher.write(null,"i_200",300);
-      Integer value=dispatcher.read(Integer.class,"i_200");
+      dispatcher.write("i_200",300);
+      Integer value=dispatcher.read("i_200");
       return value != null && value == 300;
     }catch(Throwable t){
       t.printStackTrace();
@@ -68,8 +68,8 @@ public class Dispatcher_2{
 
   public static boolean test_writePrivateStaticField(){
     try{
-      dispatcher.write(null,"s_201","New Static Private String");
-      String value=dispatcher.read(String.class,"s_201");
+      dispatcher.write("s_201","New Static Private String");
+      String value=dispatcher.read("s_201");
       return value != null && value.equals("New Static Private String");
     }catch(Throwable t){
       t.printStackTrace();
@@ -197,4 +197,3 @@ public class Dispatcher_2{
     }
   }
 }
-

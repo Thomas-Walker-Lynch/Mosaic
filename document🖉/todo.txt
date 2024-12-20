@@ -55,3 +55,9 @@ to the 'resource' project and plan to deprecate it.
   FunctionSignature used with AllMethodsPublic currently does not
   include the return type. It needs to have that.
 
+2024-12-20T06:09:38Z
+
+  For Mosaic_Dispatcher, might be best to ditch the map and do lookup
+  to get the handle upon each call to a method, as we already have to
+  do the lookup to get the information for constructing the signature
+  for lookup.

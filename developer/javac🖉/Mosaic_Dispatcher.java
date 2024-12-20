@@ -18,7 +18,7 @@ import java.util.Map;
   The envisioned use case is the 'method signature' -> handle map.
 
   Perhaps the existing method signature in the Reflection library can
-  replace this ,but most of the work done here is the formatting done
+  replace this, but most of the work done here is the formatting done
   in the constructors.
 */
 
@@ -184,7 +184,7 @@ class MethodSignature_To_Handle_Map{
       MethodSignature_To_Handle_Map.test = test;
     }
     private static void test_print(String message){
-      if (test){
+      if(test){
         System.out.println(message);
       }
     }
@@ -204,6 +204,17 @@ class MethodSignature_To_Handle_Map{
 
   // methods for adding entries
   //
+    public void add_class(Class<?> class_metadata){
+      test_print("MethodSignature_To_Handle_Map::add_class adding methods");
+      add_methods(class_metadata);
+
+      test_print("MethodSignature_To_Handle_Map::add_class adding constructors");
+      add_constructors(class_metadata);
+
+      test_print("MethodSignature_To_Handle_Map::add_class adding fields");
+      // add_fields(class_metadata);
+    }
+
     private void add_entry(MethodSignature key ,MethodHandle value){
       test_print
         (
@@ -231,9 +242,9 @@ class MethodSignature_To_Handle_Map{
             MethodHandle method_handle;
 
             if((method.getModifiers() & Modifier.STATIC) != 0){
-              method_handle = private_lookup.findStatic(class_metadata, method.getName(), method_type);
+              method_handle = private_lookup.findStatic(class_metadata ,method.getName() ,method_type);
             }else{
-              method_handle = private_lookup.findSpecial(class_metadata, method.getName(), method_type, class_metadata);
+              method_handle = private_lookup.findSpecial(class_metadata ,method.getName() ,method_type ,class_metadata);
             }
 
             add_entry(signature,method_handle);
@@ -254,7 +265,6 @@ class MethodSignature_To_Handle_Map{
       }
     }
 
-
     public void add_constructors(Class<?> class_metadata){
       try{
 
@@ -265,7 +275,7 @@ class MethodSignature_To_Handle_Map{
           try{
 
             Class<?>[] parameter_type_list = constructor.getParameterTypes();
-            MethodType method_type = MethodType.methodType(void.class, parameter_type_list);
+            MethodType method_type = MethodType.methodType(void.class ,parameter_type_list);
             MethodHandle constructor_handle = private_lookup.findConstructor(class_metadata ,method_type);
 
             // Signature for constructors: <init> with parameter types
@@ -279,16 +289,61 @@ class MethodSignature_To_Handle_Map{
             add_entry(signature ,constructor_handle);
 
           }catch(IllegalAccessException|NoSuchMethodException e){
-            System.err.println("Mosaic_Dispatcher::add_methods unexpectedly failed to register constructor: " + class_metadata.getName());
+            System.err.println("Mosaic_Dispatcher::add_constructors unexpectedly failed to register constructor: " + class_metadata.getName());
             e.printStackTrace();
           }
         }
 
       }catch(IllegalAccessException e){
-        System.err.println("Mosaic_Dispatcher::add_methods unexpectedly failed to initialize lookup for class: " + class_metadata.getName());
+        System.err.println("Mosaic_Dispatcher::add_constructors unexpectedly failed to initialize lookup for class: " + class_metadata.getName());
         e.printStackTrace();
       }
     }
+
+    public void add_fields(Class<?> class_metadata){
+      try{
+        MethodHandles.Lookup lookup = MethodHandles.lookup();
+        MethodHandles.Lookup private_lookup = MethodHandles.privateLookupIn(class_metadata ,lookup);
+
+        for(Field field : class_metadata.getDeclaredFields()){
+          try{
+            // Field Metadata
+            String field_name = field.getName();
+            Class<?> field_type = field.getType();
+
+            // Create <read> MethodHandle
+            MethodHandle read_handle = private_lookup.unreflectGetter(field);
+            MethodSignature read_signature = new MethodSignature
+              (
+               field_type 
+               ,class_metadata.getName() 
+               ,"<read:" + field_name + ">"
+               ,new Class<?>[]{}
+               );
+            add_entry(read_signature ,read_handle);
+
+            // Create <write> MethodHandle
+            MethodHandle write_handle = private_lookup.unreflectSetter(field);
+            MethodSignature write_signature = new MethodSignature
+              (
+               void.class
+               ,class_metadata.getName()
+               ,"<write:" + field_name + ">"
+                ,new Class<?>[]{field_type}
+               );
+            add_entry(write_signature ,write_handle);
+
+          }catch(IllegalAccessException e){
+            System.err.println("Mosaic_Dispatcher::add_fields unexpectedly failed to register field: " + field.getName());
+            e.printStackTrace();
+          }
+        }
+      }catch(IllegalAccessException e){
+        System.err.println("Mosaic_Dispatcher::add_fields unexpectedly failed to initialize lookup for class: " + class_metadata.getName());
+        e.printStackTrace();
+      }
+    }
+
 
   // methods for looking up handles
   //
@@ -369,91 +424,112 @@ public class Mosaic_Dispatcher{
     public Mosaic_Dispatcher(Class<?> target){
       this.map = new MethodSignature_To_Handle_Map();
       this.target = target;
-      test_print("Mosaic_Dispatcher:: mapping methods given class_metadata object: " + to_string_target());
-      this.map.add_methods(target);
-      this.map.add_constructors(target);
+      test_print("Mosaic_Dispatcher::<init> mapping methods given class_metadata object: " + to_string_target());
+      this.map.add_class(target);
     }
 
     // Constructor accepting a fully qualified class name of the target class
     public Mosaic_Dispatcher(String fully_qualified_class_name) throws ClassNotFoundException{
       this.map = new MethodSignature_To_Handle_Map();
       this.target = Class.forName(fully_qualified_class_name);
-      test_print("Mosaic_Dispatcher:: mapping methods from class specified by string: \"" + to_string_target() + "\"");
-      this.map.add_methods(target);
-      this.map.add_constructors(target);
+      test_print("Mosaic_Dispatcher::<init> mapping methods from class specified by string: \"" + to_string_target() + "\"");
+      this.map.add_class(target);
     }
 
   // methods unique to the class
   //
-    public <T> T read(Object instance ,String field_name){
+    public <T> T read(String field_name){
       try{
-        test_print("Call to Mosaic_Dispatcher::read");
+        test_print("Call to Mosaic_Dispatcher::read( field_name )");
 
-        // Private field lookup
         MethodHandles.Lookup lookup = MethodHandles.privateLookupIn(target ,MethodHandles.lookup());
         Field field = target.getDeclaredField(field_name);
+        MethodHandle handle = lookup.unreflectGetter(field);
+        return (T) handle.invoke();
 
-        // Access the field using the lookup handle
-        MethodHandle handle;
-        if((field.getModifiers() & Modifier.STATIC) != 0){
-          // Static field
-          handle = lookup.unreflectGetter(field);
-          return (T) handle.invoke();
-        }else{
-          // Instance-bound field
-          if(instance == null || !target.isInstance(instance)){
-            throw new IllegalArgumentException
-              (
-               "Provided instance is not of target type: "
-               + target.getName()
-               + ", but received: "
-               + (instance == null ? "null" : instance.getClass().getName())
-               );
-          }
-          handle = lookup.unreflectGetter(field);
-          return (T) handle.bindTo(instance).invoke();
-        }
       }catch(NoSuchFieldException | IllegalAccessException e){
-        System.out.println("Mosaic_Dispatcher::read_field exception:");
+        System.out.println("Mosaic_Dispatcher::read of static exception:");
         e.printStackTrace();
         return null;
       }catch(Throwable t){
-        System.out.println("Mosaic_Dispatcher::read_field exception:");
+        System.out.println("Mosaic_Dispatcher::read of static exception:");
         t.printStackTrace();
         return null;
       }
     }
 
-    public <T> void write(Object instance, String field_name, T value){
+    public <T> T read(Object instance ,String field_name){
       try{
-        test_print("Call to Mosaic_Dispatcher::write");
+        test_print("Call to Mosaic_Dispatcher::read(instance ,field_name)");
 
-        // Private field lookup
-        MethodHandles.Lookup lookup=MethodHandles.privateLookupIn(target,MethodHandles.lookup());
-        Field field=target.getDeclaredField(field_name);
+        MethodHandles.Lookup lookup = MethodHandles.privateLookupIn(target ,MethodHandles.lookup());
+        Field field = target.getDeclaredField(field_name);
 
-        // Access the field using the lookup handle
-        MethodHandle handle;
-        if((field.getModifiers() & Modifier.STATIC) != 0){
-          // Static field
-          handle=lookup.unreflectSetter(field);
-          handle.invoke(value);
-        }else{
-          // Instance-bound field
-          if(instance == null || !target.isInstance(instance)){
-            throw new IllegalArgumentException(
-              "Provided instance is not of target type: "+target.getName()
-              +", but received: "+(instance == null ? "null" : instance.getClass().getName())
-            );
-          }
-          handle=lookup.unreflectSetter(field);
-          handle.bindTo(instance).invoke(value);
+        if(instance == null || !target.isInstance(instance)){
+          throw new IllegalArgumentException
+            (
+             "Mosaic_Dispatcher::read provided instance is not of target type: "
+             + target.getName()
+             + ", but received: "
+             + (instance == null ? "null" : instance.getClass().getName())
+             );
         }
+        MethodHandle handle = lookup.unreflectGetter(field);
+        return (T) handle.bindTo(instance).invoke();
+
       }catch(NoSuchFieldException | IllegalAccessException e){
-        System.out.println("Mosaic_Dispatcher::write_field exception:");
+        System.out.println("Mosaic_Dispatcher::read exception:");
+        e.printStackTrace();
+        return null;
+      }catch(Throwable t){
+        System.out.println("Mosaic_Dispatcher::read exception:");
+        t.printStackTrace();
+        return null;
+      }
+    }
+
+    public <T> void write(String field_name ,T value){
+      try{
+        test_print("Call to Mosaic_Dispatcher::write(field_name ,value)");
+
+        MethodHandles.Lookup lookup = MethodHandles.privateLookupIn(target ,MethodHandles.lookup());
+        Field field = target.getDeclaredField(field_name);
+        MethodHandle handle = lookup.unreflectSetter(field);
+        handle.invoke(value);
+
+      }catch(NoSuchFieldException | IllegalAccessException e){
+        System.out.println("Mosaic_Dispatcher::write static field exception:");
         e.printStackTrace();
       }catch(Throwable t){
-        System.out.println("Mosaic_Dispatcher::write_field exception:");
+        System.out.println("Mosaic_Dispatcher::write static field exception:");
+        t.printStackTrace();
+      }
+    }
+
+    public <T> void write(Object instance ,String field_name ,T value){
+      try{
+        test_print("Call to Mosaic_Dispatcher::write(instance ,field_name ,value)");
+
+        MethodHandles.Lookup lookup = MethodHandles.privateLookupIn(target ,MethodHandles.lookup());
+        Field field = target.getDeclaredField(field_name);
+
+        if(instance == null || !target.isInstance(instance)){
+          throw new IllegalArgumentException
+            (
+             "Mosaic_Dispatcher::write provided instance is not of target type: "
+             + target.getName()
+             + ", but received: "
+             + (instance == null ? "null" : instance.getClass().getName())
+             );
+        }
+        MethodHandle handle = lookup.unreflectSetter(field);
+        handle.bindTo(instance).invoke(value);
+
+      }catch(NoSuchFieldException | IllegalAccessException e){
+        System.out.println("Mosaic_Dispatcher::write instance field exception:");
+        e.printStackTrace();
+      }catch(Throwable t){
+        System.out.println("Mosaic_Dispatcher::write instance field exception:");
         t.printStackTrace();
       }
     }
@@ -464,10 +540,10 @@ public class Mosaic_Dispatcher{
 
       // Use dispatch_1 to invoke the constructor
       Object result = dispatch_1(
-          null,         // no instance for constructor
-          void.class,   // return type for signature matching
-          "<init>",     // constructors are always named `<init>` in Java
-          arg_list
+          null         // no instance for constructor
+          ,void.class  // return type for signature matching
+          ,"<init>"    // constructors are always named `<init>` in Java
+          ,arg_list
       );
 
       // Cast the result to the target type
@@ -509,7 +585,7 @@ public class Mosaic_Dispatcher{
            + (instance == null ? "null" : instance.getClass().getName())
            );
       }
-      return dispatch_1(instance, return_type, method_name, arg_list);
+      return dispatch_1(instance ,return_type ,method_name ,arg_list);
     }
 
     @SuppressWarnings("unchecked")

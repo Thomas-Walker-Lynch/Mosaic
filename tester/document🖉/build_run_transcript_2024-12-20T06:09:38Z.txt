@@ -1,0 +1,220 @@
+2024-12-20T06:09:38Z[]
+Thomas-developer@Blossac§/var/user_data/Thomas-developer/Mosaic/tester§
+> clean; make; run
++ cd /var/user_data/Thomas-developer/Mosaic/tester
++ rm_na log/log.txt
+rm_na: cannot remove 'log/log.txt': No such file or directory
++ rm_na -r scratchpad/Dispatcher_0.class scratchpad/Dispatcher_1.class scratchpad/Dispatcher_2.class scratchpad/Dispatcher_3.class scratchpad/IO.class 'scratchpad/IsPrimitive$TestSuite$1TestEnum.class' 'scratchpad/IsPrimitive$TestSuite.class' scratchpad/IsPrimitive.class 'scratchpad/Logger$TestSuite.class' scratchpad/Logger.class 'scratchpad/MockClass_0$TestSuite.class' scratchpad/MockClass_0.class scratchpad/smoke.class scratchpad/Testbench.class scratchpad/tester scratchpad/Util.class
++ rm_na jvm/Dispatcher_0 jvm/Dispatcher_1 jvm/Dispatcher_2 jvm/Dispatcher_3 jvm/IO jvm/IsPrimitive jvm/Logger jvm/MockClass_0 jvm/smoke jvm/Testbench jvm/Util
++ rm_na jdwp_server/Dispatcher_0 jdwp_server/Dispatcher_1 jdwp_server/Dispatcher_2 jdwp_server/Dispatcher_3 jdwp_server/IO jdwp_server/IsPrimitive jdwp_server/Logger jdwp_server/MockClass_0 jdwp_server/smoke jdwp_server/Testbench jdwp_server/Util
++ set +x
+clean done.
+++ realpath /var/user_data/Thomas-developer/Mosaic/tester/tool🖉/make
++ script_afp=/var/user_data/Thomas-developer/Mosaic/tester/tool🖉/make
++ env_must_be=tester/tool🖉/env
++ '[' tester/tool🖉/env '!=' tester/tool🖉/env ']'
++ echo 'Compiling files...'
+Compiling files...
++ set -x
++ cd /var/user_data/Thomas-developer/Mosaic/tester
++ javac -g -d scratchpad javac🖉/TestClasses_0.java javac🖉/TestClasses_1.java javac🖉/TestClasses_2.java
+++ list
++ list='smoke Logger Util IO Testbench MockClass_0 IsPrimitive Dispatcher_0 Dispatcher_1 Dispatcher_2 Dispatcher_3'
++ for file in $list
++ javac -g -d scratchpad javac🖉/smoke.java
++ for file in $list
++ javac -g -d scratchpad javac🖉/Logger.java
++ for file in $list
++ javac -g -d scratchpad javac🖉/Util.java
++ for file in $list
++ javac -g -d scratchpad javac🖉/IO.java
++ for file in $list
++ javac -g -d scratchpad javac🖉/Testbench.java
++ for file in $list
++ javac -g -d scratchpad javac🖉/MockClass_0.java
++ for file in $list
++ javac -g -d scratchpad javac🖉/IsPrimitive.java
++ for file in $list
++ javac -g -d scratchpad javac🖉/Dispatcher_0.java
++ for file in $list
++ javac -g -d scratchpad javac🖉/Dispatcher_1.java
++ for file in $list
++ javac -g -d scratchpad javac🖉/Dispatcher_2.java
++ for file in $list
++ javac -g -d scratchpad javac🖉/Dispatcher_3.java
++ set +x
+Making jvm scripts ...
+Making jdwp debug server scripts...
+tester/tool🖉/make done.
+list: smoke Logger Util IO Testbench MockClass_0 IsPrimitive Dispatcher_0 Dispatcher_1 Dispatcher_2 Dispatcher_3
+
+... Running smoke
+Test0 passed
+
+... Running Logger
+Exception in thread "main" java.lang.NoClassDefFoundError: org/slf4j/LoggerFactory
+	at com.ReasoningTechnology.Mosaic.Mosaic_Logger.<clinit>(Mosaic_Logger.java:12)
+	at Logger$TestSuite.smoke_test_logging(Logger.java:9)
+	at Logger.main(Logger.java:21)
+Caused by: java.lang.ClassNotFoundException: org.slf4j.LoggerFactory
+	at java.base/jdk.internal.loader.BuiltinClassLoader.loadClass(BuiltinClassLoader.java:641)
+	at java.base/jdk.internal.loader.ClassLoaders$AppClassLoader.loadClass(ClassLoaders.java:188)
+	at java.base/java.lang.ClassLoader.loadClass(ClassLoader.java:528)
+	... 3 more
+
+... Running Util
+Util passed
+
+... Running IO
+IO passed
+
+... Running Testbench
+Expected output: Structural problem message for dummy_invalid_return_method.
+Structural problem: dummy_invalid_return_method does not return Boolean.
+Testbench Total tests run: 3
+Testbench Total tests passed: 3
+Testbench Total tests failed: 0
+
+... Running MockClass_0
+Test failed: 'test_failure_0' reported failure.
+Structural problem: test_failure_1 does not return Boolean.
+Error: test_failure_1 has an invalid structure.
+Test failed: 'test_failure_2' threw an exception: java.lang.reflect.InvocationTargetException
+Test failed: 'test_failure_3' produced extraneous stdout.
+Exception in thread "main" java.lang.NoClassDefFoundError: org/slf4j/LoggerFactory
+	at com.ReasoningTechnology.Mosaic.Mosaic_Logger.<clinit>(Mosaic_Logger.java:12)
+	at com.ReasoningTechnology.Mosaic.Mosaic_Testbench.run_test(Mosaic_Testbench.java:74)
+	at com.ReasoningTechnology.Mosaic.Mosaic_Testbench.run(Mosaic_Testbench.java:95)
+	at MockClass_0.main(MockClass_0.java:94)
+Caused by: java.lang.ClassNotFoundException: org.slf4j.LoggerFactory
+	at java.base/jdk.internal.loader.BuiltinClassLoader.loadClass(BuiltinClassLoader.java:641)
+	at java.base/jdk.internal.loader.ClassLoaders$AppClassLoader.loadClass(ClassLoaders.java:188)
+	at java.base/java.lang.ClassLoader.loadClass(ClassLoader.java:528)
+	... 4 more
+
+... Running IsPrimitive
+Total tests run: 15
+Total tests passed: 15
+Total tests failed: 0
+
+... Running Dispatcher_0
+making map for TestClasses_0
+Mosaic_Dispatcher::<init> mapping methods given class_metadata object: tester.TestClasses_0
+MethodSignature_To_Handle_Map::add_class adding methods
+(add_entry:: (key boolean tester.TestClasses_0.a_public_method_1()) (value MethodHandle(TestClasses_0)boolean))
+(add_entry:: (key boolean tester.TestClasses_0.a_public_static_method_7()) (value MethodHandle()boolean))
+(add_entry:: (key boolean tester.TestClasses_0.a_private_static_method_9()) (value MethodHandle()boolean))
+(add_entry:: (key boolean tester.TestClasses_0.a_private_method_2()) (value MethodHandle(TestClasses_0)boolean))
+MethodSignature_To_Handle_Map::add_class adding constructors
+(add_entry:: (key void tester.TestClasses_0.<init>()) (value MethodHandle()TestClasses_0))
+MethodSignature_To_Handle_Map::add_class adding fields
+
+running test: publicClass_publicMethod
+Call to Mosaic_Dispatcher::dispatch for a method bound to an instance.
+dispatch_1:: signature key:boolean tester.TestClasses_0.a_public_method_1()
+passed
+
+running test: make_0
+Mosaic_Dispatcher::<init> mapping methods given class_metadata object: tester.TestClasses_1
+MethodSignature_To_Handle_Map::add_class adding methods
+(add_entry:: (key int tester.TestClasses_1.get_i()) (value MethodHandle(TestClasses_1)int))
+MethodSignature_To_Handle_Map::add_class adding constructors
+(add_entry:: (key void tester.TestClasses_1.<init>(int ,int)) (value MethodHandle(int,int)TestClasses_1))
+(add_entry:: (key void tester.TestClasses_1.<init>(int)) (value MethodHandle(int)TestClasses_1))
+(add_entry:: (key void tester.TestClasses_1.<init>()) (value MethodHandle()TestClasses_1))
+MethodSignature_To_Handle_Map::add_class adding fields
+Call to Mosaic_Dispatcher::make
+dispatch_1:: signature key:void tester.TestClasses_1.<init>()
+Call to Mosaic_Dispatcher::make
+dispatch_1:: signature key:void tester.TestClasses_1.<init>(int)
+Call to Mosaic_Dispatcher::make
+dispatch_1:: signature key:void tester.TestClasses_1.<init>(int ,int)
+passed
+
+running test: publicStaticMethod_7
+Call to Mosaic_Dispatcher::dispatch for a static method.
+dispatch_1:: signature key:boolean tester.TestClasses_0.a_public_static_method_7()
+passed
+
+running test: privateStaticMethod_9
+Call to Mosaic_Dispatcher::dispatch for a static method.
+dispatch_1:: signature key:boolean tester.TestClasses_0.a_private_static_method_9()
+passed
+
+running test: defaultClass_access
+Mosaic_Dispatcher::<init> mapping methods from class specified by string: "tester.DefaultTestClass_01"
+MethodSignature_To_Handle_Map::add_class adding methods
+(add_entry:: (key boolean tester.DefaultTestClass_01.a_public_method_7()) (value MethodHandle(DefaultTestClass_01)boolean))
+(add_entry:: (key boolean tester.DefaultTestClass_01.a_private_method_8()) (value MethodHandle(DefaultTestClass_01)boolean))
+MethodSignature_To_Handle_Map::add_class adding constructors
+(add_entry:: (key void tester.DefaultTestClass_01.<init>()) (value MethodHandle()DefaultTestClass_01))
+MethodSignature_To_Handle_Map::add_class adding fields
+Call to Mosaic_Dispatcher::make
+dispatch_1:: signature key:void tester.DefaultTestClass_01.<init>()
+Call to Mosaic_Dispatcher::dispatch for a method bound to an instance.
+dispatch_1:: signature key:boolean tester.DefaultTestClass_01.a_public_method_7()
+Call to Mosaic_Dispatcher::dispatch for a method bound to an instance.
+dispatch_1:: signature key:boolean tester.DefaultTestClass_01.a_private_method_8()
+passed
+
+
+... Running Dispatcher_1
+
+running test: publicMethod_1
+passed
+
+running test: privateMethod_2
+passed
+
+running test: nestedPublicMethod_3
+passed
+
+running test: nestedPrivateMethod_4
+passed
+
+
+... Running Dispatcher_2
+
+running test: publicStaticField
+passed
+
+running test: privateStaticField
+passed
+
+running test: publicInstanceField
+passed
+
+running test: privateInstanceField
+passed
+
+running test: writePublicStaticField
+passed
+
+running test: writePrivateStaticField
+passed
+
+running test: writePublicInstanceField
+passed
+
+running test: writePrivateInstanceField
+passed
+
+
+... Running Dispatcher_3
+
+running test: privateNestedClassPublicMethod
+passed
+
+running test: privateNestedClassPrivateMethod
+passed
+
+running test: publicNestedClassPublicMethod
+passed
+
+running test: publicNestedClassPrivateMethod
+passed
+
+
+2024-12-20T06:10:20Z[]
+Thomas-developer@Blossac§/var/user_data/Thomas-developer/Mosaic/tester§
+> 
