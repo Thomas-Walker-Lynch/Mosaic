@@ -52,7 +52,7 @@ public class Dispatcher_1{
       System.out.println("");
       System.out.println("running test: publicMethod_1");
       if(Boolean.TRUE.equals(test_publicMethod_1())){
-        System.out.println("PASSED");
+        System.out.println("passed");
       }else{
         System.out.println("FAILED");
         result = false;
@@ -61,7 +61,7 @@ public class Dispatcher_1{
       System.out.println("");
       System.out.println("running test: privateMethod_2");
       if(Boolean.TRUE.equals(test_privateMethod_2())){
-        System.out.println("PASSED");
+        System.out.println("passed");
       }else{
         System.out.println("FAILED");
         result = false;
@@ -70,7 +70,7 @@ public class Dispatcher_1{
       System.out.println("");
       System.out.println("running test: nestedPublicMethod_3");
       if(Boolean.TRUE.equals(test_nestedPublicMethod_3())){
-        System.out.println("PASSED");
+        System.out.println("passed");
       }else{
         System.out.println("FAILED");
         result = false;
@@ -79,7 +79,7 @@ public class Dispatcher_1{
       System.out.println("");
       System.out.println("running test: nestedPrivateMethod_4");
       if(Boolean.TRUE.equals(test_nestedPrivateMethod_4())){
-        System.out.println("PASSED");
+        System.out.println("passed");
       }else{
         System.out.println("FAILED");
         result = false;
@@ -96,7 +96,7 @@ public class Dispatcher_1{
   }
 
   private static boolean logPass(){
-    System.out.println("PASSED");
+    System.out.println("passed");
     return true;
   }
 

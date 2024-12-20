@@ -230,23 +230,6 @@ class MethodSignature_To_Handle_Map{
             MethodType method_type=MethodType.methodType(method.getReturnType(),parameter_type_list);
             MethodHandle method_handle;
 
-            /* throws access exception due to public methods of private classes going down the public method branch
-            if((method.getModifiers() & Modifier.STATIC) != 0){
-              if((method.getModifiers() & Modifier.PRIVATE) != 0){
-                // Private static method
-                method_handle = private_lookup.findStatic(class_metadata, method.getName(), method_type);
-              }else{
-                // Public or protected static method
-                method_handle = lookup.findStatic(class_metadata, method.getName(), method_type);
-              }
-            }else if((method.getModifiers() & Modifier.PRIVATE) != 0){
-              // Private instance method
-              method_handle = private_lookup.findSpecial(class_metadata, method.getName(), method_type, class_metadata);
-            }else{
-              // Public or protected instance method
-              method_handle = lookup.findVirtual(class_metadata, method.getName(), method_type);
-            }
-            */
             if((method.getModifiers() & Modifier.STATIC) != 0){
               method_handle = private_lookup.findStatic(class_metadata, method.getName(), method_type);
             }else{
@@ -256,7 +239,11 @@ class MethodSignature_To_Handle_Map{
             add_entry(signature,method_handle);
 
           }catch(IllegalAccessException|NoSuchMethodException e){
-            System.err.println("Mosaic_Dispatcher::add_methods unexpectedly failed to register method: "+method.getName());
+            System.err.println
+              (
+               "Mosaic_Dispatcher::add_methods unexpectedly failed to register method: " 
+               + method.getName() + " in class: " + class_metadata.getName()
+               );
             e.printStackTrace();
           }
         }

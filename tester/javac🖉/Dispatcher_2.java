@@ -109,7 +109,7 @@ public class Dispatcher_2{
       System.out.println("");
       System.out.println("running test: publicStaticField");
       if(Boolean.TRUE.equals(test_publicStaticField())){
-        System.out.println("PASSED");
+        System.out.println("passed");
       }else{
         System.out.println("FAILED");
         result=false;
@@ -118,7 +118,7 @@ public class Dispatcher_2{
       System.out.println("");
       System.out.println("running test: privateStaticField");
       if(Boolean.TRUE.equals(test_privateStaticField())){
-        System.out.println("PASSED");
+        System.out.println("passed");
       }else{
         System.out.println("FAILED");
         result=false;
@@ -127,7 +127,7 @@ public class Dispatcher_2{
       System.out.println("");
       System.out.println("running test: publicInstanceField");
       if(Boolean.TRUE.equals(test_publicInstanceField())){
-        System.out.println("PASSED");
+        System.out.println("passed");
       }else{
         System.out.println("FAILED");
         result=false;
@@ -136,7 +136,7 @@ public class Dispatcher_2{
       System.out.println("");
       System.out.println("running test: privateInstanceField");
       if(Boolean.TRUE.equals(test_privateInstanceField())){
-        System.out.println("PASSED");
+        System.out.println("passed");
       }else{
         System.out.println("FAILED");
         result=false;
@@ -146,7 +146,7 @@ public class Dispatcher_2{
       System.out.println("");
       System.out.println("running test: writePublicStaticField");
       if(Boolean.TRUE.equals(test_writePublicStaticField())){
-        System.out.println("PASSED");
+        System.out.println("passed");
       }else{
         System.out.println("FAILED");
         result=false;
@@ -155,7 +155,7 @@ public class Dispatcher_2{
       System.out.println("");
       System.out.println("running test: writePrivateStaticField");
       if(Boolean.TRUE.equals(test_writePrivateStaticField())){
-        System.out.println("PASSED");
+        System.out.println("passed");
       }else{
         System.out.println("FAILED");
         result=false;
@@ -164,7 +164,7 @@ public class Dispatcher_2{
       System.out.println("");
       System.out.println("running test: writePublicInstanceField");
       if(Boolean.TRUE.equals(test_writePublicInstanceField())){
-        System.out.println("PASSED");
+        System.out.println("passed");
       }else{
         System.out.println("FAILED");
         result=false;
@@ -173,7 +173,7 @@ public class Dispatcher_2{
       System.out.println("");
       System.out.println("running test: writePrivateInstanceField");
       if(Boolean.TRUE.equals(test_writePrivateInstanceField())){
-        System.out.println("PASSED");
+        System.out.println("passed");
       }else{
         System.out.println("FAILED");
         result=false;
