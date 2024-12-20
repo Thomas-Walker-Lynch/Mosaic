@@ -4,6 +4,7 @@ import java.lang.invoke.MethodHandle;
 import java.lang.invoke.MethodHandles;
 import java.lang.invoke.MethodType;
 import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.Arrays;
@@ -390,9 +391,47 @@ public class Mosaic_Dispatcher{
 
   // methods unique to the class
   //
+    public <T> T read(Object instance ,String field_name){
+      try{
+        test_print("Call to Mosaic_Dispatcher::read");
+
+        // Private field lookup
+        MethodHandles.Lookup lookup = MethodHandles.privateLookupIn(target ,MethodHandles.lookup());
+        Field field = target.getDeclaredField(field_name);
+
+        // Access the field using the lookup handle
+        MethodHandle handle;
+        if((field.getModifiers() & Modifier.STATIC) != 0){
+          // Static field
+          handle = lookup.unreflectGetter(field);
+          return (T) handle.invoke();
+        }else{
+          // Instance-bound field
+          if(instance == null || !target.isInstance(instance)){
+            throw new IllegalArgumentException
+              (
+               "Provided instance is not of target type: "
+               + target.getName()
+               + ", but received: "
+               + (instance == null ? "null" : instance.getClass().getName())
+               );
+          }
+          handle = lookup.unreflectGetter(field);
+          return (T) handle.bindTo(instance).invoke();
+        }
+      }catch(NoSuchFieldException | IllegalAccessException e){
+        System.out.println("Mosaic_Dispatcher::read_field exception:");
+        e.printStackTrace();
+        return null;
+      }catch(Throwable t){
+        System.out.println("Mosaic_Dispatcher::read_field exception:");
+        t.printStackTrace();
+        return null;
+      }
+    }
 
     @SuppressWarnings("unchecked")
-    public <T> T make(Object... arg_list) {
+    public <T> T make(Object... arg_list){
       test_print("Call to Mosaic_Dispatcher::make");
 
       // Use dispatch_1 to invoke the constructor

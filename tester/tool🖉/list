@@ -20,7 +20,9 @@ echo\
   Testbench\
   MockClass_0\
   IsPrimitive\
-  Dispatch_0\
+  Dispatcher_0\
+  Dispatcher_1\
+  Dispatcher_2\
 ""
 
 #  Dispatch_1\

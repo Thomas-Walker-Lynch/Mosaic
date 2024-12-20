@@ -48,7 +48,7 @@ public class TestClasses_0{
 }
 
 // Default (package-private) class with public and private methods
-class DefaultTestClass{
+class DefaultTestClass_01{
   public boolean a_public_method_7(){
     return true;
   }

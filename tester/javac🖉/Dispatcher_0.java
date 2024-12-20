@@ -5,7 +5,7 @@ import com.ReasoningTechnology.Mosaic.Mosaic_Util;
 import tester.TestClasses_0;
 import tester.TestClasses_1;
 
-public class Dispatch_0{
+public class Dispatcher_0{
 
   private static Mosaic_Dispatcher dispatcher;
 
@@ -14,7 +14,7 @@ public class Dispatch_0{
     Mosaic_Dispatcher.test_switch(true);
   }
 
-  public Dispatch_0(){
+  public Dispatcher_0(){
     Mosaic_Dispatcher.test_print("making map for TestClasses_0");
     dispatcher = new Mosaic_Dispatcher(TestClasses_0.class);
   }
@@ -117,7 +117,7 @@ public class Dispatch_0{
       return result;
 
     }catch (Exception e){
-      System.out.println("Exception in Dispatch_0 test:");
+      System.out.println("Exception in Dispatcher_0 test:");
       e.printStackTrace();
       return false;
     }
@@ -125,7 +125,7 @@ public class Dispatch_0{
 
   public static void main(String[] args){
     // Execute the run method and return its result as the exit code
-    new Dispatch_0();
+    new Dispatcher_0();
     if( run() ) 
       System.exit(0);
     else
