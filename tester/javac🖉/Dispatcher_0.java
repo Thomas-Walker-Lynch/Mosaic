@@ -72,6 +72,29 @@ public class Dispatcher_0{
     return result;
   }
 
+  public static boolean test_defaultClass_access(){
+    try{
+      Mosaic_Dispatcher d2=new Mosaic_Dispatcher("tester.DefaultTestClass_01");
+      Object instance=d2.make();
+      boolean result1=d2.dispatch(
+        instance   // target instance
+        ,boolean.class  // return type
+        ,"a_public_method_7"  // public method name
+      );
+
+      boolean result2=d2.dispatch(
+        instance   // target instance
+        ,boolean.class  // return type
+        ,"a_private_method_8"  // private method name
+      );
+
+      return result1 && result2;
+    }catch(Throwable t){
+      t.printStackTrace();
+      return false;
+    }
+  }
+
   // Extend the run method to include static method tests
   public static boolean run(){
     try{
@@ -111,6 +134,15 @@ public class Dispatcher_0{
       }else{
         System.out.println("FAILED");
         result = false;
+      }
+
+      System.out.println("");
+      System.out.println("running test: defaultClass_access");
+      if(Boolean.TRUE.equals(test_defaultClass_access())){
+        System.out.println("passed");
+      }else{
+        System.out.println("FAILED");
+        result=false;
       }
 
       System.out.println("");

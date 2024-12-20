@@ -230,6 +230,7 @@ class MethodSignature_To_Handle_Map{
             MethodType method_type=MethodType.methodType(method.getReturnType(),parameter_type_list);
             MethodHandle method_handle;
 
+            /* throws access exception due to public methods of private classes going down the public method branch
             if((method.getModifiers() & Modifier.STATIC) != 0){
               if((method.getModifiers() & Modifier.PRIVATE) != 0){
                 // Private static method
@@ -244,6 +245,12 @@ class MethodSignature_To_Handle_Map{
             }else{
               // Public or protected instance method
               method_handle = lookup.findVirtual(class_metadata, method.getName(), method_type);
+            }
+            */
+            if((method.getModifiers() & Modifier.STATIC) != 0){
+              method_handle = private_lookup.findStatic(class_metadata, method.getName(), method_type);
+            }else{
+              method_handle = private_lookup.findSpecial(class_metadata, method.getName(), method_type, class_metadata);
             }
 
             add_entry(signature,method_handle);
@@ -384,7 +391,7 @@ public class Mosaic_Dispatcher{
     public Mosaic_Dispatcher(String fully_qualified_class_name) throws ClassNotFoundException{
       this.map = new MethodSignature_To_Handle_Map();
       this.target = Class.forName(fully_qualified_class_name);
-      test_print("Mosaic_Dispatcher:: mapping methods from class specified by string:" + to_string_target());
+      test_print("Mosaic_Dispatcher:: mapping methods from class specified by string: \"" + to_string_target() + "\"");
       this.map.add_methods(target);
       this.map.add_constructors(target);
     }
@@ -427,6 +434,40 @@ public class Mosaic_Dispatcher{
         System.out.println("Mosaic_Dispatcher::read_field exception:");
         t.printStackTrace();
         return null;
+      }
+    }
+
+    public <T> void write(Object instance, String field_name, T value){
+      try{
+        test_print("Call to Mosaic_Dispatcher::write");
+
+        // Private field lookup
+        MethodHandles.Lookup lookup=MethodHandles.privateLookupIn(target,MethodHandles.lookup());
+        Field field=target.getDeclaredField(field_name);
+
+        // Access the field using the lookup handle
+        MethodHandle handle;
+        if((field.getModifiers() & Modifier.STATIC) != 0){
+          // Static field
+          handle=lookup.unreflectSetter(field);
+          handle.invoke(value);
+        }else{
+          // Instance-bound field
+          if(instance == null || !target.isInstance(instance)){
+            throw new IllegalArgumentException(
+              "Provided instance is not of target type: "+target.getName()
+              +", but received: "+(instance == null ? "null" : instance.getClass().getName())
+            );
+          }
+          handle=lookup.unreflectSetter(field);
+          handle.bindTo(instance).invoke(value);
+        }
+      }catch(NoSuchFieldException | IllegalAccessException e){
+        System.out.println("Mosaic_Dispatcher::write_field exception:");
+        e.printStackTrace();
+      }catch(Throwable t){
+        System.out.println("Mosaic_Dispatcher::write_field exception:");
+        t.printStackTrace();
       }
     }
 
