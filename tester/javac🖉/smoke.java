@@ -1,4 +1,4 @@
-import com.ReasoningTechnology.Mosaic.Mosaic_Util;
+import com.ReasoningTechnology.Mosaic.Mosaic_Quantifier;
 
 /*
 Plug it in, see if there is smoke. There usually is.
@@ -16,7 +16,7 @@ public class smoke{
     condition[0] = test_is_true();
 
     int i = 0;
-    if( !Mosaic_Util.all(condition) ){
+    if( !Mosaic_Quantifier.all(condition) ){
       System.out.println("Test0 failed");
       return 1;
     }

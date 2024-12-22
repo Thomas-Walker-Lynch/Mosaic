@@ -1,5 +1,5 @@
 import com.ReasoningTechnology.Mosaic.Mosaic_Dispatcher;
-import com.ReasoningTechnology.Mosaic.Mosaic_Util;
+import com.ReasoningTechnology.Mosaic.Mosaic_Quantifier;
 
 import tester.TestClasses_0;
 

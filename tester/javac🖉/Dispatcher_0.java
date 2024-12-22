@@ -1,6 +1,6 @@
 import com.ReasoningTechnology.Mosaic.Mosaic_Dispatcher;
 import com.ReasoningTechnology.Mosaic.Mosaic_IsPrimitive;
-import com.ReasoningTechnology.Mosaic.Mosaic_Util;
+import com.ReasoningTechnology.Mosaic.Mosaic_Quantifier;
 
 import tester.TestClasses_0;
 import tester.TestClasses_1;
@@ -34,7 +34,7 @@ public class Dispatcher_0{
 
   public static boolean test_make_0(){
     Boolean[] condition_list = new Boolean[4];
-    Mosaic_Util.all_set_false(condition_list);
+    Mosaic_Quantifier.all_set_false(condition_list);
     int i = 0;
 
     Mosaic_Dispatcher d1 = new Mosaic_Dispatcher(TestClasses_1.class);
@@ -51,7 +51,7 @@ public class Dispatcher_0{
     TestClasses_1 tc3 = (TestClasses_1) d1.make(new Mosaic_IsPrimitive(21) ,new Mosaic_IsPrimitive(17) );
     condition_list[i++] = tc3.get_i() == 38;
 
-    return Mosaic_Util.all(condition_list);
+    return Mosaic_Quantifier.all(condition_list);
   }
 
   // Test public static method

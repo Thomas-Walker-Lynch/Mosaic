@@ -10,9 +10,9 @@ public class Dispatcher_3{
       Mosaic_Dispatcher nested_dispatcher = new Mosaic_Dispatcher("tester.TestClasses_0$APrivateClass_02");
       Object nested_instance = nested_dispatcher.make(new Object[]{outer_instance});
       boolean result = nested_dispatcher.dispatch(
-        nested_instance ,
-        boolean.class ,
-        "a_public_method_5"
+        nested_instance
+        ,boolean.class
+        ,"a_public_method_5"
       );
       return result;
     }catch(Throwable t){
@@ -28,9 +28,9 @@ public class Dispatcher_3{
       Mosaic_Dispatcher nested_dispatcher = new Mosaic_Dispatcher("tester.TestClasses_0$APrivateClass_02");
       Object nested_instance = nested_dispatcher.make(new Object[]{outer_instance});
       boolean result = nested_dispatcher.dispatch(
-        nested_instance ,
-        boolean.class ,
-        "a_private_method_6"
+        nested_instance
+        ,boolean.class
+        ,"a_private_method_6"
       );
       return result;
     }catch(Throwable t){
@@ -46,9 +46,9 @@ public class Dispatcher_3{
       TestClasses_0.APublicClass_01 nested_instance = outer.new APublicClass_01();
       Mosaic_Dispatcher nested_dispatcher = new Mosaic_Dispatcher(TestClasses_0.APublicClass_01.class);
       boolean result = nested_dispatcher.dispatch(
-        nested_instance ,
-        boolean.class ,
-        "a_public_method_3"
+        nested_instance
+        ,boolean.class
+        ,"a_public_method_3"
       );
       return result;
     }catch(Throwable t){
@@ -64,9 +64,9 @@ public class Dispatcher_3{
       TestClasses_0.APublicClass_01 nested_instance = outer.new APublicClass_01();
       Mosaic_Dispatcher nested_dispatcher = new Mosaic_Dispatcher(TestClasses_0.APublicClass_01.class);
       boolean result = nested_dispatcher.dispatch(
-        nested_instance ,
-        boolean.class ,
-        "a_private_method_4"
+        nested_instance
+        ,boolean.class
+        ,"a_private_method_4"
       );
       return result;
     }catch(Throwable t){

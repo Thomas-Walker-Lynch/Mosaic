@@ -1,7 +1,7 @@
 #!/bin/env bash
 script_afp=$(realpath "${BASH_SOURCE[0]}")
 
-# This script expands Mosaic third party projects onto the scratchpad. This is done before releasing or running local ad hoc tests, so that the third party tools will be present.
+# This script expands Mosaic third party projects onto the scratchpad. This is done before releasing or running local ad hoc tests, so that the third party tools will be present.  I.e. this is for creating a 'fat' jar.
 
 # Input guards
 
@@ -13,7 +13,7 @@ script_afp=$(realpath "${BASH_SOURCE[0]}")
 
   cd "$REPO_HOME"/developer
 
-# Link sources into the package tree
+# Expand the third party tools into the package tree
 
   echo "Expanding .jar files to be included with Mosaic into scratchpad."
 

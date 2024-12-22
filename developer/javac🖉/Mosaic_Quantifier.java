@@ -1,11 +1,8 @@
 package com.ReasoningTechnology.Mosaic;
 
-import java.time.Instant;
-import java.time.ZoneOffset;
-import java.time.format.DateTimeFormatter;
 import java.util.function.Predicate;
 
-public class Mosaic_Util{
+public class Mosaic_Quantifier{
 
   // Linear search with a predicate
   public static <T> T find( T[] elements ,Predicate<T> predicate ){
@@ -21,6 +18,7 @@ public class Mosaic_Util{
   }
 
   // True when it does a search and does not find a false value; otherwise false.
+  // Hence, all true for the empty set is false, which is appropriate for testing.
   public static Boolean all( Object[] elements ){
     return elements.length > 0 && find( elements ,element -> !(element instanceof Boolean) || !(Boolean) element ) == null;
   }
@@ -40,11 +38,5 @@ public class Mosaic_Util{
       i++;
     }
   }
-
-  public static String iso_utc_time(){
-    return Instant.now().atOffset(ZoneOffset.UTC).format(DateTimeFormatter.ISO_INSTANT);
-  }
-
-
 
 }

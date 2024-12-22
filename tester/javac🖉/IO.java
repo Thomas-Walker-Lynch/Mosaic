@@ -1,5 +1,5 @@
 import com.ReasoningTechnology.Mosaic.Mosaic_IO;
-import com.ReasoningTechnology.Mosaic.Mosaic_Util;
+import com.ReasoningTechnology.Mosaic.Mosaic_Quantifier;
 
 public class IO{
 
@@ -53,7 +53,7 @@ public class IO{
     // Restore original IO streams
     io.restore();
 
-    if(!Mosaic_Util.all(condition)){
+    if(!Mosaic_Quantifier.all(condition)){
       System.out.println("IO failed");
       return 1;
     }
